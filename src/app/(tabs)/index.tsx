@@ -29,11 +29,14 @@ export default function HomeScreen() {
     <Screen title={undefined} scroll>
       <View style={styles.header}>
         <View style={styles.brandBlock}>
-          <Text variant="title" style={styles.brand}>
-            ZPAY
-          </Text>
+          <View style={styles.brandRow}>
+            <Text variant="title" style={styles.brand}>
+              ZPAY
+            </Text>
+            <View style={[styles.brandDot, { backgroundColor: colors.accent }]} />
+          </View>
           <Text variant="caption" color="textMuted">
-            {user?.fullName ? `Hi, ${user.fullName.split(' ')[0]}` : 'Welcome back'}
+            {user?.fullName ? `Hi, ${user.fullName.split(' ')[0]} 👋` : 'Welcome back'}
           </Text>
         </View>
         <View style={styles.headerActions}>
@@ -130,8 +133,18 @@ const styles = StyleSheet.create({
   brandBlock: {
     gap: Spacing.xxs,
   },
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
   brand: {
     letterSpacing: 2,
+  },
+  brandDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   headerActions: {
     flexDirection: 'row',

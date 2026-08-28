@@ -30,6 +30,7 @@ export function Button({
 
   const backgroundColor = variantStyle[variant].backgroundColor(colors);
   const textColor = variantStyle[variant].color(colors);
+  const borderColor = variantStyle[variant].border?.(colors);
 
   return (
     <Pressable
@@ -41,8 +42,8 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         fullWidth && styles.fullWidth,
-        { backgroundColor },
-        variant !== 'ghost' && variant !== 'outline' && Shadow,
+        { backgroundColor, borderColor },
+        variant === 'primary' && Shadow,
         pressed && !isDisabled && styles.pressed,
         isDisabled && styles.disabled,
         style,
@@ -63,6 +64,7 @@ const variantStyle: Record<
   {
     backgroundColor: (colors: ReturnType<typeof useTheme>) => string;
     color: (colors: ReturnType<typeof useTheme>) => string;
+    border?: (colors: ReturnType<typeof useTheme>) => string;
   }
 > = {
   primary: {
@@ -72,10 +74,12 @@ const variantStyle: Record<
   secondary: {
     backgroundColor: (c) => c.surfaceElevated,
     color: (c) => c.accent,
+    border: (c) => c.border,
   },
   outline: {
     backgroundColor: (c) => 'transparent',
     color: (c) => c.accent,
+    border: (c) => c.accent,
   },
   destructive: {
     backgroundColor: (c) => c.danger,
@@ -94,6 +98,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
   },
   fullWidth: {
     alignSelf: 'stretch',

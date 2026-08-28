@@ -40,6 +40,16 @@ export default function LoginScreen() {
 
   return (
     <Screen title="Welcome back" subtitle="Log in to continue to your wallet" back>
+      <View style={styles.brandRow}>
+        <View style={styles.brandMark}>
+          <Text variant="bodyBold" style={styles.brandMarkText}>
+            Z
+          </Text>
+        </View>
+        <Text variant="title" style={styles.brandName}>
+          ZPAY
+        </Text>
+      </View>
       <View style={styles.form}>
         <InlineError message={error} />
         <Controller
@@ -96,6 +106,29 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.sm,
+  },
+  brandMark: {
+    width: 40,
+    height: 40,
+    borderRadius: Spacing.md,
+    backgroundColor: 'rgba(0, 244, 254, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 244, 254, 0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  brandMarkText: {
+    color: '#00F4FE',
+  },
+  brandName: {
+    letterSpacing: 2,
+  },
   form: {
     gap: Spacing.lg,
     marginTop: Spacing.xxxl,

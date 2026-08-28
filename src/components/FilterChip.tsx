@@ -22,8 +22,8 @@ export function FilterChip({ label, selected = false, onPress }: FilterChipProps
       style={({ pressed }) => [
         styles.chip,
         {
-          backgroundColor: selected ? colors.accent : colors.surfaceElevated,
-          borderColor: selected ? colors.accent : colors.border,
+          backgroundColor: selected ? colors.accent : colors.surface,
+          borderColor: selected ? colors.accent : 'rgba(255,255,255,0.12)',
         },
         pressed && styles.pressed,
       ]}>

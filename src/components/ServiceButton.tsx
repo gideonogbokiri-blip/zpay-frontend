@@ -21,7 +21,16 @@ export function ServiceButton({ icon, label, color, onPress, layout = 'grid' }: 
       accessibilityRole="button"
       accessibilityLabel={label}
       style={({ pressed }) => [styles.container, pressed && styles.pressed]}>
-      <View style={[styles.iconWrap, { backgroundColor: withAlpha(color, 0.18), width: iconSize + Spacing.xxxl, height: iconSize + Spacing.xxxl }]}>
+      <View
+        style={[
+          styles.iconWrap,
+          {
+            backgroundColor: withAlpha(color, 0.18),
+            borderColor: withAlpha(color, 0.28),
+            width: iconSize + Spacing.xxxl,
+            height: iconSize + Spacing.xxxl,
+          },
+        ]}>
         <Icon name={icon} size={iconSize} color={color} />
       </View>
       <Text variant={layout === 'grid' ? 'small' : 'caption'} numberOfLines={1} style={styles.label}>
@@ -52,6 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: Radii.xxl,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
   },
   label: {
     textAlign: 'center',

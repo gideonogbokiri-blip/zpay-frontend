@@ -14,7 +14,12 @@ export function Card({ elevated = false, style, ...rest }: CardProps) {
   return (
     <View
       surface={elevated ? 'surfaceElevated' : 'surface'}
-      style={[styles.base, { borderColor: colors.border }, elevated && Shadow, style]}
+      style={[
+        styles.base,
+        { borderColor: elevated ? 'rgba(0, 244, 254, 0.16)' : colors.border },
+        elevated && Shadow,
+        style,
+      ]}
       {...rest}
     />
   );

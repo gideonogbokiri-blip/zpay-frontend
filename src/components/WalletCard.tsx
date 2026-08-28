@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet } from 'react-native';
 
-import { Card, Text, View } from './ui';
+import { Text, View } from './ui';
 import { formatNaira } from '@/lib/format';
-import { Radii, Spacing } from '@/theme/tokens';
+import { Radii, Shadow, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
 export interface WalletCardProps {
@@ -16,40 +16,45 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
   const colors = useTheme();
 
   const content = (
-    <Card elevated style={styles.card}>
-      <View style={styles.topRow}>
-        <Text variant="label" color="textSecondary">
-          Wallet balance
-        </Text>
-        <Text variant="caption" color="textMuted">
-          NGN
-        </Text>
-      </View>
-      {loading ? (
-        <Text variant="amount" color="textMuted">
-          ------
-        </Text>
-      ) : (
-        <Text variant="amount" color="accent">
-          {formatNaira(balance)}
-        </Text>
-      )}
-      <View style={styles.bottomRow}>
-        <Pressable
-          onPress={onFundPress}
-          accessibilityRole="button"
-          accessibilityLabel="Fund wallet"
-          style={({ pressed }) => [
-            styles.fundButton,
-            { backgroundColor: colors.accent },
-            pressed && styles.pressed,
-          ]}>
-          <Text variant="smallBold" style={{ color: colors.background }}>
-            Fund wallet
+    <View style={[styles.card, { backgroundColor: colors.surface }]}>
+      <View style={[styles.glow, { backgroundColor: colors.accentSoft }]} pointerEvents="none" />
+      <View style={styles.inner}>
+        <View style={styles.topRow}>
+          <Text variant="label" color="textSecondary">
+            Wallet balance
           </Text>
-        </Pressable>
+          <View style={[styles.currencyPill, { backgroundColor: colors.accentSoft }]}>
+            <Text variant="caption" color="accent" style={styles.currencyPillText}>
+              NGN
+            </Text>
+          </View>
+        </View>
+        {loading ? (
+          <Text variant="amount" color="textMuted">
+            ------
+          </Text>
+        ) : (
+          <Text variant="amount" color="accent" style={styles.amount}>
+            {formatNaira(balance)}
+          </Text>
+        )}
+        <View style={styles.bottomRow}>
+          <Pressable
+            onPress={onFundPress}
+            accessibilityRole="button"
+            accessibilityLabel="Fund wallet"
+            style={({ pressed }) => [
+              styles.fundButton,
+              { backgroundColor: colors.accent },
+              pressed && styles.pressed,
+            ]}>
+            <Text variant="smallBold" style={{ color: colors.background }}>
+              Fund wallet
+            </Text>
+          </Pressable>
+        </View>
       </View>
-    </Card>
+    </View>
   );
 
   if (!onPress) {
@@ -65,12 +70,39 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
 
 const styles = StyleSheet.create({
   card: {
+    borderRadius: Radii.xl,
+    padding: Spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.09)',
+    overflow: 'hidden',
+    ...Shadow,
+  },
+  glow: {
+    position: 'absolute',
+    top: -70,
+    right: -50,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+  },
+  inner: {
     gap: Spacing.sm,
   },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  currencyPill: {
+    borderRadius: Radii.full,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xxs,
+  },
+  currencyPillText: {
+    fontWeight: '600',
+  },
+  amount: {
+    letterSpacing: 1,
   },
   bottomRow: {
     flexDirection: 'row',
