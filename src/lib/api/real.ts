@@ -17,6 +17,7 @@ import type {
   ServiceDescriptor,
   ServiceType,
   SignupPayload,
+  SignupResponse,
   Transaction,
   TvPackage,
   User,
@@ -121,8 +122,8 @@ export const realApi = {
 };
 
 export const realAuthApi = {
-  async signup(payload: SignupPayload): Promise<{ verificationId: string }> {
-    return http.post<{ verificationId: string }>('/auth/signup', payload);
+  async signup(payload: SignupPayload): Promise<SignupResponse> {
+    return http.post<SignupResponse>('/auth/signup', payload);
   },
 
   async verifyOtp(payload: OtpVerificationPayload): Promise<AuthSession> {

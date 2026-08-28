@@ -6,6 +6,7 @@ import type {
   OtpVerificationPayload,
   PinPayload,
   SignupPayload,
+  SignupResponse,
   User,
 } from '../types';
 import { __resetStore, registerSession } from './store';
@@ -53,7 +54,7 @@ function issueSession(record: MockUserRecord): AuthSession {
 }
 
 export const mockAuthApi = {
-  async signup(payload: SignupPayload): Promise<{ verificationId: string }> {
+  async signup(payload: SignupPayload): Promise<SignupResponse> {
     await delay(900);
     const existing = [...users.values()].find(
       (r) => r.user.email.toLowerCase() === payload.email.toLowerCase() || r.user.phone === payload.phone
@@ -79,7 +80,7 @@ export const mockAuthApi = {
     if (__DEV__) {
       console.log(`[mock-auth] OTP for ${payload.phone}: ${code}`);
     }
-    return { verificationId };
+    return { verificationId, otp: code };
   },
 
   async verifyOtp(payload: OtpVerificationPayload): Promise<AuthSession> {

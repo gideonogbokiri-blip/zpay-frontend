@@ -22,6 +22,11 @@ export interface SignupPayload {
   password: string;
 }
 
+export interface SignupResponse {
+  verificationId: string;
+  otp?: string;
+}
+
 export interface LoginPayload {
   identifier: string;
   password: string;

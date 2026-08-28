@@ -32,13 +32,13 @@ export default function SignupScreen() {
     setSubmitting(true);
     setError(null);
     try {
-      const { verificationId } = await authApi.signup({
+      const { verificationId, otp } = await authApi.signup({
         fullName: values.fullName,
         phone: values.phone,
         email: values.email,
         password: values.password,
       });
-      router.push({ pathname: '/otp', params: { verificationId } });
+      router.push({ pathname: '/otp', params: { verificationId, otp } });
     } catch (e) {
       setError(normalizeError(e).message);
     } finally {
