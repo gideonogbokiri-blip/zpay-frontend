@@ -164,4 +164,24 @@ export function useKyc() {
   });
 }
 
+export function useChat() {
+  const { token } = useAuth();
+  return useQuery({
+    queryKey: ['chat', token],
+    queryFn: () => api.getChat(token),
+    enabled: Boolean(token),
+  });
+}
+
+export function useSendChatMessage() {
+  const queryClient = useQueryClient();
+  const { token } = useAuth();
+  return useMutation({
+    mutationFn: (text: string) => api.sendChatMessage(token, text),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chat'] });
+    },
+  });
+}
+
 export type Product = DataBundle | TvPackage;

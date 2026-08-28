@@ -1,6 +1,8 @@
 import { http } from './client';
 import type {
   AuthSession,
+  ChatMessage,
+  ChatThread,
   DataBundle,
   FundWalletPayload,
   KycStatus,
@@ -107,6 +109,14 @@ export const realApi = {
 
   async getKyc(token: string | null): Promise<KycStatus> {
     return http.get<KycStatus>('/kyc', token);
+  },
+
+  async getChat(token: string | null): Promise<ChatThread> {
+    return http.get<ChatThread>('/chat', token);
+  },
+
+  async sendChatMessage(token: string | null, text: string): Promise<{ messages: ChatMessage[]; reply: ChatMessage }> {
+    return http.post<{ messages: ChatMessage[]; reply: ChatMessage }>('/chat/messages', { text }, token);
   },
 };
 

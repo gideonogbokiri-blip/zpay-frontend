@@ -174,3 +174,17 @@ export interface FundWalletPayload {
   method: string;
   idempotencyKey: string;
 }
+
+export type ChatRole = 'user' | 'bot' | 'admin';
+
+export interface ChatMessage {
+  id: string;
+  role: ChatRole;
+  text: string;
+  createdAt: string;
+}
+
+export interface ChatThread {
+  userId: string;
+  messages: ChatMessage[];
+}

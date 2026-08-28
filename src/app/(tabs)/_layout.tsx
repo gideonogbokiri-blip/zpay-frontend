@@ -1,6 +1,7 @@
 import { Redirect, Tabs } from 'expo-router';
 import { ActivityIndicator, StyleSheet, View, type ColorValue } from 'react-native';
 
+import { Chatbot } from '@/components/Chatbot';
 import { Icon, type IconName } from '@/components/Icon';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/theme';
@@ -32,50 +33,56 @@ export default function TabsLayout() {
   }
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-        },
-        tabBarActiveTintColor: colors.accent,
-        tabBarInactiveTintColor: colors.tabInactive,
-        tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="home" focused={focused} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="service"
-        options={{
-          title: 'Service',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="grid" focused={focused} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="history"
-        options={{
-          title: 'History',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="time" focused={focused} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="me"
-        options={{
-          title: 'Me',
-          tabBarIcon: ({ focused, color }) => <TabIcon name="person" focused={focused} color={color} />,
-        }}
-      />
-    </Tabs>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: colors.surface,
+            borderTopColor: colors.border,
+          },
+          tabBarActiveTintColor: colors.accent,
+          tabBarInactiveTintColor: colors.tabInactive,
+          tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
+        }}>
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ focused, color }) => <TabIcon name="home" focused={focused} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="service"
+          options={{
+            title: 'Service',
+            tabBarIcon: ({ focused, color }) => <TabIcon name="grid" focused={focused} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="history"
+          options={{
+            title: 'History',
+            tabBarIcon: ({ focused, color }) => <TabIcon name="time" focused={focused} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="me"
+          options={{
+            title: 'Me',
+            tabBarIcon: ({ focused, color }) => <TabIcon name="person" focused={focused} color={color} />,
+          }}
+        />
+      </Tabs>
+      <Chatbot />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   loading: {
     flex: 1,
     alignItems: 'center',

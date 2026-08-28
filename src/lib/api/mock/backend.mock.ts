@@ -1,6 +1,8 @@
 import { delay } from '../../mock/delay';
 import { ApiError } from '../errors';
 import type {
+  ChatMessage,
+  ChatThread,
   DataBundle,
   FundWalletPayload,
   KycStatus,
@@ -152,6 +154,32 @@ function shaStable(value: string): number {
 function mockCustomerName(identifier: string): string {
   const names = ['OKEKE MARY', 'ADEWALE K. P.', 'MUSA IBRAHIM', 'NGOZI CHIDI', 'BALOGUN TUNDE'];
   return names[shaStable(identifier) % names.length];
+}
+
+const mockChats = new Map<string, ChatMessage[]>();
+const MOCK_FAQ: Array<{ keywords: string[]; reply: string }> = [
+  { keywords: ['hi', 'hello', 'hey'], reply: "Hello! 👋 Welcome to ZPAY. I'm your virtual assistant. I can help with funding your wallet, airtime, data, cable TV, electricity and school payments. How can I help?" },
+  { keywords: ['airtime', 'recharge'], reply: 'You can buy airtime: Home → Services → Airtime. Pick MTN, Airtel, Glo or 9mobile, enter the phone number and amount, then confirm. Delivered instantly! 📱' },
+  { keywords: ['data', 'bundle', 'internet'], reply: 'To buy data: Home → Services → Data. Choose your network and bundle plan, enter the number, and confirm. Activated within seconds! 🚀' },
+  { keywords: ['electricity', 'power', 'light', 'token'], reply: 'For electricity tokens: Home → Services → Electricity. Select your discos (EKEDC, Ikeja Electric, AEDC, PHEDC), enter your meter number, amount, and pay. Token generated instantly! 💡' },
+  { keywords: ['tv', 'dstv', 'gotv', 'startimes', 'cable'], reply: 'To pay cable TV: Home → Services → TV. Choose DStv, GOtv or StarTimes, pick a package, enter your smart card number, and confirm. 📺' },
+  { keywords: ['fund', 'deposit', 'add money', 'wallet'], reply: 'To fund your wallet: tap the wallet card on Home, or go to Fund Wallet. Add money by card or bank transfer. It credits instantly!' },
+  { keywords: ['waec', 'jamb', 'neco', 'exam', 'school'], reply: 'ZPAY supports school payments! Go to Home → Services and choose WAEC, JAMB or NECO to complete your registration. 🎓' },
+  { keywords: ['pin', 'password', 'forgot'], reply: 'Manage your 4-digit transaction PIN from Profile → Security & PIN. You can create, change or reset it there. 🔒' },
+  { keywords: ['history', 'transaction', 'receipt'], reply: 'Your transaction history is in the History tab. Tap any transaction to view details and download the receipt. ✅' },
+  { keywords: ['kyc', 'verify', 'identity'], reply: 'Complete your KYC verification from Profile → Verify Identity to unlock higher limits. Takes just a few minutes! 🛡️' },
+  { keywords: ['human', 'agent', 'admin', 'support', 'person'], reply: "Of course! I've notified a human agent — our admin will join this chat shortly. Meanwhile, is there anything I can answer for you? 🎧" },
+  { keywords: ['thank'], reply: "You're very welcome! 😊 Is there anything else I can help you with today?" },
+];
+function mockAutoReply(text: string): string {
+  const lower = text.toLowerCase();
+  for (const rule of MOCK_FAQ) {
+    if (rule.keywords.some((k) => lower.includes(k))) return rule.reply;
+  }
+  return "Thanks for your message! I've sent it to our admin team who will help you shortly. You can also ask about airtime, data, electricity, cable TV, WAEC/JAMB/NECO, funding, KYC or transactions. 💬";
+}
+function mockGenId(): string {
+  return `m-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
 export const backendApi = {
@@ -501,6 +529,24 @@ export const backendApi = {
       status: completed ? 'completed' : 'not_started',
       verifiedAt: completed ? new Date().toISOString() : null,
     };
+  },
+
+  async getChat(token: string | null): Promise<ChatThread> {
+    await delay(300);
+    const userId = requireUserId(token);
+    return { userId, messages: [...(mockChats.get(userId) ?? [])] };
+  },
+
+  async sendChatMessage(token: string | null, text: string): Promise<{ messages: ChatMessage[]; reply: ChatMessage }> {
+    await delay(800);
+    const userId = requireUserId(token);
+    const list = mockChats.get(userId) ?? [];
+    const now = new Date().toISOString();
+    const userMsg: ChatMessage = { id: mockGenId(), role: 'user', text, createdAt: now };
+    const botMsg: ChatMessage = { id: mockGenId(), role: 'bot', text: mockAutoReply(text), createdAt: new Date().toISOString() };
+    list.push(userMsg, botMsg);
+    mockChats.set(userId, list);
+    return { messages: [...list], reply: botMsg };
   },
 };
 
