@@ -1,0 +1,33 @@
+{
+  "name": "ZPAY - Pay bills, buy airtime and register for exams",
+  "short_name": "ZPAY",
+  "description": "Pay bills, buy airtime, data, TV subscriptions and register for WAEC, JAMB and NECO in one place.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101415",
+  "theme_color": "#101415",
+  "categories": ["finance", "business", "utilities"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

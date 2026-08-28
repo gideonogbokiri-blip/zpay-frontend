@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     width: IconSize.xxl,
     height: IconSize.xxl,
     borderRadius: Radii.full,
-    backgroundColor: 'rgba(0,244,254,0.12)',
+    backgroundColor: 'rgba(16,185,129,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
   },

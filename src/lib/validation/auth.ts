@@ -9,6 +9,9 @@ export const signupSchema = z
     email: z.string().trim().email('Enter a valid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     confirmPassword: z.string(),
+    agreeToTerms: z.boolean().refine((value) => value === true, {
+      message: 'You must accept the Terms of Service and Privacy Policy to continue',
+    }),
   })
   .refine((value) => value.password === value.confirmPassword, {
     message: 'Passwords do not match',

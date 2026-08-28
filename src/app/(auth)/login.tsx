@@ -117,14 +117,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: Spacing.md,
-    backgroundColor: 'rgba(0, 244, 254, 0.15)',
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 244, 254, 0.35)',
+    borderColor: 'rgba(16, 185, 129, 0.35)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   brandMarkText: {
-    color: '#00F4FE',
+    color: '#10B981',
   },
   brandName: {
     letterSpacing: 2,

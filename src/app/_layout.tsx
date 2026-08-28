@@ -3,7 +3,10 @@ import { StatusBar } from 'expo-status-bar';
 import { useMemo } from 'react';
 
 import { ThemeProvider, useTheme } from '@/theme';
+import { setupPwa } from '@/lib/pwa';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+setupPwa();
 
 function RootNavigator() {
   const colors = useTheme();

@@ -16,7 +16,7 @@ export function Card({ elevated = false, style, ...rest }: CardProps) {
       surface={elevated ? 'surfaceElevated' : 'surface'}
       style={[
         styles.base,
-        { borderColor: elevated ? 'rgba(0, 244, 254, 0.16)' : colors.border },
+        { borderColor: elevated ? 'rgba(16, 185, 129, 0.16)' : colors.border },
         elevated && Shadow,
         style,
       ]}

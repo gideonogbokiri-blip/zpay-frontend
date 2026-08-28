@@ -132,9 +132,9 @@ const styles = StyleSheet.create({
     borderRadius: Radii.full,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 244, 254, 0.10)',
+    backgroundColor: 'rgba(16, 185, 129, 0.10)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 244, 254, 0.18)',
+    borderColor: 'rgba(16, 185, 129, 0.18)',
   },
   flex: {
     flex: 1,

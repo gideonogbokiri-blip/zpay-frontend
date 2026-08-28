@@ -21,7 +21,13 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "name": "ZPAY",
+      "shortName": "ZPAY",
+      "themeColor": "#101415",
+      "backgroundColor": "#101415",
+      "display": "standalone",
+      "description": "Pay bills, buy airtime, data, TV subscriptions and register for WAEC, JAMB and NECO in one place."
     },
     "plugins": [
       "expo-router",
