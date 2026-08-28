@@ -19,7 +19,7 @@ export interface ScreenProps extends PropsWithChildren {
 }
 
 export function Screen({
-  variant = 'dark',
+  variant = 'light',
   title,
   subtitle,
   headerRight,

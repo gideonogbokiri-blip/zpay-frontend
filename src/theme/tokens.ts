@@ -26,6 +26,16 @@ export const palette = {
   redDark: '#B91C1C',
   amber: '#FFB020',
   infoBlue: '#4DABF7',
+  zpayGreen50: '#ECFDF5',
+  zpayGreen100: '#D1FAE5',
+  zpayGreen300: '#6EE7B7',
+  zpayGreen400: '#34D399',
+  zpayGreen500: '#10B981',
+  zpayGreen600: '#059669',
+  zpayGreen700: '#047857',
+  zpayGreen800: '#065F46',
+  zpayGreen900: '#064E3B',
+  zpayGray500: '#6B7280',
 } as const;
 
 export const Spacing = {
@@ -165,6 +175,7 @@ export interface ThemeColors {
   accent: string;
   accentSoft: string;
   brand: string;
+  white: string;
   text: string;
   textSecondary: string;
   textMuted: string;
@@ -186,6 +197,7 @@ export const darkColors: ThemeColors = {
   accent: palette.zpayAccent,
   accentSoft: 'rgba(16, 185, 129, 0.14)',
   brand: palette.zpayBrandBlue,
+  white: palette.white,
   text: palette.white,
   textSecondary: palette.gray100,
   textMuted: palette.gray400,
@@ -200,15 +212,16 @@ export const darkColors: ThemeColors = {
 };
 
 export const lightColors: ThemeColors = {
-  background: palette.white,
-  surface: palette.gray50,
+  background: palette.zpayGreen50,
+  surface: palette.white,
   surfaceElevated: palette.white,
-  input: palette.gray50,
-  accent: palette.zpayAccentDark,
-  accentSoft: 'rgba(5, 150, 105, 0.14)',
-  brand: palette.zpayBrandBlue,
-  text: palette.gray900,
-  textSecondary: palette.gray500,
+  input: palette.white,
+  accent: palette.zpayGreen600,
+  accentSoft: 'rgba(5, 150, 105, 0.12)',
+  brand: palette.zpayGreen700,
+  white: palette.white,
+  text: palette.zpayGreen900,
+  textSecondary: palette.zpayGray500,
   textMuted: palette.gray400,
   success: palette.greenDark,
   successSoft: 'rgba(22, 163, 74, 0.12)',
@@ -216,6 +229,6 @@ export const lightColors: ThemeColors = {
   dangerSoft: 'rgba(185, 28, 28, 0.10)',
   warning: palette.amber,
   info: palette.infoBlue,
-  border: 'rgba(20, 23, 24, 0.10)',
+  border: palette.zpayGreen100,
   tabInactive: palette.gray400,
 };

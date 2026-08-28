@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Text, View } from './ui';
 import { formatNaira } from '@/lib/format';
-import { Radii, Shadow, Spacing } from '@/theme/tokens';
+import { IconSize, Radii, Shadow, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
 export interface WalletCardProps {
@@ -14,28 +16,36 @@ export interface WalletCardProps {
 
 export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCardProps) {
   const colors = useTheme();
+  const [hidden, setHidden] = useState(false);
+
+  const balanceText = hidden ? '₦ ••••••' : formatNaira(balance);
 
   const content = (
     <View style={[styles.card, { backgroundColor: colors.surface }]}>
-      <View style={[styles.glow, { backgroundColor: colors.accentSoft }]} pointerEvents="none" />
       <View style={styles.inner}>
         <View style={styles.topRow}>
           <Text variant="label" color="textSecondary">
             Wallet balance
           </Text>
-          <View style={[styles.currencyPill, { backgroundColor: colors.accentSoft }]}>
-            <Text variant="caption" color="accent" style={styles.currencyPillText}>
-              NGN
-            </Text>
-          </View>
+          <Pressable
+            onPress={() => setHidden((v) => !v)}
+            accessibilityRole="button"
+            accessibilityLabel={hidden ? 'Show balance' : 'Hide balance'}
+            style={styles.eyeButton}>
+            <Ionicons
+              name={hidden ? 'eye-off-outline' : 'eye-outline'}
+              size={IconSize.sm}
+              color={colors.textMuted}
+            />
+          </Pressable>
         </View>
         {loading ? (
           <Text variant="amount" color="textMuted">
             ------
           </Text>
         ) : (
-          <Text variant="amount" color="accent" style={styles.amount}>
-            {formatNaira(balance)}
+          <Text variant="amount" color="text" style={styles.amount}>
+            {balanceText}
           </Text>
         )}
         <View style={styles.bottomRow}>
@@ -43,13 +53,9 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
             onPress={onFundPress}
             accessibilityRole="button"
             accessibilityLabel="Fund wallet"
-            style={({ pressed }) => [
-              styles.fundButton,
-              { backgroundColor: colors.accent },
-              pressed && styles.pressed,
-            ]}>
-            <Text variant="smallBold" style={{ color: colors.background }}>
-              Fund wallet
+            style={({ pressed }) => [styles.fundButton, { backgroundColor: colors.accent }, pressed && styles.pressed]}>
+            <Text variant="smallBold" style={{ color: colors.white }}>
+              + Fund Wallet
             </Text>
           </Pressable>
         </View>
@@ -73,17 +79,9 @@ const styles = StyleSheet.create({
     borderRadius: Radii.xl,
     padding: Spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.09)',
+    borderColor: '#D1FAE5',
     overflow: 'hidden',
     ...Shadow,
-  },
-  glow: {
-    position: 'absolute',
-    top: -70,
-    right: -50,
-    width: 200,
-    height: 200,
-    borderRadius: 100,
   },
   inner: {
     gap: Spacing.sm,
@@ -93,20 +91,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  currencyPill: {
-    borderRadius: Radii.full,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xxs,
-  },
-  currencyPillText: {
-    fontWeight: '600',
+  eyeButton: {
+    padding: Spacing.xxs,
   },
   amount: {
     letterSpacing: 1,
   },
   bottomRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     marginTop: Spacing.sm,
   },
   fundButton: {

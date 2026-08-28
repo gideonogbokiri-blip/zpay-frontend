@@ -1,6 +1,7 @@
 import { Link, router } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { GradientHeader } from '@/components/GradientHeader';
 import { Icon } from '@/components/Icon';
 import { ServiceButton } from '@/components/ServiceButton';
 import { TransactionRow } from '@/components/TransactionRow';
@@ -27,38 +28,37 @@ export default function HomeScreen() {
 
   return (
     <Screen title={undefined} scroll>
-      <View style={styles.header}>
-        <View style={styles.brandBlock}>
-          <View style={styles.brandRow}>
-            <Text variant="title" style={styles.brand}>
-              ZPAY
+      <GradientHeader>
+        <View style={styles.header}>
+          <View style={styles.brandBlock}>
+            <Text variant="title" style={[styles.greeting, { color: colors.white }]}>
+              Hello, {user?.fullName ? user.fullName.split(' ')[0] : 'there'} 👋
             </Text>
-            <View style={[styles.brandDot, { backgroundColor: colors.accent }]} />
+            <Text variant="small" style={[styles.greetingSub, { color: '#A7F3D0' }]}>
+              Good to have you back
+            </Text>
           </View>
-          <Text variant="caption" color="textMuted">
-            {user?.fullName ? `Hi, ${user.fullName.split(' ')[0]} 👋` : 'Welcome back'}
-          </Text>
+          <View style={styles.headerActions}>
+            <Link href="/notifications" asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Notifications"
+                style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
+                <Icon name="notifications-outline" size={IconSize.lg} color={colors.white} />
+                {unreadCount > 0 ? <View style={styles.unreadDot} /> : null}
+              </Pressable>
+            </Link>
+            <Link href="/me" asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Profile"
+                style={({ pressed }) => [styles.avatar, pressed && styles.pressed]}>
+                <Icon name="person" size={IconSize.md} color={colors.white} />
+              </Pressable>
+            </Link>
+          </View>
         </View>
-        <View style={styles.headerActions}>
-          <Link href="/notifications" asChild>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Notifications"
-              style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
-              <Icon name="notifications-outline" size={IconSize.lg} color={colors.text} />
-              {unreadCount > 0 ? <View style={styles.unreadDot} /> : null}
-            </Pressable>
-          </Link>
-          <Link href="/me" asChild>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Profile"
-              style={({ pressed }) => [styles.avatar, pressed && styles.pressed]}>
-              <Icon name="person" size={IconSize.md} color={colors.accent} />
-            </Pressable>
-          </Link>
-        </View>
-      </View>
+      </GradientHeader>
 
       <WalletCard
         balance={wallet?.balance ?? 0}
@@ -127,24 +127,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: Spacing.sm,
-    paddingBottom: Spacing.md,
   },
   brandBlock: {
     gap: Spacing.xxs,
+    flex: 1,
   },
-  brandRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
+  greeting: {
+    color: '#FFFFFF',
   },
-  brand: {
-    letterSpacing: 2,
-  },
-  brandDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  greetingSub: {
+    color: '#A7F3D0',
   },
   headerActions: {
     flexDirection: 'row',
@@ -155,7 +147,7 @@ const styles = StyleSheet.create({
     width: IconSize.xxl,
     height: IconSize.xxl,
     borderRadius: Radii.full,
-    backgroundColor: 'rgba(128,128,128,0.15)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -172,7 +164,7 @@ const styles = StyleSheet.create({
     width: IconSize.xxl,
     height: IconSize.xxl,
     borderRadius: Radii.full,
-    backgroundColor: 'rgba(16,185,129,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
   },
