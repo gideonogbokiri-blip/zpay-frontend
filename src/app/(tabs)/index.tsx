@@ -133,9 +133,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   greeting: {
+    fontSize: 28,
+    fontWeight: '800',
     color: '#FFFFFF',
   },
   greetingSub: {
+    fontSize: 16,
+    fontWeight: '600',
     color: '#A7F3D0',
   },
   headerActions: {

@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { GradientHeader } from '@/components/GradientHeader';
+import { ZpayLogo } from '@/components/ZpayLogo';
 import { Button, InlineError, Input, Screen, Text } from '@/components/ui';
 import { useAuth } from '@/hooks/use-auth';
 import { authApi, normalizeError } from '@/lib/api';
@@ -19,6 +20,24 @@ export default function LoginScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  const brandOpacity = useRef(new Animated.Value(0)).current;
+  const brandTranslateY = useRef(new Animated.Value(14)).current;
+  const cardOpacity = useRef(new Animated.Value(0)).current;
+  const cardTranslateY = useRef(new Animated.Value(22)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(brandOpacity, { toValue: 1, duration: 420, useNativeDriver: true }),
+        Animated.timing(brandTranslateY, { toValue: 0, duration: 420, useNativeDriver: true }),
+      ]),
+      Animated.parallel([
+        Animated.timing(cardOpacity, { toValue: 1, duration: 460, useNativeDriver: true }),
+        Animated.timing(cardTranslateY, { toValue: 0, duration: 460, useNativeDriver: true }),
+      ]),
+    ]).start();
+  }, [brandOpacity, brandTranslateY, cardOpacity, cardTranslateY]);
 
   const {
     control,
@@ -46,15 +65,24 @@ export default function LoginScreen() {
   return (
     <Screen title={undefined} scroll={false} contentStyle={styles.screen}>
       <GradientHeader>
-        <View style={styles.header}>
+        <Animated.View
+          style={[
+            styles.header,
+            { opacity: brandOpacity, transform: [{ translateY: brandTranslateY }] },
+          ]}>
+          <ZpayLogo size={72} style={styles.headerLogo} />
           <Text style={[styles.brand, { color: colors.white }]}>
             Z<span style={styles.brandAccent}>Pay</span>
           </Text>
           <Text style={[styles.tagline, { color: '#A7F3D0' }]}>Simple. Secure. Nigerian.</Text>
-        </View>
+        </Animated.View>
       </GradientHeader>
 
-      <View style={styles.cardWrap}>
+      <Animated.View
+        style={[
+          styles.cardWrap,
+          { opacity: cardOpacity, transform: [{ translateY: cardTranslateY }] },
+        ]}>
         <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <Text variant="bodyBold" style={styles.cardTitle} color="text">
             Welcome Back
@@ -149,7 +177,7 @@ export default function LoginScreen() {
             </Text>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </Screen>
   );
 }
@@ -161,17 +189,21 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
   },
+  headerLogo: {
+    marginBottom: Spacing.md,
+  },
   brand: {
-    fontSize: 34,
-    fontWeight: '700',
+    fontSize: 44,
+    fontWeight: '800',
     letterSpacing: 1,
   },
   brandAccent: {
-    fontWeight: '700',
+    fontWeight: '800',
     color: '#A7F3D0',
   },
   tagline: {
-    fontSize: 14,
+    fontSize: 17,
+    fontWeight: '600',
     marginTop: Spacing.xs,
   },
   cardWrap: {
@@ -180,20 +212,21 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: Radii.xl,
-    padding: Spacing.xl,
+    padding: Spacing.xxl,
     borderWidth: 1,
     shadowColor: '#000000',
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 4,
+    shadowOpacity: 0.2,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 8,
   },
   cardTitle: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '800',
   },
   cardSubtitle: {
-    marginTop: Spacing.xxs,
+    marginTop: Spacing.xs,
+    fontSize: 16,
   },
   field: {
     position: 'relative',
@@ -207,6 +240,8 @@ const styles = StyleSheet.create({
   },
   inputWithIcon: {
     paddingLeft: 40,
+    fontSize: 18,
+    fontWeight: '500',
   },
   linksRow: {
     flexDirection: 'row',

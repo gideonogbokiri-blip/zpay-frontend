@@ -86,25 +86,25 @@ export const MaxContentWidth = 800;
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 
 export const FontSize = {
-  caption: 12,
-  small: 14,
-  body: 16,
-  bodyLarge: 18,
-  title: 22,
-  heading: 26,
-  display: 34,
-  amount: 40,
+  caption: 13,
+  small: 15,
+  body: 17,
+  bodyLarge: 19,
+  title: 24,
+  heading: 28,
+  display: 38,
+  amount: 44,
 } as const;
 
 export const LineHeight = {
-  caption: 16,
-  small: 20,
-  body: 24,
-  bodyLarge: 26,
-  title: 28,
-  heading: 34,
-  display: 40,
-  amount: 48,
+  caption: 18,
+  small: 22,
+  body: 26,
+  bodyLarge: 28,
+  title: 30,
+  heading: 36,
+  display: 44,
+  amount: 52,
 } as const;
 
 export const FontWeight = {

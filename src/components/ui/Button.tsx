@@ -1,4 +1,4 @@
-import { ActivityIndicator, Pressable, StyleSheet, type ViewStyle } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, type TextStyle, type ViewStyle } from 'react-native';
 
 import { Radii, Shadow, Spacing, TouchTarget } from '@/theme/tokens';
 import { useTheme } from '@/theme';
@@ -14,6 +14,7 @@ export interface ButtonProps {
   loading?: boolean;
   fullWidth?: boolean;
   style?: ViewStyle;
+  labelStyle?: TextStyle;
 }
 
 export function Button({
@@ -24,6 +25,7 @@ export function Button({
   loading = false,
   fullWidth = true,
   style,
+  labelStyle,
 }: ButtonProps) {
   const colors = useTheme();
   const isDisabled = disabled || loading;
@@ -51,7 +53,7 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={textColor} />
       ) : (
-        <Text variant="bodyBold" style={{ color: textColor }}>
+        <Text variant="bodyBold" style={{ color: textColor, fontSize: 18, fontWeight: '700', ...labelStyle }}>
           {label}
         </Text>
       )}
@@ -99,8 +101,8 @@ const variantStyle: Record<
 
 const styles = StyleSheet.create({
   base: {
-    minHeight: TouchTarget.standard,
-    borderRadius: Radii.md,
+    minHeight: 56,
+    borderRadius: Radii.lg,
     paddingHorizontal: Spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',

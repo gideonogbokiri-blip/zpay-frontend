@@ -29,7 +29,7 @@ export function Input({ label, error, hint, right, style, onFocus, onBlur, ...re
       <View style={[styles.inputShell, { borderColor, backgroundColor: colors.input }]}>
         <TextInput
           placeholderTextColor={colors.textMuted}
-          style={[styles.input, { color: colors.text }]}
+          style={[styles.input, { color: colors.text }, style]}
           onFocus={(e) => {
             setFocused(true);
             onFocus?.(e);
@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xxs,
   },
   inputShell: {
-    minHeight: TouchTarget.standard,
-    borderRadius: Radii.md,
+    minHeight: 54,
+    borderRadius: Radii.lg,
     borderWidth: BorderWidth.thin,
     paddingHorizontal: Spacing.lg,
     flexDirection: 'row',
@@ -72,8 +72,9 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: FontSize.body,
-    paddingVertical: Spacing.sm,
+    fontSize: 17,
+    fontWeight: '500',
+    paddingVertical: Spacing.md,
   },
   feedback: {
     marginTop: Spacing.xxs,

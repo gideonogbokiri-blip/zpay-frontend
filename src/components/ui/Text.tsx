@@ -58,32 +58,32 @@ const variantStyles = StyleSheet.create({
   title: {
     fontSize: FontSize.title,
     lineHeight: LineHeight.title,
-    fontWeight: FontWeight.semibold,
+    fontWeight: FontWeight.bold,
   },
   body: {
     fontSize: FontSize.body,
     lineHeight: LineHeight.body,
-    fontWeight: FontWeight.regular,
+    fontWeight: FontWeight.medium,
   },
   bodyBold: {
     fontSize: FontSize.body,
     lineHeight: LineHeight.body,
-    fontWeight: FontWeight.semibold,
+    fontWeight: FontWeight.bold,
   },
   small: {
     fontSize: FontSize.small,
     lineHeight: LineHeight.small,
-    fontWeight: FontWeight.regular,
+    fontWeight: FontWeight.medium,
   },
   smallBold: {
     fontSize: FontSize.small,
     lineHeight: LineHeight.small,
-    fontWeight: FontWeight.semibold,
+    fontWeight: FontWeight.bold,
   },
   caption: {
     fontSize: FontSize.caption,
     lineHeight: LineHeight.caption,
-    fontWeight: FontWeight.regular,
+    fontWeight: FontWeight.medium,
   },
   label: {
     fontSize: FontSize.caption,
