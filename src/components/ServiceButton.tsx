@@ -20,7 +20,10 @@ export function ServiceButton({ icon, label, color, onPress, layout = 'grid' }: 
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={label}
-      style={({ pressed }) => [styles.container, pressed && styles.pressed]}>
+      style={({ pressed }) => [
+        styles.container,
+        pressed && { opacity: 0.8, transform: [{ scale: 0.94 }] },
+      ]}>
       <View
         style={[
           styles.iconWrap,
@@ -65,8 +68,5 @@ const styles = StyleSheet.create({
   },
   label: {
     textAlign: 'center',
-  },
-  pressed: {
-    opacity: 0.75,
   },
 });

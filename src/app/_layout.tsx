@@ -37,8 +37,8 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider variant="light">
-        <StatusBar style="dark" />
+      <ThemeProvider variant="dark">
+        <StatusBar style="light" />
         <RootNavigator />
       </ThemeProvider>
     </QueryClientProvider>

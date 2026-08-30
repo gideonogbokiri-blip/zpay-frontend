@@ -17,7 +17,7 @@ export default function ServiceScreen() {
   const serviceOrder = services?.map((s) => s.type) ?? ACTIVE_SERVICES;
 
   return (
-    <Screen variant="light" title={undefined} scroll>
+    <Screen variant="dark" title={undefined} scroll>
       <View style={styles.header}>
         <Text variant="title" style={styles.brand}>
           ZPAY

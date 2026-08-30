@@ -44,7 +44,7 @@ export function Button({
         fullWidth && styles.fullWidth,
         { backgroundColor, borderColor },
         variant === 'primary' && Shadow,
-        pressed && !isDisabled && styles.pressed,
+        makePressedTransform(pressed),
         isDisabled && styles.disabled,
         style,
       ]}>
@@ -57,6 +57,12 @@ export function Button({
       )}
     </Pressable>
   );
+}
+
+function makePressedTransform(
+  pressed: boolean,
+): { opacity: number } | { opacity: number; transform: { scale: number }[] } {
+  return pressed ? { opacity: 0.85, transform: [{ scale: 0.98 }] } : { opacity: 1 };
 }
 
 const variantStyle: Record<
@@ -102,9 +108,6 @@ const styles = StyleSheet.create({
   },
   fullWidth: {
     alignSelf: 'stretch',
-  },
-  pressed: {
-    opacity: 0.85,
   },
   disabled: {
     opacity: 0.45,

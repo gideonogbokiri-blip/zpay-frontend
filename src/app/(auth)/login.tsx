@@ -55,7 +55,7 @@ export default function LoginScreen() {
       </GradientHeader>
 
       <View style={styles.cardWrap}>
-        <View style={[styles.card, { backgroundColor: colors.surface }]}>
+        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <Text variant="bodyBold" style={styles.cardTitle} color="text">
             Welcome Back
           </Text>
@@ -182,7 +182,6 @@ const styles = StyleSheet.create({
     borderRadius: Radii.xl,
     padding: Spacing.xl,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
     shadowColor: '#000000',
     shadowOpacity: 0.08,
     shadowRadius: 16,

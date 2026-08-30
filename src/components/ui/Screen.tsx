@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
-import type { PropsWithChildren, ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, type ViewStyle } from 'react-native';
+import { useEffect, useRef, type PropsWithChildren, type ReactNode } from 'react';
+import { Animated, Pressable, ScrollView, StyleSheet, type ViewStyle } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { IconSize, MaxContentWidth, Radii, Spacing } from '@/theme/tokens';
@@ -19,7 +19,7 @@ export interface ScreenProps extends PropsWithChildren {
 }
 
 export function Screen({
-  variant = 'light',
+  variant = 'dark',
   title,
   subtitle,
   headerRight,
@@ -54,6 +54,25 @@ function ScreenInner({
 }: Omit<ScreenProps, 'variant'>) {
   const colors = useTheme();
   const insets = useSafeAreaInsets();
+  const opacity = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(12)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 320,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 320,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [opacity, translateY]);
+
+  const animatedStyle = { opacity, transform: [{ translateY }] };
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
@@ -82,14 +101,16 @@ function ScreenInner({
           </View>
         ) : null}
         {scroll ? (
-          <ScrollView
-            style={styles.flex}
-            contentContainerStyle={styles.content}
-            keyboardShouldPersistTaps="handled">
-            {children}
-          </ScrollView>
+          <Animated.View style={[styles.flex, animatedStyle]}>
+            <ScrollView
+              style={styles.flex}
+              contentContainerStyle={styles.content}
+              keyboardShouldPersistTaps="handled">
+              {children}
+            </ScrollView>
+          </Animated.View>
         ) : (
-          <View style={[styles.flex, styles.content]}>{children}</View>
+          <Animated.View style={[styles.flex, styles.content, animatedStyle]}>{children}</Animated.View>
         )}
       </View>
     </SafeAreaView>

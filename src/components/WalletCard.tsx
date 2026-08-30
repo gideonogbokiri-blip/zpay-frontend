@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Text, View } from './ui';
@@ -17,11 +17,26 @@ export interface WalletCardProps {
 export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCardProps) {
   const colors = useTheme();
   const [hidden, setHidden] = useState(false);
+  const [display, setDisplay] = useState(balance);
+  const animated = useRef(new Animated.Value(balance)).current;
 
-  const balanceText = hidden ? '₦ ••••••' : formatNaira(balance);
+  useEffect(() => {
+    if (loading) return;
+    const listener = animated.addListener(({ value }) => setDisplay(Math.round(value)));
+    Animated.timing(animated, {
+      toValue: balance,
+      duration: 700,
+      useNativeDriver: false,
+    }).start();
+    return () => {
+      animated.removeListener(listener);
+    };
+  }, [balance, loading, animated]);
+
+  const balanceText = hidden ? '₦ ••••••' : formatNaira(display);
 
   const content = (
-    <View style={[styles.card, { backgroundColor: colors.surface }]}>
+    <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
       <View style={styles.inner}>
         <View style={styles.topRow}>
           <Text variant="label" color="textSecondary">
@@ -79,7 +94,6 @@ const styles = StyleSheet.create({
     borderRadius: Radii.xl,
     padding: Spacing.lg,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
     overflow: 'hidden',
     ...Shadow,
   },
