@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Easing, Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { GradientHeader } from '@/components/GradientHeader';
@@ -14,6 +14,45 @@ import { loginSchema, type LoginFormValues } from '@/lib/validation/auth';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
+function useStaggeredReveal(count: number, staggerMs = 80, startDelay = 200) {
+  const items = Array.from({ length: count }, (_, i) => ({
+    opacity: useRef(new Animated.Value(0)).current,
+    translateY: useRef(new Animated.Value(24)).current,
+    scale: useRef(new Animated.Value(0.92)).current,
+  }));
+
+  useEffect(() => {
+    const animations = items.map((item, i) =>
+      Animated.parallel([
+        Animated.spring(item.opacity, {
+          toValue: 1,
+          tension: 65,
+          friction: 9,
+          delay: startDelay + i * staggerMs,
+          useNativeDriver: true,
+        }),
+        Animated.spring(item.translateY, {
+          toValue: 0,
+          tension: 65,
+          friction: 9,
+          delay: startDelay + i * staggerMs,
+          useNativeDriver: true,
+        }),
+        Animated.spring(item.scale, {
+          toValue: 1,
+          tension: 80,
+          friction: 8,
+          delay: startDelay + i * staggerMs,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    Animated.parallel(animations).start();
+  }, []);
+
+  return items;
+}
+
 export default function LoginScreen() {
   const colors = useTheme();
   const { signIn } = useAuth();
@@ -21,23 +60,102 @@ export default function LoginScreen() {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [logoGlow] = useState(() => new Animated.Value(0.3));
+  const logoScale = useRef(new Animated.Value(0.5)).current;
+  const logoOpacity = useRef(new Animated.Value(0)).current;
   const brandOpacity = useRef(new Animated.Value(0)).current;
-  const brandTranslateY = useRef(new Animated.Value(14)).current;
+  const brandTranslateY = useRef(new Animated.Value(30)).current;
+  const taglineOpacity = useRef(new Animated.Value(0)).current;
+  const taglineTranslateY = useRef(new Animated.Value(20)).current;
   const cardOpacity = useRef(new Animated.Value(0)).current;
-  const cardTranslateY = useRef(new Animated.Value(22)).current;
+  const cardTranslateY = useRef(new Animated.Value(40)).current;
+  const cardScale = useRef(new Animated.Value(0.95)).current;
+
+  const stagger = useStaggeredReveal(6, 100, 600);
 
   useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(logoGlow, {
+          toValue: 0.6,
+          duration: 1800,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(logoGlow, {
+          toValue: 0.3,
+          duration: 1800,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]),
+    ).start();
+
     Animated.sequence([
       Animated.parallel([
-        Animated.timing(brandOpacity, { toValue: 1, duration: 420, useNativeDriver: true }),
-        Animated.timing(brandTranslateY, { toValue: 0, duration: 420, useNativeDriver: true }),
+        Animated.spring(logoScale, {
+          toValue: 1,
+          tension: 50,
+          friction: 7,
+          useNativeDriver: true,
+        }),
+        Animated.spring(logoOpacity, {
+          toValue: 1,
+          tension: 50,
+          friction: 7,
+          useNativeDriver: true,
+        }),
       ]),
       Animated.parallel([
-        Animated.timing(cardOpacity, { toValue: 1, duration: 460, useNativeDriver: true }),
-        Animated.timing(cardTranslateY, { toValue: 0, duration: 460, useNativeDriver: true }),
+        Animated.spring(brandOpacity, {
+          toValue: 1,
+          tension: 55,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.spring(brandTranslateY, {
+          toValue: 0,
+          tension: 55,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.spring(taglineOpacity, {
+          toValue: 1,
+          tension: 55,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.spring(taglineTranslateY, {
+          toValue: 0,
+          tension: 55,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.spring(cardOpacity, {
+          toValue: 1,
+          tension: 50,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.spring(cardTranslateY, {
+          toValue: 0,
+          tension: 50,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.spring(cardScale, {
+          toValue: 1,
+          tension: 55,
+          friction: 7,
+          useNativeDriver: true,
+        }),
       ]),
     ]).start();
-  }, [brandOpacity, brandTranslateY, cardOpacity, cardTranslateY]);
+  }, [logoGlow, logoScale, logoOpacity, brandOpacity, brandTranslateY, taglineOpacity, taglineTranslateY, cardOpacity, cardTranslateY, cardScale]);
 
   const {
     control,
@@ -62,38 +180,76 @@ export default function LoginScreen() {
     }
   };
 
+  const staggerStyle = (index: number) => ({
+    opacity: stagger[index].opacity,
+    transform: [
+      { translateY: stagger[index].translateY },
+      { scale: stagger[index].scale },
+    ],
+  });
+
   return (
     <Screen title={undefined} scroll={false} contentStyle={styles.screen}>
       <GradientHeader>
-        <Animated.View
-          style={[
-            styles.header,
-            { opacity: brandOpacity, transform: [{ translateY: brandTranslateY }] },
-          ]}>
-          <ZpayLogo size={72} style={styles.headerLogo} />
-          <Text style={[styles.brand, { color: colors.white }]}>
-            Z<span style={styles.brandAccent}>Pay</span>
-          </Text>
-          <Text style={[styles.tagline, { color: '#A7F3D0' }]}>Simple. Secure. Nigerian.</Text>
-        </Animated.View>
+        <View style={styles.header}>
+          <Animated.View
+            style={{
+              opacity: logoOpacity,
+              transform: [{ scale: logoScale }],
+            }}>
+            <ZpayLogo size={80} style={styles.headerLogo} />
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              opacity: brandOpacity,
+              transform: [{ translateY: brandTranslateY }],
+              alignItems: 'center',
+            }}>
+            <Text style={[styles.brand, { color: colors.white }]}>
+              Z<span style={styles.brandAccent}>Pay</span>
+            </Text>
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              opacity: taglineOpacity,
+              transform: [{ translateY: taglineTranslateY }],
+              alignItems: 'center',
+            }}>
+            <Text style={[styles.tagline, { color: '#A7F3D0' }]}>
+              Simple. Secure. Nigerian.
+            </Text>
+          </Animated.View>
+        </View>
       </GradientHeader>
 
       <Animated.View
         style={[
           styles.cardWrap,
-          { opacity: cardOpacity, transform: [{ translateY: cardTranslateY }] },
+          {
+            opacity: cardOpacity,
+            transform: [{ translateY: cardTranslateY }, { scale: cardScale }],
+          },
         ]}>
         <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <Text variant="bodyBold" style={styles.cardTitle} color="text">
-            Welcome Back
-          </Text>
-          <Text variant="small" color="textSecondary" style={styles.cardSubtitle}>
-            Login to continue to your account.
-          </Text>
+          <Animated.View style={staggerStyle(0)}>
+            <Text variant="bodyBold" style={styles.cardTitle} color="text">
+              Welcome Back
+            </Text>
+          </Animated.View>
 
-          <InlineError message={error} />
+          <Animated.View style={staggerStyle(1)}>
+            <Text variant="small" color="textSecondary" style={styles.cardSubtitle}>
+              Login to continue to your account.
+            </Text>
+          </Animated.View>
 
-          <View style={styles.field}>
+          <Animated.View style={staggerStyle(1)}>
+            <InlineError message={error} />
+          </Animated.View>
+
+          <Animated.View style={[styles.field, staggerStyle(2)]}>
             <View style={styles.inputIcon}>
               <Ionicons name="person-outline" size={IconSize.sm} color={colors.accent} />
             </View>
@@ -114,9 +270,9 @@ export default function LoginScreen() {
                 />
               )}
             />
-          </View>
+          </Animated.View>
 
-          <View style={styles.field}>
+          <Animated.View style={[styles.field, staggerStyle(3)]}>
             <View style={styles.inputIcon}>
               <Ionicons name="lock-closed-outline" size={IconSize.sm} color={colors.accent} />
             </View>
@@ -148,9 +304,9 @@ export default function LoginScreen() {
                 />
               )}
             />
-          </View>
+          </Animated.View>
 
-          <View style={styles.linksRow}>
+          <Animated.View style={[styles.linksRow, staggerStyle(4)]}>
             <Link href="/forgot-password" asChild>
               <Text variant="small" color="accent">
                 Forgot password?
@@ -161,21 +317,23 @@ export default function LoginScreen() {
                 Create account
               </Text>
             </Link>
-          </View>
+          </Animated.View>
 
-          <Button
-            label="Login"
-            loading={submitting}
-            disabled={submitting}
-            onPress={handleSubmit(onSubmit)}
-          />
+          <Animated.View style={staggerStyle(5)}>
+            <Button
+              label="Login"
+              loading={submitting}
+              disabled={submitting}
+              onPress={handleSubmit(onSubmit)}
+            />
+          </Animated.View>
 
-          <View style={styles.secureNote}>
+          <Animated.View style={[styles.secureNote, staggerStyle(5)]}>
             <Ionicons name="lock-closed-outline" size={14} color={colors.textMuted} />
             <Text variant="small" color="textMuted">
               Secure login powered by zPay
             </Text>
-          </View>
+          </Animated.View>
         </View>
       </Animated.View>
     </Screen>
@@ -188,14 +346,15 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
+    gap: Spacing.xs,
   },
   headerLogo: {
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   brand: {
-    fontSize: 44,
+    fontSize: 46,
     fontWeight: '800',
-    letterSpacing: 1,
+    letterSpacing: 1.5,
   },
   brandAccent: {
     fontWeight: '800',
@@ -205,6 +364,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     marginTop: Spacing.xs,
+    letterSpacing: 0.5,
   },
   cardWrap: {
     flex: 1,
@@ -214,11 +374,11 @@ const styles = StyleSheet.create({
     borderRadius: Radii.xl,
     padding: Spacing.xxl,
     borderWidth: 1,
-    shadowColor: '#000000',
-    shadowOpacity: 0.2,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 8,
+    shadowColor: '#00C54C',
+    shadowOpacity: 0.08,
+    shadowRadius: 32,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 12,
   },
   cardTitle: {
     fontSize: 28,
