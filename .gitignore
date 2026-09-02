@@ -51,3 +51,4 @@ example
 /android
 
 .vercel
+.env.local
