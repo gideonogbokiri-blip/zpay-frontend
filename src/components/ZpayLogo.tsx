@@ -2,7 +2,7 @@ import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Text } from './ui';
-import { IconSize, Radii } from '@/theme/tokens';
+import { IconSize } from '@/theme/tokens';
 
 export interface ZpayLogoProps {
   size?: number;
@@ -32,6 +32,9 @@ export function ZpayLogo({ size = 84, style }: ZpayLogoProps) {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[styles.badge, { borderRadius: radius }]}>
+        <View pointerEvents="none" style={styles.shine} />
+        <View pointerEvents="none" style={styles.cutTop} />
+        <View pointerEvents="none" style={styles.cutBottom} />
         <Text
           style={[
             styles.z,
@@ -69,9 +72,39 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
     elevation: 8,
   },
+  shine: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    right: '44%',
+    height: '26%',
+    borderRadius: 999,
+    backgroundColor: 'rgba(255, 255, 255, 0.24)',
+    transform: [{ rotate: '-18deg' }],
+  },
+  cutTop: {
+    position: 'absolute',
+    right: -18,
+    top: 12,
+    width: '52%',
+    height: 10,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    transform: [{ rotate: '-28deg' }],
+  },
+  cutBottom: {
+    position: 'absolute',
+    left: -20,
+    bottom: 14,
+    width: '56%',
+    height: 10,
+    borderRadius: 999,
+    backgroundColor: 'rgba(2, 6, 23, 0.14)',
+    transform: [{ rotate: '-28deg' }],
+  },
   z: {
     color: '#FFFFFF',
-    fontWeight: '800',
+    fontWeight: '900',
     letterSpacing: -Math.round(IconSize.xs / 2),
   },
 });
