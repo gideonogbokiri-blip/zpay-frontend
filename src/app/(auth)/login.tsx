@@ -114,28 +114,36 @@ export default function LoginScreen() {
 
   return (
     <Screen title={undefined} scroll contentStyle={styles.screen}>
-      <View style={[styles.layout, wide && styles.layoutWide]}>
-        <Animated.View style={[styles.visualPanel, wide ? styles.visualPanelWide : styles.visualPanelMobile, reveal(0)]}>
-          <Animated.View pointerEvents="none" style={[styles.visualGlow, { opacity: glow }]} />
-          <Image source={loginVisual} resizeMode="cover" style={styles.visualImage} />
-          <View style={styles.visualCopy}>
-            <Text style={styles.visualTitle}>Pay smarter with ZPAY</Text>
-            <Text style={styles.visualText}>Bills, airtime, data, exams and wallet funding in one secure Nigerian app.</Text>
-          </View>
-        </Animated.View>
+      <View style={[styles.layout, wide ? styles.layoutWide : styles.layoutMobile]}>
+        {wide ? (
+          <Animated.View style={[styles.visualPanel, styles.visualPanelWide, reveal(0)]}>
+            <Animated.View pointerEvents="none" style={[styles.visualGlow, { opacity: glow }]} />
+            <Image source={loginVisual} resizeMode="cover" style={styles.visualImage} />
+            <View style={styles.visualCopy}>
+              <Text style={styles.visualTitle}>Pay smarter with ZPAY</Text>
+              <Text style={styles.visualText}>Bills, airtime, data, exams and wallet funding in one secure Nigerian app.</Text>
+            </View>
+          </Animated.View>
+        ) : null}
 
-        <Animated.View style={[styles.formPanel, { backgroundColor: colors.surface, borderColor: colors.border }, reveal(1)]}>
-          <Animated.View style={[styles.brandRow, reveal(2)]}>
-            <ZpayLogo size={72} />
-            <View style={styles.brandTextWrap}>
-              <Text style={[styles.brand, { color: colors.white }]}>Z<Text style={styles.brandAccent}>Pay</Text></Text>
-              <Text style={[styles.tagline, { color: colors.textSecondary }]}>Simple. Secure. Nigerian.</Text>
+        <Animated.View
+          style={[
+            styles.formPanel,
+            wide ? styles.formPanelWide : styles.formPanelMobile,
+            { backgroundColor: wide ? colors.surface : 'transparent', borderColor: wide ? colors.border : 'transparent' },
+            reveal(1),
+          ]}>
+          <Animated.View style={[styles.brandRow, !wide && styles.brandRowMobile, reveal(2)]}>
+            <ZpayLogo size={wide ? 72 : 108} />
+            <View style={[styles.brandTextWrap, !wide && styles.brandTextWrapMobile]}>
+              <Text style={[styles.brand, !wide && styles.brandMobile, { color: colors.white }]}>Z<Text style={styles.brandAccent}>Pay</Text></Text>
+              <Text style={[styles.tagline, !wide && styles.taglineMobile, { color: colors.textSecondary }]}>Simple. Secure. Nigerian.</Text>
             </View>
           </Animated.View>
 
           <Animated.View style={reveal(3)}>
-            <Text variant="bodyBold" style={styles.cardTitle} color="text">Welcome Back</Text>
-            <Text variant="small" color="textSecondary" style={styles.cardSubtitle}>Login to continue to your account.</Text>
+            <Text variant="bodyBold" style={[styles.cardTitle, !wide && styles.cardTitleMobile]} color="text">Welcome Back</Text>
+            <Text variant="small" color="textSecondary" style={[styles.cardSubtitle, !wide && styles.cardSubtitleMobile]}>Login to continue to your account.</Text>
           </Animated.View>
 
           <Animated.View style={reveal(4)}>
@@ -229,6 +237,11 @@ const styles = StyleSheet.create({
     minHeight: 720,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  layoutMobile: {
+    flex: 1,
+    justifyContent: 'center',
   },
   visualPanel: {
     overflow: 'hidden',
@@ -240,8 +253,25 @@ const styles = StyleSheet.create({
     flex: 1.05,
     minHeight: 680,
   },
-  visualPanelMobile: {
-    height: 250,
+  formPanel: {
+    borderRadius: Radii.xxl,
+    borderWidth: 1,
+    padding: Spacing.xxl,
+    gap: Spacing.lg,
+    shadowColor: '#00C54C',
+    shadowOpacity: 0.09,
+    shadowRadius: 34,
+    shadowOffset: { width: 0, height: 18 },
+    elevation: 14,
+  },
+  formPanelWide: {
+    flex: 0.95,
+  },
+  formPanelMobile: {
+    width: '100%',
+    paddingHorizontal: 0,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   visualGlow: {
     position: 'absolute',
@@ -276,31 +306,30 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontWeight: '600',
   },
-  formPanel: {
-    flex: 0.95,
-    borderRadius: Radii.xxl,
-    borderWidth: 1,
-    padding: Spacing.xxl,
-    gap: Spacing.lg,
-    shadowColor: '#00C54C',
-    shadowOpacity: 0.09,
-    shadowRadius: 34,
-    shadowOffset: { width: 0, height: 18 },
-    elevation: 14,
-  },
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
     marginBottom: Spacing.sm,
   },
+  brandRowMobile: {
+    gap: Spacing.lg,
+    marginBottom: Spacing.lg,
+  },
   brandTextWrap: {
+    flex: 1,
+  },
+  brandTextWrapMobile: {
     flex: 1,
   },
   brand: {
     fontSize: 42,
     fontWeight: '800',
     letterSpacing: 1.2,
+  },
+  brandMobile: {
+    fontSize: 44,
+    fontWeight: '900',
   },
   brandAccent: {
     color: '#A7F3D0',
@@ -312,14 +341,27 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.3,
   },
+  taglineMobile: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginTop: Spacing.xs,
+  },
   cardTitle: {
     fontSize: 32,
     lineHeight: 38,
     fontWeight: '800',
   },
+  cardTitleMobile: {
+    fontSize: 34,
+    lineHeight: 42,
+  },
   cardSubtitle: {
     marginTop: Spacing.xs,
     fontSize: 16,
+  },
+  cardSubtitleMobile: {
+    fontSize: 17,
+    marginTop: Spacing.xs,
   },
   field: {
     position: 'relative',
