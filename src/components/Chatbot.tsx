@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -74,6 +74,16 @@ export function Chatbot() {
   const fabLeft = useRef(new Animated.Value(maxLeft)).current;
   const fabBottom = useRef(new Animated.Value(minBottom)).current;
   const gesture = useRef({ x: maxLeft, y: minBottom, moved: 0 });
+
+  // Keep the FAB in-bounds when the viewport resizes so it never overflows the screen.
+  useLayoutEffect(() => {
+    const nx = clamp(gesture.current.x, minLeft, maxLeft);
+    const ny = clamp(gesture.current.y, minBottom, maxBottom);
+    gesture.current.x = nx;
+    gesture.current.y = ny;
+    fabLeft.setValue(nx);
+    fabBottom.setValue(ny);
+  }, [winW, winH, minLeft, maxLeft, minBottom, maxBottom, fabLeft, fabBottom]);
 
   const fabPan = useRef(
     PanResponder.create({
