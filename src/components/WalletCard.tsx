@@ -124,11 +124,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 14 },
     elevation: 16,
   },
-  glow: {
-    display: 'none',
-  },
   inner: {
-    gap: Spacing.sm,
+    gap: Spacing.md,
   },
   topRow: {
     flexDirection: 'row',
@@ -178,7 +175,7 @@ const styles = StyleSheet.create({
   bottomRow: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginTop: Spacing.md,
+    marginTop: Spacing.lg,
   },
   fundPress: {
     shadowColor: '#00C54C',
