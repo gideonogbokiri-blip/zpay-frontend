@@ -11,6 +11,7 @@ import { ACTIVE_SERVICES, SERVICE_META, SERVICE_NAMES } from '@/constants/servic
 import { useAuth } from '@/hooks/use-auth';
 import { useNotifications, useServices, useTransactions, useWallet } from '@/hooks/queries';
 import { formatNaira } from '@/lib/format';
+import type { ServiceType } from '@/lib/api';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
@@ -21,7 +22,9 @@ export default function HomeScreen() {
   const { data: services } = useServices();
   const { data: transactions } = useTransactions({ service: 'ALL', status: 'ALL' });
 
-  const serviceOrder = services?.map((s) => s.type) ?? ACTIVE_SERVICES;
+  const serviceOrder =
+    (services?.map((s) => s.type).filter((t) => ACTIVE_SERVICES.includes(t)) as ServiceType[]) ?? [];
+  const visibleServices = serviceOrder.length ? serviceOrder : ACTIVE_SERVICES;
   const recent = transactions?.items.slice(0, 5) ?? [];
   const { data: notifications } = useNotifications();
   const unreadCount = notifications?.filter((n) => !n.readAt).length ?? 0;
@@ -72,15 +75,16 @@ export default function HomeScreen() {
           Services
         </Text>
         <View style={styles.grid}>
-          {serviceOrder.map((type) => (
-            <ServiceButton
-              key={type}
-              icon={SERVICE_META[type].icon}
-              label={SERVICE_NAMES[type]}
-              color={SERVICE_META[type].color}
-              layout="home"
-              onPress={() => router.push(`/services/${type.toLowerCase()}`)}
-            />
+          {visibleServices.map((type) => (
+            <View key={type} style={styles.gridItem}>
+              <ServiceButton
+                icon={SERVICE_META[type].icon}
+                label={SERVICE_NAMES[type]}
+                color={SERVICE_META[type].color}
+                layout="home"
+                onPress={() => router.push(`/services/${type.toLowerCase()}`)}
+              />
+            </View>
           ))}
         </View>
       </View>
@@ -191,6 +195,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     rowGap: Spacing.lg,
+    columnGap: Spacing.md,
+  },
+  gridItem: {
+    width: '48%',
+    alignItems: 'center',
   },
   list: {
     borderTopWidth: 1,

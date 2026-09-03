@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Text, View } from './ui';
 import { formatNaira } from '@/lib/format';
-import { IconSize, Radii, Shadow, Spacing } from '@/theme/tokens';
+import { FontSize, IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
 export interface WalletCardProps {
@@ -33,45 +34,67 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
     };
   }, [balance, loading, animated]);
 
-  const balanceText = hidden ? '₦ ••••••' : formatNaira(display);
+  const balanceText = hidden ? '••••••' : formatNaira(display);
 
   const content = (
-    <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+    <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.accentSoft }]}>
+      <View pointerEvents="none" style={styles.glow} />
+
       <View style={styles.inner}>
         <View style={styles.topRow}>
-          <Text variant="label" color="textSecondary">
-            Wallet balance
-          </Text>
+          <View style={styles.topLeft}>
+            <View style={styles.walletIconWrap}>
+              <Ionicons name="wallet-outline" size={IconSize.sm} color={colors.accent} />
+            </View>
+            <Text variant="smallBold" color="textSecondary">
+              My wallet
+            </Text>
+          </View>
           <Pressable
             onPress={() => setHidden((v) => !v)}
             accessibilityRole="button"
             accessibilityLabel={hidden ? 'Show balance' : 'Hide balance'}
-            style={styles.eyeButton}>
+            hitSlop={Spacing.sm}
+            style={({ pressed }) => [styles.eyeButton, { backgroundColor: colors.accentSoft }, pressed && styles.pressed]}>
             <Ionicons
               name={hidden ? 'eye-off-outline' : 'eye-outline'}
               size={IconSize.sm}
-              color={colors.textMuted}
+              color={colors.accent}
             />
           </Pressable>
         </View>
+
+        <Text variant="caption" color="textMuted" style={styles.label}>
+          Available balance
+        </Text>
+
         {loading ? (
-          <Text variant="amount" color="textMuted">
+          <Text style={[styles.amount, { color: colors.textMuted }]}>
             ------
           </Text>
         ) : (
-          <Text variant="amount" color="text" style={styles.amount}>
-            {balanceText}
-          </Text>
+          <View style={styles.amountRow}>
+            <Text style={[styles.currency, { color: colors.textMuted }]}>₦</Text>
+            <Text style={[styles.amount, { color: colors.text }]}>{balanceText}</Text>
+          </View>
         )}
+
         <View style={styles.bottomRow}>
           <Pressable
             onPress={onFundPress}
             accessibilityRole="button"
             accessibilityLabel="Fund wallet"
-            style={({ pressed }) => [styles.fundButton, { backgroundColor: colors.accent }, pressed && styles.pressed]}>
-            <Text variant="smallBold" style={{ color: colors.white }}>
-              + Fund Wallet
-            </Text>
+            style={({ pressed }) => [styles.fundPress, pressed && styles.fundPressed]}>
+            <LinearGradient
+              colors={['#00C54C', '#00A93F', '#059669']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.fundButton}>
+              <Ionicons name="add" size={IconSize.md} color="#FFFFFF" />
+              <Text variant="smallBold" style={{ color: '#FFFFFF' }}>
+                Fund Wallet
+              </Text>
+            </LinearGradient>
           </Pressable>
         </View>
       </View>
@@ -92,10 +115,23 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
 const styles = StyleSheet.create({
   card: {
     borderRadius: Radii.xl,
-    padding: Spacing.lg,
+    padding: Spacing.xl,
     borderWidth: 1,
     overflow: 'hidden',
-    ...Shadow,
+    shadowColor: '#00C54C',
+    shadowOpacity: 0.18,
+    shadowRadius: 28,
+    shadowOffset: { width: 0, height: 14 },
+    elevation: 16,
+  },
+  glow: {
+    position: 'absolute',
+    top: -70,
+    right: -50,
+    width: 190,
+    height: 190,
+    borderRadius: 95,
+    backgroundColor: 'rgba(0, 197, 76, 0.10)',
   },
   inner: {
     gap: Spacing.sm,
@@ -105,23 +141,71 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  topLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  walletIconWrap: {
+    width: IconSize.lg + 4,
+    height: IconSize.lg + 4,
+    borderRadius: Radii.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 197, 76, 0.14)',
+  },
   eyeButton: {
-    padding: Spacing.xxs,
+    width: IconSize.xl,
+    height: IconSize.xl,
+    borderRadius: Radii.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  label: {
+    marginTop: Spacing.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+  },
+  amountRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  currency: {
+    fontSize: FontSize.heading,
+    fontWeight: '700',
+    marginRight: Spacing.xs,
   },
   amount: {
-    letterSpacing: 1,
+    fontSize: FontSize.amount,
+    lineHeight: 52,
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   bottomRow: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginTop: Spacing.sm,
+    marginTop: Spacing.md,
+  },
+  fundPress: {
+    shadowColor: '#00C54C',
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 10,
   },
   fundButton: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.sm + 2,
     borderRadius: Radii.full,
   },
+  fundPressed: {
+    opacity: 0.88,
+    transform: [{ scale: 0.97 }],
+  },
   pressed: {
-    opacity: 0.85,
+    opacity: 0.7,
   },
 });

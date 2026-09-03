@@ -1,15 +1,7 @@
 import type { IconName } from '@/components/Icon';
 import type { ServiceType } from '@/lib/api';
 
-export const ACTIVE_SERVICES: ServiceType[] = [
-  'ELECTRICITY',
-  'AIRTIME',
-  'DATA',
-  'TV',
-  'WAEC',
-  'JAMB',
-  'NECO',
-];
+export const ACTIVE_SERVICES: ServiceType[] = ['ELECTRICITY', 'AIRTIME', 'DATA', 'TV'];
 
 export const SERVICE_NAMES: Record<ServiceType, string> = {
   ELECTRICITY: 'Electricity',

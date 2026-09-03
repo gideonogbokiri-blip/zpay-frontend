@@ -18,7 +18,14 @@ export default function MeScreen() {
   const confirmLogout = () => {
     Alert.alert('Log out?', 'You will need to log in again to use ZPAY.', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Log out', style: 'destructive', onPress: () => signOut() },
+      {
+        text: 'Log out',
+        style: 'destructive',
+        onPress: () => {
+          signOut();
+          router.replace('/welcome');
+        },
+      },
     ]);
   };
 

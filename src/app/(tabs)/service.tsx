@@ -14,7 +14,9 @@ export default function ServiceScreen() {
   const { data: services } = useServices();
   const { data: notifications } = useNotifications();
   const unreadCount = notifications?.filter((n) => !n.readAt).length ?? 0;
-  const serviceOrder = services?.map((s) => s.type) ?? ACTIVE_SERVICES;
+  const serviceOrder = services?.map((s) => s.type) ?? [];
+  const visibleServices = serviceOrder.filter((t) => ACTIVE_SERVICES.includes(t));
+  const displayServices = visibleServices.length ? visibleServices : ACTIVE_SERVICES;
 
   return (
     <Screen variant="dark" title={undefined} scroll>
@@ -41,8 +43,8 @@ export default function ServiceScreen() {
       </Text>
 
       <View style={styles.grid}>
-        {serviceOrder.map((type, index) => {
-          const isLastOdd = index === serviceOrder.length - 1 && serviceOrder.length % 2 === 1;
+        {displayServices.map((type, index) => {
+          const isLastOdd = index === displayServices.length - 1 && displayServices.length % 2 === 1;
           const content = (
             <ServiceButton
               icon={SERVICE_META[type].icon}
