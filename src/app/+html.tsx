@@ -6,6 +6,7 @@ export default function Root({ children }: PropsWithChildren) {
     <html lang="en">
       <head>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         <meta name="theme-color" content="#101415" />
         <meta name="description" content="Pay bills, buy airtime and register for exams in one place." />
         <link rel="manifest" href="/manifest.json" />
