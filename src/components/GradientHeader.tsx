@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inner: {
-    paddingTop: Spacing.xxxl + Spacing.lg,
-    paddingBottom: Spacing.xxl + Spacing.md,
+    paddingTop: Spacing.xxxl,
+    paddingBottom: Spacing.xxl,
     paddingHorizontal: Spacing.xl,
   },
 });

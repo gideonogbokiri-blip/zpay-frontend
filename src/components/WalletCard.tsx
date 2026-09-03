@@ -171,14 +171,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   currency: {
-    fontSize: FontSize.heading,
-    fontWeight: '700',
+    fontSize: FontSize.heading + 6,
+    fontWeight: '800',
     marginRight: Spacing.xs,
   },
   amount: {
-    fontSize: FontSize.amount,
-    lineHeight: 52,
-    fontWeight: '800',
+    fontSize: 52,
+    lineHeight: 60,
+    fontWeight: '900',
     letterSpacing: 0.5,
   },
   bottomRow: {

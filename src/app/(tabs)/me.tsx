@@ -23,6 +23,8 @@ export default function MeScreen() {
         style: 'destructive',
         onPress: () => {
           signOut();
+          // Reset the navigation stack so the user cannot go back to Home.
+          router.dismissAll();
           router.replace('/welcome');
         },
       },

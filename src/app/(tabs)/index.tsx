@@ -63,12 +63,14 @@ export default function HomeScreen() {
         </View>
       </GradientHeader>
 
-      <WalletCard
-        balance={wallet?.balance ?? 0}
-        loading={walletLoading}
-        onFundPress={() => router.push('/wallet/fund')}
-        onPress={() => router.push('/wallet/fund')}
-      />
+      <View style={styles.walletOverlap}>
+        <WalletCard
+          balance={wallet?.balance ?? 0}
+          loading={walletLoading}
+          onFundPress={() => router.push('/wallet/fund')}
+          onPress={() => router.push('/wallet/fund')}
+        />
+      </View>
 
       <View style={styles.section}>
         <Text variant="title" style={styles.sectionTitle}>
@@ -175,6 +177,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  walletOverlap: {
+    marginTop: -70,
+    marginHorizontal: -Spacing.lg,
+    shadowColor: '#00C54C',
+    shadowOpacity: 0.28,
+    shadowRadius: 30,
+    shadowOffset: { width: 0, height: 16 },
+    elevation: 18,
   },
   pressed: {
     opacity: 0.7,
