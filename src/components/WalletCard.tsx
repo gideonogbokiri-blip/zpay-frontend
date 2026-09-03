@@ -114,7 +114,9 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: Radii.xl,
+    borderRadius: 0,
+    borderTopLeftRadius: Radii.lg,
+    borderTopRightRadius: Radii.lg,
     padding: Spacing.xl,
     borderWidth: 1,
     overflow: 'hidden',

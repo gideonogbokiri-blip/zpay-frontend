@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   KeyboardAvoidingView,
+  PanResponder,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   type NativeSyntheticEvent,
   type TextInputContentSizeChangeEventData,
 } from 'react-native';
@@ -30,6 +33,12 @@ const QUICK_REPLIES = [
 function timeLabel(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+const FAB_SIZE = 58;
+
+function clamp(v: number, min: number, max: number): number {
+  return Math.min(Math.max(v, min), max);
 }
 
 export function Chatbot() {
@@ -55,15 +64,68 @@ export function Chatbot() {
     setInputHeight(Math.min(Math.max(h + 8, 44), 120));
   }
 
-  if (!open) {    return (
-      <TouchableOpacity
-        activeOpacity={0.85}
-        onPress={() => setOpen(true)}
-        accessibilityRole="button"
-        accessibilityLabel="Open support chat"
-        style={[styles.fab, { backgroundColor: colors.accent, bottom: BottomTabInset + Spacing.xl }]}>
-        <Icon name="chatbubble-ellipses" size={26} color="#0a0f10" />
-      </TouchableOpacity>
+  const { width: winW, height: winH } = useWindowDimensions();
+
+  const minLeft = Spacing.lg;
+  const maxLeft = Math.max(minLeft, winW - FAB_SIZE - Spacing.lg);
+  const minBottom = BottomTabInset + Spacing.xl;
+  const maxBottom = Math.max(minBottom, winH - FAB_SIZE - Spacing.lg);
+
+  const fabLeft = useRef(new Animated.Value(maxLeft)).current;
+  const fabBottom = useRef(new Animated.Value(minBottom)).current;
+  const gesture = useRef({ x: maxLeft, y: minBottom, moved: 0 });
+
+  const fabPan = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        gesture.current.moved = 0;
+        fabLeft.stopAnimation();
+        fabBottom.stopAnimation();
+      },
+      onPanResponderMove: (_evt, g) => {
+        gesture.current.moved += Math.abs(g.dx) + Math.abs(g.dy);
+        const nx = clamp(gesture.current.x + g.dx, minLeft, maxLeft);
+        const ny = clamp(gesture.current.y - g.dy, minBottom, maxBottom);
+        gesture.current.x = nx;
+        gesture.current.y = ny;
+        fabLeft.setValue(nx);
+        fabBottom.setValue(ny);
+      },
+      onPanResponderRelease: () => {
+        // Treat a tiny movement as a tap -> open the chat.
+        if (gesture.current.moved < 8) {
+          setOpen(true);
+          return;
+        }
+        // Snap the FAB to the nearest edge so it always looks tidy.
+        const targetLeft = gesture.current.x < winW / 2 ? minLeft : maxLeft;
+        gesture.current.x = targetLeft;
+        Animated.spring(fabLeft, {
+          toValue: targetLeft,
+          useNativeDriver: false,
+          bounciness: 4,
+          speed: 14,
+        }).start();
+      },
+    })
+  ).current;
+
+  if (!open) {
+    return (
+      <Animated.View
+        style={[styles.fabAnimated, { left: fabLeft, bottom: fabBottom }]}
+        {...fabPan.panHandlers}>
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={() => setOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel="Open support chat"
+          style={[styles.fab, { backgroundColor: colors.accent }]}>
+          <Icon name="chatbubble-ellipses" size={26} color="#0a0f10" />
+        </TouchableOpacity>
+      </Animated.View>
     );
   }
 
@@ -184,11 +246,13 @@ export function Chatbot() {
 }
 
 const styles = StyleSheet.create({
-  fab: {
+  fabAnimated: {
     position: 'absolute',
-    right: Spacing.lg,
-    width: 58,
-    height: 58,
+    zIndex: 50,
+  },
+  fab: {
+    width: FAB_SIZE,
+    height: FAB_SIZE,
     borderRadius: Radii.full,
     alignItems: 'center',
     justifyContent: 'center',
@@ -197,7 +261,6 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
     elevation: 8,
-    zIndex: 50,
   },
   wrapper: {
     position: 'absolute',

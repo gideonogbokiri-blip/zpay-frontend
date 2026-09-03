@@ -31,37 +31,39 @@ export default function HomeScreen() {
 
   return (
     <Screen title={undefined} scroll>
-      <GradientHeader>
-        <View style={styles.header}>
-          <View style={styles.brandBlock}>
-            <Text variant="title" style={[styles.greeting, { color: colors.white }]}>
-              Hello, {user?.fullName ? user.fullName.split(' ')[0] : 'there'} 👋
-            </Text>
-            <Text variant="small" style={[styles.greetingSub, { color: '#A7F3D0' }]}>
-              Good to have you back
-            </Text>
+      <View style={styles.gradientWrap}>
+        <GradientHeader>
+          <View style={styles.header}>
+            <View style={styles.brandBlock}>
+              <Text variant="title" style={[styles.greeting, { color: colors.white }]}>
+                Hello, {user?.fullName ? user.fullName.split(' ')[0] : 'there'} 👋
+              </Text>
+              <Text variant="small" style={[styles.greetingSub, { color: '#A7F3D0' }]}>
+                Good to have you back
+              </Text>
+            </View>
+            <View style={styles.headerActions}>
+              <Link href="/notifications" asChild>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Notifications"
+                  style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
+                  <Icon name="notifications-outline" size={IconSize.lg} color={colors.white} />
+                  {unreadCount > 0 ? <View style={styles.unreadDot} /> : null}
+                </Pressable>
+              </Link>
+              <Link href="/me" asChild>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Profile"
+                  style={({ pressed }) => [styles.avatar, pressed && styles.pressed]}>
+                  <Icon name="person" size={IconSize.md} color={colors.white} />
+                </Pressable>
+              </Link>
+            </View>
           </View>
-          <View style={styles.headerActions}>
-            <Link href="/notifications" asChild>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Notifications"
-                style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
-                <Icon name="notifications-outline" size={IconSize.lg} color={colors.white} />
-                {unreadCount > 0 ? <View style={styles.unreadDot} /> : null}
-              </Pressable>
-            </Link>
-            <Link href="/me" asChild>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Profile"
-                style={({ pressed }) => [styles.avatar, pressed && styles.pressed]}>
-                <Icon name="person" size={IconSize.md} color={colors.white} />
-              </Pressable>
-            </Link>
-          </View>
-        </View>
-      </GradientHeader>
+        </GradientHeader>
+      </View>
 
       <View style={styles.walletOverlap}>
         <WalletCard
@@ -129,6 +131,9 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  gradientWrap: {
+    marginHorizontal: -Spacing.lg,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',

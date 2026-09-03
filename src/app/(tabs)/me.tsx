@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Icon, type IconName } from '@/components/Icon';
 import { Screen, Text } from '@/components/ui';
@@ -14,21 +15,15 @@ export default function MeScreen() {
   const { data: kyc } = useKyc();
   const { data: notifications } = useNotifications();
   const unread = notifications?.filter((n) => !n.readAt).length ?? 0;
+  const [showLogout, setShowLogout] = useState(false);
 
-  const confirmLogout = () => {
-    Alert.alert('Log out?', 'You will need to log in again to use ZPAY.', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Log out',
-        style: 'destructive',
-        onPress: () => {
-          signOut();
-          // Reset the navigation stack so the user cannot go back to Home.
-          router.dismissAll();
-          router.replace('/welcome');
-        },
-      },
-    ]);
+  const handleLogout = () => {
+    setShowLogout(false);
+    // Clear all auth data (token + user) and wipe the persisted AsyncStorage entry.
+    signOut();
+    // Reset the navigation stack so the user lands on Welcome and cannot go back.
+    router.dismissAll();
+    router.replace('/welcome');
   };
 
   return (
@@ -64,14 +59,52 @@ export default function MeScreen() {
       </View>
 
       <Pressable
-        onPress={confirmLogout}
+        onPress={() => setShowLogout(true)}
         accessibilityRole="button"
+        accessibilityLabel="Log out"
         style={({ pressed }) => [styles.logout, { backgroundColor: colors.dangerSoft }, pressed && styles.pressed]}>
         <Icon name="log-out-outline" size={IconSize.md} color={colors.danger} />
         <Text variant="bodyBold" style={{ color: colors.danger }}>
           Log out
         </Text>
       </Pressable>
+
+      <Modal
+        visible={showLogout}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowLogout(false)}>
+        <Pressable style={styles.backdrop} onPress={() => setShowLogout(false)} accessibilityLabel="Close">
+          <Pressable style={[styles.dialogSurface, { backgroundColor: colors.surfaceElevated }]} onPress={() => {}}>
+            <View style={[styles.dialogIcon, { backgroundColor: colors.dangerSoft }]}>
+              <Icon name="log-out-outline" size={IconSize.xxl} color={colors.danger} />
+            </View>
+            <Text variant="heading" style={styles.dialogTitle}>
+              Log out?
+            </Text>
+            <Text variant="body" color="textSecondary" style={styles.dialogBody}>
+              You will need to log in again to use ZPAY.
+            </Text>
+            <Pressable
+              onPress={handleLogout}
+              accessibilityRole="button"
+              accessibilityLabel="Confirm log out"
+              style={({ pressed }) => [styles.dialogDangerBtn, { backgroundColor: colors.danger }, pressed && styles.pressed]}>
+              <Text variant="bodyBold" style={{ color: '#FFFFFF' }}>
+                Log out
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => setShowLogout(false)}
+              accessibilityRole="button"
+              style={({ pressed }) => [styles.dialogCancelBtn, pressed && styles.pressed]}>
+              <Text variant="body" color="textSecondary">
+                Cancel
+              </Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </Screen>
   );
 }
@@ -183,8 +216,54 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.lg,
     borderRadius: Radii.md,
     marginTop: Spacing.xxxl,
+    marginBottom: Spacing.xxl,
+    zIndex: 1,
   },
   pressed: {
     opacity: 0.7,
+  },
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing.xl,
+  },
+  dialogSurface: {
+    width: '100%',
+    maxWidth: 360,
+    borderRadius: Radii.xl,
+    padding: Spacing.xl,
+    alignItems: 'center',
+    gap: Spacing.sm,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.12)',
+  },
+  dialogIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: Radii.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.xs,
+  },
+  dialogTitle: {
+    textAlign: 'center',
+  },
+  dialogBody: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
+  dialogDangerBtn: {
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    paddingVertical: Spacing.lg,
+    borderRadius: Radii.md,
+    marginTop: Spacing.sm,
+  },
+  dialogCancelBtn: {
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    paddingVertical: Spacing.md,
   },
 });
