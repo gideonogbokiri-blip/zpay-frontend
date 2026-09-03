@@ -106,9 +106,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     rowGap: Spacing.xl,
+    columnGap: Spacing.lg,
+    justifyContent: 'center',
   },
   gridItem: {
-    width: '50%',
+    width: '48%',
     alignItems: 'center',
   },
   gridItemFull: {

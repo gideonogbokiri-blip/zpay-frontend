@@ -37,6 +37,7 @@ export default function SignupScreen() {
       email: '',
       password: '',
       confirmPassword: '',
+      referralCode: '',
       agreeToTerms: false,
     },
   });
@@ -52,6 +53,7 @@ export default function SignupScreen() {
         phone: values.phone,
         email: values.email,
         password: values.password,
+        referralCode: values.referralCode?.trim() || undefined,
       });
       router.push({ pathname: '/otp', params: { verificationId, otp } });
     } catch (e) {
@@ -141,6 +143,23 @@ export default function SignupScreen() {
               onChangeText={field.onChange}
               onBlur={field.onBlur}
               error={errors.confirmPassword?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="referralCode"
+          render={({ field }) => (
+            <Input
+              label="Referral code (optional)"
+              placeholder="Enter a referral code if you have one"
+              autoCapitalize="characters"
+              autoCorrect={false}
+              value={field.value}
+              onChangeText={field.onChange}
+              onBlur={field.onBlur}
+              error={errors.referralCode?.message}
             />
           )}
         />

@@ -20,6 +20,7 @@ export interface SignupPayload {
   phone: string;
   email: string;
   password: string;
+  referralCode?: string;
 }
 
 export interface SignupResponse {
