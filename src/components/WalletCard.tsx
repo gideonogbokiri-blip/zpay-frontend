@@ -38,8 +38,6 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
 
   const content = (
     <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.accentSoft }]}>
-      <View pointerEvents="none" style={styles.glow} />
-
       <View style={styles.inner}>
         <View style={styles.topRow}>
           <View style={styles.topLeft}>
@@ -127,13 +125,7 @@ const styles = StyleSheet.create({
     elevation: 16,
   },
   glow: {
-    position: 'absolute',
-    top: -70,
-    right: -50,
-    width: 190,
-    height: 190,
-    borderRadius: 95,
-    backgroundColor: 'rgba(0, 197, 76, 0.10)',
+    display: 'none',
   },
   inner: {
     gap: Spacing.sm,
