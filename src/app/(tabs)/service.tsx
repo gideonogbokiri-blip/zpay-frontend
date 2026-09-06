@@ -85,7 +85,7 @@ function FeaturedCard({
       onPress={onPress}
       style={({ pressed }) => [styles.featuredWrap, pressed && styles.pressed]}>
       <LinearGradient
-        colors={['#2A5BFF', '#1E63F7', '#1549C9']}
+        colors={['#151A21', '#211A0E', '#3A2A0C']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.featured}>
@@ -199,8 +199,8 @@ export default function ServiceScreen() {
       </View>
 
       <View style={[styles.assistCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        <View style={[styles.assistIcon, { backgroundColor: withAlpha('#1E63F7', 0.14) }]}>
-          <Icon name="headset" size={IconSize.lg} color="#1E63F7" />
+        <View style={[styles.assistIcon, { backgroundColor: withAlpha('#F5B82E', 0.14) }]}>
+          <Icon name="headset" size={IconSize.lg} color="#F5B82E" />
         </View>
         <View style={styles.assistText}>
           <Text variant="smallBold">Need help?</Text>
@@ -208,7 +208,7 @@ export default function ServiceScreen() {
             Talk to the ZPAY assistant anytime
           </Text>
         </View>
-        <Icon name="chatbubble-ellipses-outline" size={IconSize.md} color="#1E63F7" />
+        <Icon name="chatbubble-ellipses-outline" size={IconSize.md} color="#F5B82E" />
       </View>
     </Screen>
   );
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.xl,
     overflow: 'hidden',
-    shadowColor: '#1E63F7',
+    shadowColor: '#000000',
     shadowOpacity: 0.4,
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 10 },

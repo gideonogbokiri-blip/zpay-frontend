@@ -3,7 +3,7 @@ import { useEffect, useRef, type PropsWithChildren, type ReactNode } from 'react
 import { Animated, Pressable, ScrollView, StyleSheet, type ViewStyle } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { IconSize, MaxContentWidth, Radii, Spacing } from '@/theme/tokens';
+import { BottomTabInset, IconSize, MaxContentWidth, Radii, Spacing } from '@/theme/tokens';
 import { ThemeProvider, useTheme, type ThemeVariant } from '@/theme';
 import { Text } from './Text';
 import { View } from './View';
@@ -153,15 +153,15 @@ const styles = StyleSheet.create({
     borderRadius: Radii.full,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.10)',
+    backgroundColor: 'rgba(245, 184, 46, 0.10)',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.18)',
+    borderColor: 'rgba(245, 184, 46, 0.18)',
   },
   flex: {
     flex: 1,
   },
   content: {
     paddingHorizontal: Spacing.lg,
-    paddingBottom: Spacing.xxxl,
+    paddingBottom: BottomTabInset + 112,
   },
 });

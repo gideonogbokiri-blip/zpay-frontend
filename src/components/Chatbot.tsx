@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -35,7 +35,7 @@ function timeLabel(iso: string): string {
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-const FAB_SIZE = 58;
+const FAB_SIZE = 48;
 
 function clamp(v: number, min: number, max: number): number {
   return Math.min(Math.max(v, min), max);
@@ -69,11 +69,12 @@ export function Chatbot() {
 
   const minLeft = Spacing.lg;
   const maxLeft = Math.max(minLeft, winW - FAB_SIZE - Spacing.lg);
-  const minBottom = BottomTabInset + Spacing.xl;
+  const minBottom = BottomTabInset + 96;
   const maxBottom = Math.max(minBottom, winH - FAB_SIZE - Spacing.lg);
 
   const fabLeft = useRef(new Animated.Value(maxLeft)).current;
   const fabBottom = useRef(new Animated.Value(minBottom)).current;
+  const pulse = useRef(new Animated.Value(1)).current;
   const gesture = useRef({ x: maxLeft, y: minBottom, moved: 0 });
 
   // Keep the FAB in-bounds when the viewport resizes so it never overflows the screen.
@@ -85,6 +86,19 @@ export function Chatbot() {
     fabLeft.setValue(nx);
     fabBottom.setValue(ny);
   }, [winW, winH, minLeft, maxLeft, minBottom, maxBottom, fabLeft, fabBottom]);
+
+  useEffect(() => {
+    if (open) return;
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.delay(4200),
+        Animated.timing(pulse, { toValue: 1.06, duration: 420, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 1, duration: 420, useNativeDriver: true }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [open, pulse]);
 
   const fabPan = useRef(
     PanResponder.create({
@@ -126,15 +140,15 @@ export function Chatbot() {
   if (!open) {
     return (
       <Animated.View
-        style={[styles.fabAnimated, { left: fabLeft, bottom: fabBottom }]}
+        style={[styles.fabAnimated, { left: fabLeft, bottom: fabBottom, transform: [{ scale: pulse }] }]}
         {...fabPan.panHandlers}>
         <TouchableOpacity
           activeOpacity={0.85}
           onPress={() => setOpen(true)}
           accessibilityRole="button"
           accessibilityLabel="Open support chat"
-          style={[styles.fab, { backgroundColor: colors.accent }]}>
-          <Icon name="chatbubble-ellipses" size={26} color="#FFFFFF" />
+          style={[styles.fab, { backgroundColor: colors.surfaceElevated, borderColor: colors.accent }]}>
+          <Icon name="chatbubble-ellipses" size={21} color={colors.accent} />
         </TouchableOpacity>
       </Animated.View>
     );
@@ -146,7 +160,7 @@ export function Chatbot() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View surface="surfaceElevated" style={[styles.header, { borderBottomColor: colors.border }]}>
         <View style={styles.headerLeft}>
-          <View style={[styles.avatar, { backgroundColor: 'rgba(0,244,254,0.15)' }]}>
+          <View style={[styles.avatar, { backgroundColor: 'rgba(245,184,46,0.14)' }]}> 
             <Icon name="sparkles" size={16} color={colors.accent} />
           </View>
           <View surface="surfaceElevated">
@@ -193,7 +207,7 @@ export function Chatbot() {
                     : [
                         styles.botBubble,
                         { backgroundColor: colors.input },
-                        isAdmin && { borderWidth: 1, borderColor: 'rgba(94,132,255,0.6)' },
+                        isAdmin && { borderWidth: 1, borderColor: 'rgba(245,184,46,0.34)' },
                       ],
                 ]}>
                 {isAdmin ? (
@@ -202,7 +216,7 @@ export function Chatbot() {
                   </Text>
                 ) : null}
                 <Text style={isUser ? styles.userText : styles.botText}>{m.text}</Text>
-                <Text variant="caption" style={[styles.time, { color: isUser ? 'rgba(255,255,255,0.9)' : colors.textMuted }]}>
+                <Text variant="caption" style={[styles.time, { color: isUser ? 'rgba(9,12,16,0.70)' : colors.textMuted }]}> 
                   {timeLabel(m.createdAt)}
                 </Text>
               </View>
@@ -250,7 +264,7 @@ export function Chatbot() {
           onPress={() => handleSend()}
           accessibilityRole="button"
           style={[styles.sendBtn, { backgroundColor: canSend ? colors.accent : colors.input }]}>
-          {send.isPending ? <ActivityIndicator size="small" color="#FFFFFF" /> : <Icon name="send" size={18} color="#FFFFFF" />}
+          {send.isPending ? <ActivityIndicator size="small" color="#090C10" /> : <Icon name="send" size={18} color="#090C10" />}
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -268,11 +282,12 @@ const styles = StyleSheet.create({
     borderRadius: Radii.full,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
     shadowColor: '#000',
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
+    shadowOpacity: 0.28,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   wrapper: {
     position: 'absolute',
@@ -361,7 +376,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 3,
   },
   userText: {
-    color: '#FFFFFF',
+    color: '#090C10',
     fontWeight: '600',
   },
   botText: {

@@ -7,6 +7,7 @@ import { SERVICE_META } from '@/constants/services';
 import { formatNaira, formatDateTime } from '@/lib/format';
 import type { Transaction } from '@/lib/api';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
+import { useTheme } from '@/theme';
 
 export interface TransactionRowProps {
   transaction: Transaction;
@@ -14,14 +15,15 @@ export interface TransactionRowProps {
 }
 
 export function TransactionRow({ transaction, onPress }: TransactionRowProps) {
-  const meta = transaction.service === 'WALLET' ? { icon: 'wallet' as const, color: '#1E63F7' } : SERVICE_META[transaction.service];
+  const colors = useTheme();
+  const meta = transaction.service === 'WALLET' ? { icon: 'wallet' as const, color: '#F5B82E' } : SERVICE_META[transaction.service];
 
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${transaction.serviceName} ${formatNaira(transaction.total)}`}
-      style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
+      style={({ pressed }) => [styles.row, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.pressed]}>
       <View style={[styles.iconWrap, { backgroundColor: withAlpha(meta.color, 0.15) }]}>
         <Icon name={meta.icon} size={IconSize.md} color={meta.color} />
       </View>
@@ -34,7 +36,7 @@ export function TransactionRow({ transaction, onPress }: TransactionRowProps) {
         </Text>
       </View>
       <View style={styles.right}>
-        <Text variant="bodyBold">{formatNaira(transaction.total)}</Text>
+        <Text variant="bodyBold" numberOfLines={1}>{formatNaira(transaction.total)}</Text>
         <StatusBadge status={
           transaction.status === 'successful' ? 'success'
             : transaction.status === 'failed' ? 'failed'
@@ -42,6 +44,7 @@ export function TransactionRow({ transaction, onPress }: TransactionRowProps) {
             : 'pending'
         } />
       </View>
+      <Icon name="chevron-forward" size={IconSize.sm} color={colors.textMuted} />
     </Pressable>
   );
 }
@@ -59,12 +62,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
+    borderRadius: Radii.xl,
+    borderWidth: 1,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
   },
   iconWrap: {
-    width: IconSize.xxl,
-    height: IconSize.xxl,
-    borderRadius: Radii.full,
+    width: 42,
+    height: 42,
+    borderRadius: Radii.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -75,8 +81,10 @@ const styles = StyleSheet.create({
   right: {
     alignItems: 'flex-end',
     gap: Spacing.xs,
+    maxWidth: 118,
   },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.86,
+    transform: [{ scale: 0.98 }],
   },
 });

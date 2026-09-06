@@ -13,7 +13,12 @@ interface TabIconProps {
 }
 
 function TabIcon({ name, focused, color }: TabIconProps) {
-  return <Icon name={focused ? name : (`${name}-outline` as IconName)} size={22} color={String(color)} />;
+  return (
+    <View style={[styles.tabIconWrap, focused && styles.tabIconWrapActive]}>
+      <Icon name={focused ? name : (`${name}-outline` as IconName)} size={21} color={String(color)} />
+      {focused ? <View style={styles.activeIndicator} /> : null}
+    </View>
+  );
 }
 
 export default function TabsLayout() {
@@ -38,12 +43,30 @@ export default function TabsLayout() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: colors.surface,
-            borderTopColor: colors.border,
+            height: 74,
+            paddingTop: 8,
+            paddingBottom: 10,
+            marginHorizontal: 12,
+            marginBottom: 10,
+            borderRadius: 24,
+            backgroundColor: 'rgba(17, 21, 27, 0.96)',
+            borderTopColor: 'rgba(255,255,255,0.08)',
+            borderTopWidth: 1,
+            borderLeftWidth: 1,
+            borderRightWidth: 1,
+            borderLeftColor: colors.border,
+            borderRightColor: colors.border,
+            position: 'absolute',
+            shadowColor: '#000000',
+            shadowOpacity: 0.32,
+            shadowRadius: 18,
+            shadowOffset: { width: 0, height: 10 },
+            elevation: 16,
           },
           tabBarActiveTintColor: colors.accent,
           tabBarInactiveTintColor: colors.tabInactive,
-          tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
+          tabBarLabelStyle: { fontSize: 11, fontWeight: '700', marginTop: 2 },
+          tabBarItemStyle: { paddingVertical: 2 },
         }}>
         <Tabs.Screen
           name="index"
@@ -87,5 +110,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tabIconWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 28,
+  },
+  tabIconWrapActive: {
+    transform: [{ translateY: -1 }],
+  },
+  activeIndicator: {
+    width: 18,
+    height: 3,
+    borderRadius: 999,
+    marginTop: 4,
+    backgroundColor: '#F5B82E',
   },
 });
