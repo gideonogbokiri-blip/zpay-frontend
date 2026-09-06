@@ -1,4 +1,4 @@
-import { Alert, Pressable, Share, StyleSheet, View } from 'react-native';
+import { Pressable, Share, StyleSheet, View } from 'react-native';
 
 import { Icon } from './Icon';
 import { Button, Text } from './ui';
@@ -23,10 +23,6 @@ export function Receipt({ transaction, onClose }: ReceiptProps) {
     } catch {
       // share dismissed
     }
-  };
-
-  const onDownload = () => {
-    Alert.alert('Receipt downloaded', 'Your receipt PDF has been saved to this device.');
   };
 
   return (
@@ -64,7 +60,6 @@ export function Receipt({ transaction, onClose }: ReceiptProps) {
       </View>
 
       <View style={styles.actions}>
-        <Button label="Download" variant="secondary" onPress={onDownload} />
         <Button label="Share" onPress={onShare} />
       </View>
     </View>

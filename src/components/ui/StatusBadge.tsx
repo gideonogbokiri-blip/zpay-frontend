@@ -5,7 +5,7 @@ import { useTheme } from '@/theme';
 import { Text } from './Text';
 import { View } from './View';
 
-export type StatusKind = 'success' | 'pending' | 'failed' | 'info';
+export type StatusKind = 'success' | 'pending' | 'failed' | 'cancelled' | 'info';
 
 export interface StatusBadgeProps {
   status: StatusKind;
@@ -16,6 +16,7 @@ const labelFor: Record<StatusKind, string> = {
   success: 'Successful',
   pending: 'Pending',
   failed: 'Failed',
+  cancelled: 'Cancelled',
   info: 'Info',
 };
 
@@ -37,6 +38,7 @@ const statusColor = {
   success: (c: ReturnType<typeof useTheme>) => c.success,
   pending: (c: ReturnType<typeof useTheme>) => c.warning,
   failed: (c: ReturnType<typeof useTheme>) => c.danger,
+  cancelled: (c: ReturnType<typeof useTheme>) => c.textMuted,
   info: (c: ReturnType<typeof useTheme>) => c.info,
 } as const;
 
@@ -44,6 +46,7 @@ const softBackground = {
   success: (c: ReturnType<typeof useTheme>) => c.successSoft,
   pending: (c: ReturnType<typeof useTheme>) => 'rgba(255, 176, 32, 0.14)',
   failed: (c: ReturnType<typeof useTheme>) => c.dangerSoft,
+  cancelled: (c: ReturnType<typeof useTheme>) => 'rgba(255, 255, 255, 0.06)',
   info: (c: ReturnType<typeof useTheme>) => 'rgba(77, 171, 247, 0.14)',
 } as const;
 

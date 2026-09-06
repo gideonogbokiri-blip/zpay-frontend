@@ -12,10 +12,9 @@ export interface WalletCardProps {
   balance: number;
   loading?: boolean;
   onFundPress?: () => void;
-  onPress?: () => void;
 }
 
-export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCardProps) {
+export function WalletCard({ balance, loading, onFundPress }: WalletCardProps) {
   const colors = useTheme();
   const [hidden, setHidden] = useState(false);
   const [display, setDisplay] = useState(balance);
@@ -36,7 +35,7 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
 
   const balanceText = hidden ? '••••••' : formatNaira(display);
 
-  const content = (
+  return (
     <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.accentSoft }]}>
       <View style={styles.inner}>
         <View style={styles.topRow}>
@@ -73,7 +72,13 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
         ) : (
           <View style={styles.amountRow}>
             <Text style={[styles.currency, { color: colors.textMuted }]}>₦</Text>
-            <Text style={[styles.amount, { color: colors.text }]}>{balanceText}</Text>
+            <Text
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.5}
+              style={[styles.amount, { color: colors.text }]}>
+              {balanceText}
+            </Text>
           </View>
         )}
 
@@ -97,16 +102,6 @@ export function WalletCard({ balance, loading, onFundPress, onPress }: WalletCar
         </View>
       </View>
     </View>
-  );
-
-  if (!onPress) {
-    return content;
-  }
-
-  return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel="Wallet balance">
-      {content}
-    </Pressable>
   );
 }
 

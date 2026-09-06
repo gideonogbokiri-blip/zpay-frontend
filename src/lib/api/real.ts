@@ -142,6 +142,26 @@ export const realAuthApi = {
     return http.post<{ user: User }>('/auth/create-pin', payload, token);
   },
 
+  async changePassword(token: string | null, payload: { currentPassword: string; newPassword: string }): Promise<{ user: User }> {
+    return http.post<{ user: User }>('/auth/change-password', payload, token);
+  },
+
+  async changePin(token: string | null, payload: { currentPin: string; newPin: string }): Promise<{ user: User }> {
+    return http.post<{ user: User }>('/auth/change-pin', payload, token);
+  },
+
+  async requestOtp(phone: string): Promise<{ verificationId: string; otp?: string }> {
+    return http.post<{ verificationId: string; otp?: string }>('/auth/request-otp', { phone });
+  },
+
+  async resetPassword(payload: {
+    verificationId: string;
+    code: string;
+    newPassword: string;
+  }): Promise<AuthSession> {
+    return http.post<AuthSession>('/auth/reset-password', payload);
+  },
+
   async getMe(token: string): Promise<User> {
     return http.get<User>('/auth/me', token);
   },

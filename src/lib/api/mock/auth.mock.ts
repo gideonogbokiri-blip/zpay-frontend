@@ -14,6 +14,7 @@ import { __resetStore, registerSession } from './store';
 interface MockUserRecord {
   user: User;
   password: string;
+  pin?: string;
 }
 
 interface PendingVerification {
@@ -146,13 +147,97 @@ export const mockAuthApi = {
     const record = users.get(user.id) ?? users.get(token);
     if (record) {
       record.user = { ...record.user, pinSet: true };
+      record.pin = payload.pin;
     }
     return { user: record?.user ?? user };
+  },
+
+  async changePassword(token: string | null, payload: { currentPassword: string; newPassword: string }): Promise<{ user: User }> {
+    await delay(700);
+    const user = requireUser(token ?? '');
+    const record = users.get(user.id) ?? (token ? users.get(token) : undefined);
+    if (!record) {
+      throw new ApiError({ code: 'ACCOUNT_NOT_FOUND', message: 'Account not found.', retryable: false }, 'validation');
+    }
+    if (record.password !== payload.currentPassword) {
+      throw new ApiError(
+        { code: 'INVALID_CREDENTIALS', message: 'Current password is incorrect.', retryable: true },
+        'authentication'
+      );
+    }
+    record.password = payload.newPassword;
+    return { user: record.user };
+  },
+
+  async changePin(token: string | null, payload: { currentPin: string; newPin: string }): Promise<{ user: User }> {
+    await delay(700);
+    const user = requireUser(token ?? '');
+    const record = users.get(user.id) ?? (token ? users.get(token) : undefined);
+    if (!record) {
+      throw new ApiError({ code: 'ACCOUNT_NOT_FOUND', message: 'Account not found.', retryable: false }, 'validation');
+    }
+    if (record.pin && record.pin !== payload.currentPin) {
+      throw new ApiError(
+        { code: 'PIN_INVALID', message: 'Current PIN is incorrect.', retryable: true },
+        'validation'
+      );
+    }
+    record.pin = payload.newPin;
+    return { user: record.user };
   },
 
   async getMe(token: string): Promise<User> {
     await delay(400);
     return requireUser(token);
+  },
+
+  async requestOtp(phone: string): Promise<{ verificationId: string; otp?: string }> {
+    await delay(800);
+    const record = [...users.values()].find((r) => r.user.phone === phone);
+    if (!record) {
+      throw new ApiError(
+        { code: 'ACCOUNT_NOT_FOUND', message: 'No account found with this phone number. Please sign up first.', retryable: false },
+        'validation'
+      );
+    }
+    const verificationId = generateId();
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    pendingVerifications.set(verificationId, { phone, email: record.user.email, code });
+    if (__DEV__) {
+      console.log(`[mock-auth] OTP for ${phone}: ${code}`);
+    }
+    return { verificationId, otp: code };
+  },
+
+  async resetPassword(payload: {
+    verificationId: string;
+    code: string;
+    newPassword: string;
+  }): Promise<AuthSession> {
+    await delay(800);
+    const pending = pendingVerifications.get(payload.verificationId);
+    if (!pending) {
+      throw new ApiError(
+        { code: 'OTP_EXPIRED', message: 'This verification code has expired. Request a new one.', retryable: false },
+        'validation'
+      );
+    }
+    if (payload.code !== pending.code) {
+      throw new ApiError(
+        { code: 'OTP_INVALID', message: 'The code you entered is incorrect. Try again.', retryable: true },
+        'validation'
+      );
+    }
+    const record = users.get(pending.phone) ?? users.get(pending.email);
+    pendingVerifications.delete(payload.verificationId);
+    if (!record) {
+      throw new ApiError(
+        { code: 'ACCOUNT_NOT_FOUND', message: 'Account not found. Please try again.', retryable: false },
+        'validation'
+      );
+    }
+    record.password = payload.newPassword;
+    return issueSession(record);
   },
 };
 

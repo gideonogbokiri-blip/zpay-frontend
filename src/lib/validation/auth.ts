@@ -7,7 +7,10 @@ export const signupSchema = z
     fullName: z.string().trim().min(2, 'Enter your full name'),
     phone: z.string().trim().regex(nigerianPhone, 'Enter a valid Nigerian phone number'),
     email: z.string().trim().email('Enter a valid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
+    password: z.string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[A-Za-z]/, 'Password must contain at least one letter')
+      .regex(/\d/, 'Password must contain at least one number'),
     confirmPassword: z.string(),
     referralCode: z
       .string()

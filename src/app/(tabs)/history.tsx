@@ -11,7 +11,7 @@ import type { ServiceType, Transaction } from '@/lib/api';
 import { Spacing } from '@/theme/tokens';
 
 const SERVICE_FILTERS: (ServiceType | 'WALLET' | 'ALL')[] = ['ALL', ...ACTIVE_SERVICES, 'WALLET'];
-const STATUS_FILTERS: (Transaction['status'] | 'ALL')[] = ['ALL', 'successful', 'pending', 'failed'];
+const STATUS_FILTERS: (Transaction['status'] | 'ALL')[] = ['ALL', 'successful', 'pending', 'failed', 'cancelled'];
 
 const SERVICE_LABELS: Record<string, string> = {
   ALL: 'All',
@@ -23,7 +23,7 @@ export default function HistoryScreen() {
   const [service, setService] = useState<ServiceType | 'WALLET' | 'ALL'>('ALL');
   const [status, setStatus] = useState<Transaction['status'] | 'ALL'>('ALL');
 
-  const { data, isLoading } = useTransactions({ service, status });
+  const { data, isLoading, isError, error } = useTransactions({ service, status });
   const groups = useMemo(() => groupByDate(data?.items ?? []), [data]);
 
   return (
@@ -57,6 +57,10 @@ export default function HistoryScreen() {
         {isLoading ? (
           <Text variant="small" color="textMuted" style={styles.empty}>
             Loading transactions...
+          </Text>
+        ) : isError ? (
+          <Text variant="small" color="danger" style={styles.empty}>
+            Couldn&apos;t load transactions. Pull to refresh or try again.
           </Text>
         ) : groups.length === 0 ? (
           <Text variant="small" color="textMuted" style={styles.empty}>

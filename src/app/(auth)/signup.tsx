@@ -3,6 +3,7 @@ import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Modal, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Button, InlineError, Input, Screen, Text, View } from '@/components/ui';
 import { authApi, normalizeError } from '@/lib/api';
@@ -23,6 +24,8 @@ export default function SignupScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [policy, setPolicy] = useState<PolicyType | null>(null);
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const {
     control,
@@ -48,14 +51,14 @@ export default function SignupScreen() {
     setSubmitting(true);
     setError(null);
     try {
-      const { verificationId, otp } = await authApi.signup({
+      const { verificationId } = await authApi.signup({
         fullName: values.fullName,
         phone: values.phone,
         email: values.email,
         password: values.password,
         referralCode: values.referralCode?.trim() || undefined,
       });
-      router.push({ pathname: '/otp', params: { verificationId, otp } });
+      router.push({ pathname: '/otp', params: { verificationId } });
     } catch (e) {
       setError(normalizeError(e).message);
     } finally {
@@ -122,12 +125,22 @@ export default function SignupScreen() {
           render={({ field }) => (
             <Input
               label="Password"
-              placeholder="At least 6 characters"
-              secureTextEntry
+              placeholder="At least 8 characters"
+              secureTextEntry={!showPass}
               value={field.value}
               onChangeText={field.onChange}
               onBlur={field.onBlur}
               error={errors.password?.message}
+              right={
+                <Pressable
+                  onPress={() => setShowPass((v) => !v)}
+                  accessibilityRole="button"
+                  accessibilityLabel={showPass ? 'Hide password' : 'Show password'}
+                  hitSlop={8}
+                  style={{ padding: 4 }}>
+                  <Ionicons name={showPass ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textMuted} />
+                </Pressable>
+              }
             />
           )}
         />
@@ -138,11 +151,21 @@ export default function SignupScreen() {
             <Input
               label="Confirm password"
               placeholder="Repeat your password"
-              secureTextEntry
+              secureTextEntry={!showConfirm}
               value={field.value}
               onChangeText={field.onChange}
               onBlur={field.onBlur}
               error={errors.confirmPassword?.message}
+              right={
+                <Pressable
+                  onPress={() => setShowConfirm((v) => !v)}
+                  accessibilityRole="button"
+                  accessibilityLabel={showConfirm ? 'Hide password' : 'Show password'}
+                  hitSlop={8}
+                  style={{ padding: 4 }}>
+                  <Ionicons name={showConfirm ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textMuted} />
+                </Pressable>
+              }
             />
           )}
         />

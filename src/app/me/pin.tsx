@@ -1,14 +1,21 @@
-import { Alert } from 'react-native';
 import { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import { Button, PinInput, Screen, Text } from '@/components/ui';
+import { Button, InlineError, PinInput, Screen, Text } from '@/components/ui';
+import { normalizeError } from '@/lib/api';
+import { useChangePin } from '@/hooks/queries';
 import { Spacing } from '@/theme/tokens';
+import { useTheme } from '@/theme';
 
 export default function PinScreen() {
+  const colors = useTheme();
+  const changePin = useChangePin();
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const submit = () => {
     if (current.length !== 4) {
@@ -24,14 +31,34 @@ export default function PinScreen() {
       return;
     }
     setError(null);
-    Alert.alert('PIN updated', 'Your transaction PIN has been changed successfully.');
-    setCurrent('');
-    setNext('');
-    setConfirm('');
+    setSuccess(false);
+    changePin.mutate(
+      { currentPin: current, newPin: next },
+      {
+        onSuccess: () => {
+          setSuccess(true);
+          setCurrent('');
+          setNext('');
+          setConfirm('');
+        },
+        onError: (e) => {
+          setError(normalizeError(e).message);
+        },
+      }
+    );
   };
 
   return (
     <Screen title="Transaction PIN" subtitle="Change your transaction PIN" back scroll>
+      {success ? (
+        <View style={[styles.banner, { backgroundColor: colors.successSoft }]}>
+          <Ionicons name="checkmark-circle" size={20} color={colors.success} />
+          <Text variant="smallBold" color="success">
+            PIN updated successfully
+          </Text>
+        </View>
+      ) : null}
+      <InlineError message={error} />
       <Text variant="caption" color="textSecondary" style={{ marginBottom: Spacing.md }}>
         Your PIN is required to approve every payment.
       </Text>
@@ -42,15 +69,26 @@ export default function PinScreen() {
         value={confirm}
         onChange={setConfirm}
         label="Confirm new PIN"
-        error={error}
         autoFocus={false}
       />
       <Button
         label="Update PIN"
         onPress={submit}
-        disabled={current.length !== 4 || next.length !== 4 || confirm.length !== 4}
+        loading={changePin.isPending}
+        disabled={current.length !== 4 || next.length !== 4 || confirm.length !== 4 || changePin.isPending}
         style={{ marginTop: Spacing.lg }}
       />
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    borderRadius: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+});

@@ -11,16 +11,15 @@ import { Spacing } from '@/theme/tokens';
 const RESEND_SECONDS = 30;
 
 export default function OtpScreen() {
-  const params = useLocalSearchParams<{ verificationId?: string; otp?: string }>();
+  const params = useLocalSearchParams<{ verificationId?: string }>();
   const { signIn } = useAuth();
-  const [code, setCode] = useState(params.otp ?? '');
+  const [code, setCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [resending, setResending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [seconds, setSeconds] = useState(RESEND_SECONDS);
 
   const verificationId = params.verificationId;
-  const autoCode = params.otp;
 
   useEffect(() => {
     if (seconds <= 0) {
@@ -29,22 +28,6 @@ export default function OtpScreen() {
     const timer = setTimeout(() => setSeconds((s) => s - 1), 1000);
     return () => clearTimeout(timer);
   }, [seconds]);
-
-  useEffect(() => {
-    if (autoCode && autoCode.length === 6 && verificationId) {
-      setSubmitting(true);
-      authApi
-        .verifyOtp({ verificationId, code: autoCode })
-        .then((session) => {
-          signIn(session);
-          router.replace(session.user.pinSet ? '/' : '/pin-setup');
-        })
-        .catch((e) => {
-          setError(normalizeError(e).message);
-          setSubmitting(false);
-        });
-    }
-  }, [autoCode, verificationId]);
 
   const verify = async () => {
     if (!verificationId) {

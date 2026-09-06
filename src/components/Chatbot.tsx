@@ -65,6 +65,7 @@ export function Chatbot() {
   }
 
   const { width: winW, height: winH } = useWindowDimensions();
+  const scrollRef = useRef<ScrollView>(null);
 
   const minLeft = Spacing.lg;
   const maxLeft = Math.max(minLeft, winW - FAB_SIZE - Spacing.lg);
@@ -141,7 +142,7 @@ export function Chatbot() {
 
   return (
     <KeyboardAvoidingView
-      style={[styles.wrapper, { bottom: Spacing.lg, backgroundColor: colors.surfaceElevated }]}
+      style={[styles.wrapper, { bottom: Spacing.lg, maxHeight: Math.min(540, winH - 120), backgroundColor: colors.surfaceElevated }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View surface="surfaceElevated" style={[styles.header, { borderBottomColor: colors.border }]}>
         <View style={styles.headerLeft}>
@@ -164,10 +165,11 @@ export function Chatbot() {
       </View>
 
       <ScrollView
+        ref={scrollRef}
         style={styles.msgScroll}
         contentContainerStyle={styles.msgContent}
         onContentSizeChange={() => {
-          // auto-scroll not needed; simple approach
+          scrollRef.current?.scrollToEnd({ animated: true });
         }}>
         {messages.length === 0 ? (
           <View surface="surfaceElevated" style={styles.botWelcome}>
@@ -276,7 +278,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: Spacing.lg,
     left: Spacing.lg,
-    maxHeight: 540,
     borderRadius: Radii.xl,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: 'rgba(255,255,255,0.12)',
@@ -326,7 +327,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   msgScroll: {
-    maxHeight: 360,
+    flexGrow: 1,
+    maxHeight: '100%',
   },
   msgContent: {
     padding: Spacing.lg,

@@ -35,7 +35,12 @@ export function TransactionRow({ transaction, onPress }: TransactionRowProps) {
       </View>
       <View style={styles.right}>
         <Text variant="bodyBold">{formatNaira(transaction.total)}</Text>
-        <StatusBadge status={transaction.status === 'successful' ? 'success' : transaction.status === 'failed' ? 'failed' : 'pending'} />
+        <StatusBadge status={
+          transaction.status === 'successful' ? 'success'
+            : transaction.status === 'failed' ? 'failed'
+            : transaction.status === 'cancelled' ? 'cancelled'
+            : 'pending'
+        } />
       </View>
     </Pressable>
   );

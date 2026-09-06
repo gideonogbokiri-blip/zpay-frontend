@@ -10,7 +10,6 @@ import { Screen, Text } from '@/components/ui';
 import { ACTIVE_SERVICES, SERVICE_META, SERVICE_NAMES } from '@/constants/services';
 import { useAuth } from '@/hooks/use-auth';
 import { useNotifications, useServices, useTransactions, useWallet } from '@/hooks/queries';
-import { formatNaira } from '@/lib/format';
 import type { ServiceType } from '@/lib/api';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
@@ -18,7 +17,7 @@ import { useTheme } from '@/theme';
 export default function HomeScreen() {
   const colors = useTheme();
   const { user } = useAuth();
-  const { data: wallet, isLoading: walletLoading } = useWallet();
+  const { data: wallet, isLoading: walletLoading, isError: walletError } = useWallet();
   const { data: services } = useServices();
   const { data: transactions } = useTransactions({ service: 'ALL', status: 'ALL' });
 
@@ -29,6 +28,13 @@ export default function HomeScreen() {
   const { data: notifications } = useNotifications();
   const unreadCount = notifications?.filter((n) => !n.readAt).length ?? 0;
 
+  const greeting = (() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  })();
+
   return (
     <Screen title={undefined} scroll>
       <View style={styles.gradientWrap}>
@@ -36,10 +42,10 @@ export default function HomeScreen() {
           <View style={styles.header}>
             <View style={styles.brandBlock}>
               <Text variant="title" style={[styles.greeting, { color: colors.white }]}>
-                Hello, {user?.fullName ? user.fullName.split(' ')[0] : 'there'} 👋
+                {greeting}, {user?.fullName ? user.fullName.split(' ')[0] : 'there'} 👋
               </Text>
               <Text variant="small" style={[styles.greetingSub, { color: '#A7F3D0' }]}>
-                Good to have you back
+                Manage your bills and wallet here
               </Text>
             </View>
             <View style={styles.headerActions}>
@@ -70,8 +76,12 @@ export default function HomeScreen() {
           balance={wallet?.balance ?? 0}
           loading={walletLoading}
           onFundPress={() => router.push('/wallet/fund')}
-          onPress={() => router.push('/wallet/fund')}
         />
+        {walletError && !walletLoading ? (
+          <Text variant="caption" color="danger" style={styles.walletError}>
+            Couldn&apos;t refresh your balance. Check your connection.
+          </Text>
+        ) : null}
       </View>
 
       <View style={styles.section}>
@@ -119,12 +129,6 @@ export default function HomeScreen() {
             ))}
           </View>
         )}
-      </View>
-
-      <View style={styles.placeholderNote}>
-        <Text variant="caption" color="textMuted">
-          {wallet ? `Available balance ${formatNaira(wallet.balance)}` : ' '}
-        </Text>
       </View>
     </Screen>
   );
@@ -195,6 +199,10 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
+  walletError: {
+    textAlign: 'center',
+    marginTop: Spacing.sm,
+  },
   section: {
     marginTop: Spacing.xxl,
     gap: Spacing.lg,
@@ -223,9 +231,5 @@ const styles = StyleSheet.create({
   },
   empty: {
     paddingVertical: Spacing.md,
-  },
-  placeholderNote: {
-    marginTop: Spacing.xl,
-    alignItems: 'center',
   },
 });

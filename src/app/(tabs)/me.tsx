@@ -30,7 +30,7 @@ export default function MeScreen() {
     <Screen title="Me" subtitle="Account and settings">
       <View style={styles.profile}>
         <View style={styles.avatarGlow} pointerEvents="none" />
-        <View style={[styles.avatar, { backgroundColor: colors.accentSoft, borderColor: 'rgba(0,244,254,0.35)' }]}>
+        <View style={[styles.avatar, { backgroundColor: colors.accentSoft, borderColor: 'rgba(0,197,76,0.35)' }]}>
           <Icon name="person" size={IconSize.xxl} color={colors.accent} />
         </View>
         <Text variant="heading">{user?.fullName}</Text>
@@ -125,7 +125,7 @@ function MenuItem({ icon, label, badge, onPress }: MenuItemProps) {
       accessibilityLabel={label}
       style={({ pressed }) => [styles.menuItem, { borderBottomColor: colors.border }, pressed && styles.pressed]}>
       <View style={styles.menuLeft}>
-        <View style={[styles.menuIcon, { backgroundColor: 'rgba(0,244,254,0.10)' }]}>
+        <View style={[styles.menuIcon, { backgroundColor: colors.accentSoft }]}>
           <Icon name={icon} size={IconSize.md} color={colors.accent} />
         </View>
         <Text variant="body">{label}</Text>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     width: 108,
     height: 108,
     borderRadius: 54,
-    backgroundColor: 'rgba(0,244,254,0.08)',
+    backgroundColor: 'rgba(0,197,76,0.08)',
   },
   avatar: {
     width: 88,

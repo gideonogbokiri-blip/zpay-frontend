@@ -4,7 +4,12 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/Icon';
 import { ServiceButton } from '@/components/ServiceButton';
 import { Screen, Text } from '@/components/ui';
-import { ACTIVE_SERVICES, SERVICE_META, SERVICE_NAMES } from '@/constants/services';
+import {
+  ACTIVE_SERVICES,
+  REGISTRATION_SERVICES,
+  SERVICE_META,
+  SERVICE_NAMES,
+} from '@/constants/services';
 import { useNotifications, useServices } from '@/hooks/queries';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
@@ -36,29 +41,42 @@ export default function ServiceScreen() {
       </View>
 
       <Text variant="heading" style={styles.title}>
-        Service
+        Services
       </Text>
       <Text variant="small" color="textSecondary" style={styles.subtitle}>
-        Select a service to continue
+        Pay bills, top up and register in seconds
       </Text>
 
+      <Text variant="caption" color="textMuted" style={styles.sectionLabel}>
+        Popular
+      </Text>
       <View style={styles.grid}>
-        {displayServices.map((type, index) => {
-          const isLastOdd = index === displayServices.length - 1 && displayServices.length % 2 === 1;
-          const content = (
+        {displayServices.map((type) => (
+          <View key={type} style={styles.gridItem}>
             <ServiceButton
               icon={SERVICE_META[type].icon}
               label={SERVICE_NAMES[type]}
               color={SERVICE_META[type].color}
               onPress={() => router.push(`/services/${type.toLowerCase()}`)}
             />
-          );
-          return (
-            <View key={type} style={[styles.gridItem, isLastOdd && styles.gridItemFull]}>
-              {content}
-            </View>
-          );
-        })}
+          </View>
+        ))}
+      </View>
+
+      <Text variant="caption" color="textMuted" style={styles.sectionLabel}>
+        Exams &amp; registration
+      </Text>
+      <View style={styles.grid}>
+        {REGISTRATION_SERVICES.map((type) => (
+          <View key={type} style={styles.gridItem}>
+            <ServiceButton
+              icon={SERVICE_META[type].icon}
+              label={SERVICE_NAMES[type]}
+              color={SERVICE_META[type].color}
+              onPress={() => router.push(`/services/${type.toLowerCase()}`)}
+            />
+          </View>
+        ))}
       </View>
     </Screen>
   );
@@ -102,19 +120,22 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
     marginBottom: Spacing.xxl,
   },
+  sectionLabel: {
+    marginBottom: Spacing.lg,
+    marginTop: Spacing.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     rowGap: Spacing.xl,
     columnGap: Spacing.lg,
     justifyContent: 'center',
+    marginBottom: Spacing.xxxl,
   },
   gridItem: {
     width: '48%',
-    alignItems: 'center',
-  },
-  gridItemFull: {
-    width: '100%',
     alignItems: 'center',
   },
 });

@@ -3,6 +3,8 @@ import type { ServiceType } from '@/lib/api';
 
 export const ACTIVE_SERVICES: ServiceType[] = ['ELECTRICITY', 'AIRTIME', 'DATA', 'TV'];
 
+export const REGISTRATION_SERVICES: ServiceType[] = ['WAEC', 'JAMB', 'NECO'];
+
 export const SERVICE_NAMES: Record<ServiceType, string> = {
   ELECTRICITY: 'Electricity',
   AIRTIME: 'Airtime',
