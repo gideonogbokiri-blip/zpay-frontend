@@ -12,7 +12,7 @@ export interface GradientHeaderProps {
 export function GradientHeader({ children, contentStyle }: GradientHeaderProps) {
   return (
     <LinearGradient
-      colors={['#00C54C', '#059669', '#047857']}
+      colors={['#1E63F7', '#1B4FD6', '#1549C9']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={[styles.header, contentStyle]}>

@@ -41,10 +41,10 @@ export default function HomeScreen() {
         <GradientHeader>
           <View style={styles.header}>
             <View style={styles.brandBlock}>
-              <Text variant="title" style={[styles.greeting, { color: colors.white }]}>
+              <Text variant="title" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.6} style={[styles.greeting, { color: colors.white }]}>
                 {greeting}, {user?.fullName ? user.fullName.split(' ')[0] : 'there'} 👋
               </Text>
-              <Text variant="small" style={[styles.greetingSub, { color: '#A7F3D0' }]}>
+              <Text variant="small" style={[styles.greetingSub, { color: '#BFD7FF' }]}>
                 Manage your bills and wallet here
               </Text>
             </View>
@@ -63,7 +63,9 @@ export default function HomeScreen() {
                   accessibilityRole="button"
                   accessibilityLabel="Profile"
                   style={({ pressed }) => [styles.avatar, pressed && styles.pressed]}>
-                  <Icon name="person" size={IconSize.md} color={colors.white} />
+                  <Text style={styles.avatarInitial}>
+                    {user?.fullName ? user.fullName.trim().charAt(0).toUpperCase() : 'Z'}
+                  </Text>
                 </Pressable>
               </Link>
             </View>
@@ -155,7 +157,7 @@ const styles = StyleSheet.create({
   greetingSub: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#A7F3D0',
+    color: '#BFD7FF',
   },
   headerActions: {
     flexDirection: 'row',
@@ -183,14 +185,22 @@ const styles = StyleSheet.create({
     width: IconSize.xxl,
     height: IconSize.xxl,
     borderRadius: Radii.full,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,255,255,0.22)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.45)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  avatarInitial: {
+    fontSize: IconSize.lg,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    lineHeight: IconSize.lg + 2,
   },
   walletOverlap: {
     marginTop: -70,
     marginHorizontal: -Spacing.lg,
-    shadowColor: '#00C54C',
+    shadowColor: '#1E63F7',
     shadowOpacity: 0.28,
     shadowRadius: 30,
     shadowOffset: { width: 0, height: 16 },

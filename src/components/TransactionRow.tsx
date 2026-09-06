@@ -14,7 +14,7 @@ export interface TransactionRowProps {
 }
 
 export function TransactionRow({ transaction, onPress }: TransactionRowProps) {
-  const meta = transaction.service === 'WALLET' ? { icon: 'wallet' as const, color: '#10B981' } : SERVICE_META[transaction.service];
+  const meta = transaction.service === 'WALLET' ? { icon: 'wallet' as const, color: '#1E63F7' } : SERVICE_META[transaction.service];
 
   return (
     <Pressable

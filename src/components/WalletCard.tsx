@@ -89,7 +89,7 @@ export function WalletCard({ balance, loading, onFundPress }: WalletCardProps) {
             accessibilityLabel="Fund wallet"
             style={({ pressed }) => [styles.fundPress, pressed && styles.fundPressed]}>
             <LinearGradient
-              colors={['#00C54C', '#00A93F', '#059669']}
+              colors={['#1E63F7', '#1B4FD6', '#1549C9']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.fundButton}>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xl,
     borderWidth: 1,
     overflow: 'hidden',
-    shadowColor: '#00C54C',
+    shadowColor: '#1E63F7',
     shadowOpacity: 0.18,
     shadowRadius: 28,
     shadowOffset: { width: 0, height: 14 },
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     borderRadius: Radii.md,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 197, 76, 0.14)',
+    backgroundColor: 'rgba(30, 99, 247, 0.14)',
   },
   eyeButton: {
     width: IconSize.xl,
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
   },
   fundPress: {
-    shadowColor: '#00C54C',
+    shadowColor: '#1E63F7',
     shadowOpacity: 0.45,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },

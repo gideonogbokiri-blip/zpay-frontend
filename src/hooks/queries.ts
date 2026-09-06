@@ -95,6 +95,7 @@ export function usePayService() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wallet'] });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
   });
 }
@@ -107,6 +108,7 @@ export function useRegisterService() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wallet'] });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
   });
 }
@@ -120,6 +122,7 @@ export function useFundWallet() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wallet'] });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
   });
 }
@@ -154,6 +157,8 @@ export function useNotifications() {
     queryKey: ['notifications', token],
     queryFn: () => api.listNotifications(token),
     enabled: Boolean(token),
+    refetchOnWindowFocus: true,
+    refetchInterval: 30000,
   });
 }
 

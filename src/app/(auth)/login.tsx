@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   visualPanel: {
     overflow: 'hidden',
     borderRadius: Radii.xxl,
-    backgroundColor: '#00C54C',
+    backgroundColor: '#1E63F7',
     ...Shadow,
   },
   visualPanelWide: {
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: Spacing.xxl,
     gap: Spacing.lg,
-    shadowColor: '#00C54C',
+    shadowColor: '#1E63F7',
     shadowOpacity: 0.09,
     shadowRadius: 34,
     shadowOffset: { width: 0, height: 18 },
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   visualText: {
-    color: '#D1FAE5',
+    color: '#BFD7FF',
     fontSize: 16,
     lineHeight: 24,
     fontWeight: '600',
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   brandAccent: {
-    color: '#A7F3D0',
+    color: '#BFD7FF',
     fontWeight: '800',
   },
   tagline: {

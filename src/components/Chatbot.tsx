@@ -134,7 +134,7 @@ export function Chatbot() {
           accessibilityRole="button"
           accessibilityLabel="Open support chat"
           style={[styles.fab, { backgroundColor: colors.accent }]}>
-          <Icon name="chatbubble-ellipses" size={26} color="#0a0f10" />
+          <Icon name="chatbubble-ellipses" size={26} color="#FFFFFF" />
         </TouchableOpacity>
       </Animated.View>
     );
@@ -193,7 +193,7 @@ export function Chatbot() {
                     : [
                         styles.botBubble,
                         { backgroundColor: colors.input },
-                        isAdmin && { borderWidth: 1, borderColor: 'rgba(52,211,153,0.5)' },
+                        isAdmin && { borderWidth: 1, borderColor: 'rgba(94,132,255,0.6)' },
                       ],
                 ]}>
                 {isAdmin ? (
@@ -202,7 +202,7 @@ export function Chatbot() {
                   </Text>
                 ) : null}
                 <Text style={isUser ? styles.userText : styles.botText}>{m.text}</Text>
-                <Text variant="caption" style={[styles.time, { color: isUser ? '#0a0f10' : colors.textMuted }]}>
+                <Text variant="caption" style={[styles.time, { color: isUser ? 'rgba(255,255,255,0.9)' : colors.textMuted }]}>
                   {timeLabel(m.createdAt)}
                 </Text>
               </View>
@@ -250,7 +250,7 @@ export function Chatbot() {
           onPress={() => handleSend()}
           accessibilityRole="button"
           style={[styles.sendBtn, { backgroundColor: canSend ? colors.accent : colors.input }]}>
-          {send.isPending ? <ActivityIndicator size="small" color="#0a0f10" /> : <Icon name="send" size={18} color="#0a0f10" />}
+          {send.isPending ? <ActivityIndicator size="small" color="#FFFFFF" /> : <Icon name="send" size={18} color="#FFFFFF" />}
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 3,
   },
   userText: {
-    color: '#0a0f10',
+    color: '#FFFFFF',
     fontWeight: '600',
   },
   botText: {
