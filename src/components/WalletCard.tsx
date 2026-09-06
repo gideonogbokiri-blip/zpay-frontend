@@ -107,6 +107,8 @@ export function WalletCard({ balance, loading, onFundPress }: WalletCardProps) {
 
 const styles = StyleSheet.create({
   card: {
+    maxWidth: 260,
+    alignSelf: 'center',
     borderRadius: 0,
     borderTopLeftRadius: Radii.lg,
     borderTopRightRadius: Radii.lg,
