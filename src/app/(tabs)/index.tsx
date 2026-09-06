@@ -198,13 +198,13 @@ const styles = StyleSheet.create({
     lineHeight: IconSize.lg + 2,
   },
   walletOverlap: {
-    marginTop: -70,
+    marginTop: -32,
     marginHorizontal: -Spacing.lg,
     shadowColor: '#1E63F7',
-    shadowOpacity: 0.28,
-    shadowRadius: 30,
-    shadowOffset: { width: 0, height: 16 },
-    elevation: 18,
+    shadowOpacity: 0.22,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 12,
   },
   pressed: {
     opacity: 0.7,
