@@ -68,7 +68,7 @@ export default function OtpScreen() {
   return (
     <Screen
       title="Verify your number"
-      subtitle="Enter the 6-digit code we sent to your phone"
+      subtitle="Enter the 6-digit code we sent to your email and phone"
       back>
       <View style={styles.form}>
         <InlineError message={error} />

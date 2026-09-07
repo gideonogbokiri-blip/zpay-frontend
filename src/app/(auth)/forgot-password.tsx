@@ -69,7 +69,7 @@ export default function ForgotPasswordScreen() {
 
   if (step === 1) {
     return (
-      <Screen title="Reset password" subtitle="Enter your phone number and we'll send you a code" back>
+      <Screen title="Reset password" subtitle="Enter your phone number and we'll send a code to your phone and email" back>
         <View style={styles.form}>
           <InlineError message={error} />
           <Input

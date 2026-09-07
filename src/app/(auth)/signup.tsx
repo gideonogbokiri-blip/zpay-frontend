@@ -107,16 +107,21 @@ export default function SignupScreen() {
           control={control}
           name="email"
           render={({ field }) => (
-            <Input
-              label="Email address"
-              placeholder="you@example.com"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              value={field.value}
-              onChangeText={field.onChange}
-              onBlur={field.onBlur}
-              error={errors.email?.message}
-            />
+            <View>
+              <Input
+                label="Email address"
+                placeholder="you@example.com"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                error={errors.email?.message}
+              />
+              <Text variant="caption" color="textMuted" style={styles.fieldHint}>
+                We&apos;ll send your verification code to this email.
+              </Text>
+            </View>
           )}
         />
         <Controller
@@ -308,6 +313,10 @@ const styles = StyleSheet.create({
   },
   consentError: {
     marginLeft: 32,
+  },
+  fieldHint: {
+    marginTop: Spacing.xs,
+    paddingHorizontal: Spacing.xs,
   },
   pressed: {
     opacity: 0.7,
