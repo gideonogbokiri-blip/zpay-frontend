@@ -21,7 +21,7 @@ export default function WelcomeScreen() {
     <Screen title={undefined} scroll contentStyle={styles.content}>
       <View style={styles.brand}>
         <ZpayLogo size={108} />
-        <Text variant="display" style={styles.logoText}>
+        <Text variant="display" style={[styles.logoText, { color: colors.accent }]}>
           ZPAY
         </Text>
         <Text variant="body" color="textSecondary" style={styles.tagline}>

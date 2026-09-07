@@ -136,7 +136,7 @@ export default function LoginScreen() {
           <Animated.View style={[styles.brandRow, !wide && styles.brandRowMobile, reveal(2)]}>
             <ZpayLogo size={wide ? 72 : 108} />
             <View style={[styles.brandTextWrap, !wide && styles.brandTextWrapMobile]}>
-              <Text style={[styles.brand, !wide && styles.brandMobile, { color: colors.white }]}>Z<Text style={styles.brandAccent}>Pay</Text></Text>
+              <Text style={[styles.brand, !wide && styles.brandMobile, { color: colors.accent }]}>ZPay</Text>
               <Text style={[styles.tagline, !wide && styles.taglineMobile, { color: colors.textSecondary }]}>Simple. Secure. Nigerian.</Text>
             </View>
           </Animated.View>
@@ -330,10 +330,6 @@ const styles = StyleSheet.create({
   brandMobile: {
     fontSize: 44,
     fontWeight: '900',
-  },
-  brandAccent: {
-    color: '#F5B82E',
-    fontWeight: '800',
   },
   tagline: {
     marginTop: Spacing.xxs,

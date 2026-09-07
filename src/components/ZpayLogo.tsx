@@ -28,7 +28,7 @@ export function ZpayLogo({ size = 84, style }: ZpayLogoProps) {
         ]}
       />
       <LinearGradient
-        colors={['#F5B82E', '#D99A12', '#A66E08']}
+        colors={['#151A21', '#11151B']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[styles.badge, { borderRadius: radius }]}>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   glow: {
     position: 'absolute',
-    backgroundColor: 'rgba(245, 184, 46, 0.22)',
+    backgroundColor: 'rgba(245, 184, 46, 0.24)',
   },
   badge: {
     width: '100%',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.18)',
+    borderColor: 'rgba(245, 184, 46, 0.5)',
     shadowColor: '#F5B82E',
     shadowOpacity: 0.45,
     shadowRadius: 16,
@@ -99,11 +99,11 @@ const styles = StyleSheet.create({
     width: '56%',
     height: 10,
     borderRadius: 999,
-    backgroundColor: 'rgba(2, 6, 23, 0.14)',
+    backgroundColor: 'rgba(245, 184, 46, 0.22)',
     transform: [{ rotate: '-28deg' }],
   },
   z: {
-    color: '#FFFFFF',
+    color: '#F5B82E',
     fontWeight: '900',
     letterSpacing: -Math.round(IconSize.xs / 2),
   },
