@@ -156,8 +156,6 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
 const styles = StyleSheet.create({
   card: {
     width: '100%',
-    maxWidth: 420,
-    alignSelf: 'center',
     borderRadius: 24,
     padding: Spacing.xl,
     borderWidth: 1,
