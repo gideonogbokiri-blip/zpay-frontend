@@ -15,7 +15,7 @@ import { formatNaira } from '@/lib/format';
 import { Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
-const METHODS = ['Card (Demo)', 'Bank Transfer (Demo)'];
+const METHODS = ['Card', 'Bank Transfer'];
 
 type Stage = 'form' | 'processing' | 'success' | 'failure';
 
