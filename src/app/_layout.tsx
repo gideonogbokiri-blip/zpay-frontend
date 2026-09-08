@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useMemo } from 'react';
 
-import { ThemeProvider, useTheme } from '@/theme';
+import { ThemeProvider, useTheme, useThemeVariant } from '@/theme';
 import { setupPwa } from '@/lib/pwa';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -10,25 +10,29 @@ setupPwa();
 
 function RootNavigator() {
   const colors = useTheme();
+  const variant = useThemeVariant();
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: colors.background },
-      }}>
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="wallet/fund" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="services/[service]" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="tx/[id]" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="tx/[id]/receipt" options={{ presentation: 'modal' }} />
-      <Stack.Screen name="notifications" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="me/profile" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="me/kyc" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="me/security" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="me/pin" options={{ animation: 'slide_from_right' }} />
-      <Stack.Screen name="me/settings" options={{ animation: 'slide_from_right' }} />
-    </Stack>
+    <>
+      <StatusBar style={variant === 'dark' ? 'light' : 'dark'} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+        }}>
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="wallet/fund" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="services/[service]" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="tx/[id]" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="tx/[id]/receipt" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="notifications" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="me/profile" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="me/kyc" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="me/security" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="me/pin" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="me/settings" options={{ animation: 'slide_from_right' }} />
+      </Stack>
+    </>
   );
 }
 
@@ -38,7 +42,6 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <StatusBar style="light" />
         <RootNavigator />
       </ThemeProvider>
     </QueryClientProvider>

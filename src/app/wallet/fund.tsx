@@ -1,12 +1,18 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+
+import { PaymentSuccess } from '@/components/payment/PaymentSuccess';
+import { PaymentFailure } from '@/components/payment/PaymentFailure';
+import { ProcessingState } from '@/components/payment/ProcessingState';
+import { PaymentSummary } from '@/components/payment/PaymentSummary';
+import { WalletBalanceSummary } from '@/components/payment/WalletBalanceSummary';
+import { Button, Input, Screen, Text } from '@/components/ui';
 import { useAuth } from '@/hooks/use-auth';
 import { useElectricityQuickAmounts, useFundWallet, useWallet } from '@/hooks/queries';
 import { formatNaira } from '@/lib/format';
 import { Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
-import { Text } from '@/components/ui';
 
 const METHODS = ['Card (Demo)', 'Bank Transfer (Demo)'];
 
@@ -18,7 +24,7 @@ function makeIdempotencyKey(): string {
 
 export default function FundWalletScreen() {
   const colors = useTheme();
-  const { phone } = useAuth();
+  const { user } = useAuth();
   const [amount, setAmount] = useState('');
   const [method, setMethod] = useState(METHODS[0]);
   const [amountError, setAmountError] = useState<string | null>(null);
@@ -109,8 +115,8 @@ export default function FundWalletScreen() {
         error={amountError}
         hint="Minimum amount is NGN 1."
       />
-      <Text variant="subtitle" color="textSecondary">
-        Account number: {phone ?? '—'}
+      <Text variant="body" color="textSecondary">
+        Account number: {user?.phone ?? '—'}
       </Text>
 
       <View style={styles.quickRow}>
