@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
 import { Button, InlineError, Input, PinInput, Screen, Text, View } from '@/components/ui';
+import { OtpFallbackNotice } from '@/components/OtpFallbackNotice';
 import { useAuth } from '@/hooks/use-auth';
 import { authApi, normalizeError } from '@/lib/api';
 import { isValidOtp } from '@/lib/validation/auth';
@@ -18,6 +19,7 @@ export default function ForgotPasswordScreen() {
   const [step, setStep] = useState<1 | 2>(1);
   const [phone, setPhone] = useState('');
   const [verificationId, setVerificationId] = useState('');
+  const [fallbackOtp, setFallbackOtp] = useState('');
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -32,9 +34,7 @@ export default function ForgotPasswordScreen() {
     try {
       const res = await authApi.requestOtp(phone.trim());
       setVerificationId(res.verificationId);
-      if (res.otp && __DEV__) {
-        console.log(`[mock-auth] OTP for password reset: ${res.otp}`);
-      }
+      setFallbackOtp(res.otp ? String(res.otp).trim() : '');
       setStep(2);
       setSeconds(RESEND_SECONDS);
       const timer = setInterval(() => {
@@ -92,6 +92,7 @@ export default function ForgotPasswordScreen() {
     <Screen title="Choose a new password" subtitle="Enter the code and your new password" back>
       <View style={styles.form}>
         <InlineError message={error} />
+        {fallbackOtp ? <OtpFallbackNotice otp={fallbackOtp} /> : null}
         <PinInput length={6} value={code} onChange={setCode} label="Verification code" autoFocus />
         <Input
           label="New password"

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Button, InlineError, PinInput, Screen, Text, View } from '@/components/ui';
+import { OtpFallbackNotice } from '@/components/OtpFallbackNotice';
 import { useAuth } from '@/hooks/use-auth';
 import { authApi, normalizeError } from '@/lib/api';
 import { isValidOtp } from '@/lib/validation/auth';
@@ -11,9 +12,10 @@ import { Spacing } from '@/theme/tokens';
 const RESEND_SECONDS = 30;
 
 export default function OtpScreen() {
-  const params = useLocalSearchParams<{ verificationId?: string }>();
+  const params = useLocalSearchParams<{ verificationId?: string; otp?: string }>();
   const { signIn } = useAuth();
   const [code, setCode] = useState('');
+  const [fallbackOtp, setFallbackOtp] = useState(() => (params.otp ? String(params.otp).trim() : ''));
   const [submitting, setSubmitting] = useState(false);
   const [resending, setResending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,7 +57,8 @@ export default function OtpScreen() {
     setResending(true);
     setError(null);
     try {
-      await authApi.resendOtp(verificationId);
+      const res = await authApi.resendOtp(verificationId);
+      setFallbackOtp(res.otp ? String(res.otp).trim() : '');
       setSeconds(RESEND_SECONDS);
       setCode('');
     } catch (e) {
@@ -72,6 +75,7 @@ export default function OtpScreen() {
       back>
       <View style={styles.form}>
         <InlineError message={error} />
+        {fallbackOtp ? <OtpFallbackNotice otp={fallbackOtp} /> : null}
         <PinInput
           length={6}
           value={code}

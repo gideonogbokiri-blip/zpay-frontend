@@ -130,8 +130,8 @@ export const realAuthApi = {
     return http.post<AuthSession>('/auth/verify-otp', payload);
   },
 
-  async resendOtp(verificationId: string): Promise<{ verificationId: string }> {
-    return http.post<{ verificationId: string }>('/auth/resend-otp', { verificationId });
+  async resendOtp(verificationId: string): Promise<{ verificationId: string; otp?: string }> {
+    return http.post<{ verificationId: string; otp?: string }>('/auth/resend-otp', { verificationId });
   },
 
   async login(payload: { identifier: string; password: string }): Promise<AuthSession> {

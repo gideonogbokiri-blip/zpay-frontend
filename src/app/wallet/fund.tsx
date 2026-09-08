@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { PaymentSuccess } from '@/components/payment/PaymentSuccess';
 import { PaymentFailure } from '@/components/payment/PaymentFailure';
@@ -115,9 +116,31 @@ export default function FundWalletScreen() {
         error={amountError}
         hint="Minimum amount is NGN 1."
       />
-      <Text variant="body" color="textSecondary">
-        Account number: {user?.phone ?? '—'}
-      </Text>
+      <View style={[styles.accountCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }]}>
+        <View style={styles.accountHeader}>
+          <View style={[styles.accountIcon, { backgroundColor: colors.accentSoft, borderColor: colors.accent }]}>
+            <Ionicons name="card-outline" size={18} color={colors.accent} />
+          </View>
+          <View style={styles.accountTitleWrap}>
+            <Text variant="smallBold" color="accent">Transfer to your ZPAY account</Text>
+            <Text variant="caption" color="textMuted">Use your phone number as the account number</Text>
+          </View>
+        </View>
+        <View style={styles.accountNumberRow}>
+          <Text variant="amount" style={{ color: colors.text }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>
+            {user?.phone ?? 'Add a phone number'}
+          </Text>
+          <View style={[styles.accountBrand, { backgroundColor: colors.accent }]}>
+            <Text variant="smallBold" style={{ color: colors.background }}>ZPAY</Text>
+          </View>
+        </View>
+        {user?.fullName ? (
+          <Text variant="body" color="textSecondary">{user.fullName}</Text>
+        ) : null}
+        <Text variant="caption" color="textMuted">
+          Send money to this account from any Nigerian bank or app. It lands in your ZPAY wallet instantly.
+        </Text>
+      </View>
 
       <View style={styles.quickRow}>
         {quickAmountsList.map((value) => (
@@ -208,6 +231,41 @@ export default function FundWalletScreen() {
 }
 
 const styles = StyleSheet.create({
+  accountCard: {
+    marginTop: Spacing.xxl,
+    padding: Spacing.lg,
+    borderRadius: Radii.xl,
+    borderWidth: 1,
+    gap: Spacing.sm,
+  },
+  accountHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  accountIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: Radii.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+  },
+  accountTitleWrap: {
+    flex: 1,
+    gap: 1,
+  },
+  accountNumberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+  },
+  accountBrand: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: Radii.md,
+  },
   quickRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',

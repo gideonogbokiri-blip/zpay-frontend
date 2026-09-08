@@ -110,7 +110,7 @@ export const mockAuthApi = {
     return issueSession(record);
   },
 
-  async resendOtp(verificationId: string): Promise<{ verificationId: string }> {
+  async resendOtp(verificationId: string): Promise<{ verificationId: string; otp?: string }> {
     await delay(600);
     const pending = pendingVerifications.get(verificationId);
     if (!pending) {
@@ -123,7 +123,7 @@ export const mockAuthApi = {
     if (__DEV__) {
       console.log(`[mock-auth] New OTP for ${pending.phone}: ${pending.code}`);
     }
-    return { verificationId };
+    return { verificationId, otp: pending.code };
   },
 
   async login(payload: LoginPayload): Promise<AuthSession> {
