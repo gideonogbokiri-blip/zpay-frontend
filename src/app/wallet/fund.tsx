@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { PaymentSuccess } from '@/components/payment/PaymentSuccess';
@@ -10,8 +10,9 @@ import { PaymentSummary } from '@/components/payment/PaymentSummary';
 import { WalletBalanceSummary } from '@/components/payment/WalletBalanceSummary';
 import { Button, Input, Screen, Text } from '@/components/ui';
 import { useAuth } from '@/hooks/use-auth';
-import { useElectricityQuickAmounts, useFundWallet, useWallet } from '@/hooks/queries';
+import { useElectricityQuickAmounts, useFundWallet, useVerifyFund, useWallet } from '@/hooks/queries';
 import { formatNaira } from '@/lib/format';
+import { normalizeError } from '@/lib/api/errors';
 import { Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
@@ -23,6 +24,16 @@ function makeIdempotencyKey(): string {
   return `fund_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function openPaystack(url: string): void {
+  if (Platform.OS === 'web') {
+    if (typeof window !== 'undefined') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+    return;
+  }
+  Linking.openURL(url).catch(() => {});
+}
+
 export default function FundWalletScreen() {
   const colors = useTheme();
   const { user } = useAuth();
@@ -31,14 +42,17 @@ export default function FundWalletScreen() {
   const [amountError, setAmountError] = useState<string | null>(null);
   const [stage, setStage] = useState<Stage>('form');
   const [failureMessage, setFailureMessage] = useState<string | undefined>();
+  const [paystackReference, setPaystackReference] = useState<string | null>(null);
 
   const { data: wallet } = useWallet();
   const { data: quickAmounts } = useElectricityQuickAmounts();
   const fund = useFundWallet();
+  const verify = useVerifyFund();
   const quickAmountsList = quickAmounts ?? [1000, 2000, 5000, 10000];
 
   const parsedAmount = Number(amount);
   const valid = amount.trim().length > 0 && Number.isFinite(parsedAmount) && parsedAmount > 0;
+  const verifying = verify.isPending && stage === 'processing';
 
   const submit = () => {
     if (!valid) {
@@ -50,39 +64,115 @@ export default function FundWalletScreen() {
     fund.mutate(
       { amount: parsedAmount, method, idempotencyKey: makeIdempotencyKey() },
       {
-        onSuccess: () => setStage('success'),
+        onSuccess: (data) => {
+          setPaystackReference(data.reference);
+          openPaystack(data.authorizationUrl);
+        },
         onError: (error) => {
-          setFailureMessage(error.message);
+          const err = normalizeError(error);
+          setFailureMessage(err.message);
           setStage('failure');
         },
       }
     );
   };
 
+  const confirmPayment = () => {
+    if (!paystackReference) return;
+    verify.mutate(paystackReference, {
+      onSuccess: () => setStage('success'),
+      onError: (error) => {
+        const err = normalizeError(error);
+        if (err.code === 'PAYMENT_PENDING' && err.retryable) {
+          // Payment has not completed yet; allow the user to confirm again.
+          return;
+        }
+        setFailureMessage(error.message);
+        setStage('failure');
+      },
+    });
+  };
+
   if (stage === 'processing') {
+    if (fund.isPending) {
+      return (
+        <Screen title="Funding wallet" back>
+          <ProcessingState
+            title="Starting secure payment"
+            message="Please wait while we set up your payment with Paystack. Do not close the app."
+            stages={[
+              'Validating amount',
+              'Opening secure Paystack checkout',
+            ]}
+          />
+        </Screen>
+      );
+    }
     return (
-      <Screen title="Funding wallet" back>
-        <ProcessingState
-          title="Funding your wallet"
-          message="Please wait while we process your funding. Do not close the app."
-          stages={[
-            'Validating payment details',
-            'Processing payment',
-            'Crediting your wallet',
-          ]}
-        />
+      <Screen title="Complete payment" back={!verifying}>
+        <View style={styles.confirmWrap}>
+          <View style={[styles.confirmCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }]}>
+            <View style={[styles.confirmIcon, { backgroundColor: colors.accentSoft }]}>
+              <Ionicons name="lock-closed" size={20} color={colors.accent} />
+            </View>
+            <Text variant="heading" style={styles.confirmTitle}>
+              Complete payment in the window that opened
+            </Text>
+            <Text variant="body" color="textSecondary" style={styles.confirmMsg}>
+              Pay {formatNaira(parsedAmount || 0)} by {method.toLowerCase()} in the Paystack checkout that just
+              opened. When you are done, tap the button below to confirm and credit your wallet.
+            </Text>
+            <View style={[styles.pendingHint, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+              <Text variant="caption" color="textMuted">
+                If the window did not open, check pop-up blockers and try again.
+              </Text>
+            </View>
+            {verifying ? (
+              <ProcessingState
+                title="Confirming payment"
+                message="Checking with Paystack and crediting your wallet..."
+              />
+            ) : null}
+          </View>
+          <View style={styles.confirmActions}>
+            <Button label="I have completed payment" onPress={confirmPayment} loading={verifying} />
+            <Button
+              label="Cancel funding"
+              variant="secondary"
+              onPress={() => {
+                setStage('form');
+                setPaystackReference(null);
+              }}
+            />
+          </View>
+        </View>
       </Screen>
     );
   }
 
-  if (stage === 'success' && fund.data) {
+  if (stage === 'success' && verify.data) {
+    const transaction = verify.data.transaction;
     return (
       <Screen title={undefined} back>
-        <PaymentSuccess
-          transaction={fund.data.transaction}
-          onViewReceipt={() => router.replace(`/tx/${fund.data!.transaction.id}/receipt`)}
-          onDone={() => router.replace('/')}
-        />
+        {transaction ? (
+          <PaymentSuccess
+            transaction={transaction}
+            onViewReceipt={() => router.replace(`/tx/${transaction.id}/receipt`)}
+            onDone={() => router.replace('/')}
+          />
+        ) : (
+          <View style={styles.confirmWrap}>
+            <View style={[styles.confirmCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }]}>
+              <Text variant="heading" style={{ textAlign: 'center' }}>
+                Payment successful
+              </Text>
+              <Text variant="body" color="textSecondary" style={{ textAlign: 'center' }}>
+                Your wallet was funded with {formatNaira(parsedAmount || 0)}.
+              </Text>
+            </View>
+            <Button label="Done" onPress={() => router.replace('/')} />
+          </View>
+        )}
       </Screen>
     );
   }
@@ -231,6 +321,40 @@ export default function FundWalletScreen() {
 }
 
 const styles = StyleSheet.create({
+  confirmWrap: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: Spacing.xxl,
+  },
+  confirmCard: {
+    padding: Spacing.lg,
+    borderRadius: Radii.xl,
+    borderWidth: 1,
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  confirmIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: Radii.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmTitle: {
+    textAlign: 'center',
+  },
+  confirmMsg: {
+    textAlign: 'center',
+  },
+  pendingHint: {
+    alignSelf: 'stretch',
+    borderRadius: Radii.md,
+    borderWidth: 1,
+    padding: Spacing.md,
+  },
+  confirmActions: {
+    gap: Spacing.md,
+  },
   accountCard: {
     marginTop: Spacing.xxl,
     padding: Spacing.lg,

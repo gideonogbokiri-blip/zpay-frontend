@@ -117,8 +117,19 @@ export function useFundWallet() {
   const queryClient = useQueryClient();
   const { token } = useAuth();
   return useMutation({
-    mutationFn: (payload: { amount: number; method: string; idempotencyKey: string }) =>
+    mutationFn: (payload: { amount: number; method: string; idempotencyKey?: string }) =>
       api.fundWallet(token, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['wallet'] });
+    },
+  });
+}
+
+export function useVerifyFund() {
+  const queryClient = useQueryClient();
+  const { token } = useAuth();
+  return useMutation({
+    mutationFn: (reference: string) => api.verifyFund(token, reference),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wallet'] });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });

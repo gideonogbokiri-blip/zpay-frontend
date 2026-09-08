@@ -4,7 +4,9 @@ import type {
   ChatMessage,
   ChatThread,
   DataBundle,
+  FundWalletInitResponse,
   FundWalletPayload,
+  FundWalletVerifyResponse,
   KycStatus,
   Notification,
   Paginated,
@@ -182,6 +184,8 @@ function mockGenId(): string {
   return `m-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
+const mockFundReferences = new Map<string, { userId: string; amount: number }>();
+
 export const backendApi = {
   async getWallet(token: string | null): Promise<Wallet> {
     await delay(350);
@@ -192,8 +196,8 @@ export const backendApi = {
   async fundWallet(
     token: string | null,
     payload: FundWalletPayload
-  ): Promise<{ wallet: Wallet; transaction: Transaction }> {
-    await delay(1200);
+  ): Promise<FundWalletInitResponse> {
+    await delay(400);
     const userId = requireUserId(token);
     if (payload.amount <= 0) {
       throw new ApiError(
@@ -201,22 +205,41 @@ export const backendApi = {
         'validation'
       );
     }
-    const wallet = creditWallet(userId, payload.amount);
+    const reference = generateReference('ZP');
+    mockFundReferences.set(reference, { userId, amount: payload.amount });
+    return { reference, authorizationUrl: `https://paystack.com/pay/${reference}` };
+  },
+
+  async verifyFund(
+    token: string | null,
+    reference: string
+  ): Promise<FundWalletVerifyResponse> {
+    await delay(900);
+    const userId = requireUserId(token);
+    const pending = mockFundReferences.get(reference);
+    if (!pending || pending.userId !== userId) {
+      throw new ApiError(
+        { code: 'PAYMENT_NOT_FOUND', message: 'Payment record not found. Please try funding again.', retryable: false },
+        'validation'
+      );
+    }
+    mockFundReferences.delete(reference);
+    const wallet = creditWallet(userId, pending.amount);
     const transaction: Transaction = {
       id: generateReference('tx'),
       reference: generateReference('ZP'),
       userId,
       service: 'WALLET',
       serviceName: 'Wallet Funding',
-      amount: payload.amount,
+      amount: pending.amount,
       fee: 0,
-      total: payload.amount,
+      total: pending.amount,
       currency: 'NGN',
-      paymentMethod: 'wallet',
+      paymentMethod: 'card',
       status: 'successful',
-      providerReference: generateReference('GTW'),
+      providerReference: reference,
       customerIdentifier: null,
-      metadata: { fundingMethod: payload.method },
+      metadata: { fundingChannel: 'paystack', paystackReference: reference },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -225,7 +248,7 @@ export const backendApi = {
       id: generateReference('ntf'),
       type: 'funding',
       title: 'Wallet funded',
-      message: `Your wallet was funded with NGN ${payload.amount}.`,
+      message: `Your wallet was funded with NGN ${pending.amount}.`,
       readAt: null,
       createdAt: new Date().toISOString(),
     });

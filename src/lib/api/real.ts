@@ -4,7 +4,9 @@ import type {
   ChatMessage,
   ChatThread,
   DataBundle,
+  FundWalletInitResponse,
   FundWalletPayload,
+  FundWalletVerifyResponse,
   KycStatus,
   Notification,
   OtpVerificationPayload,
@@ -33,8 +35,15 @@ export const realApi = {
   async fundWallet(
     token: string | null,
     payload: FundWalletPayload
-  ): Promise<{ wallet: Wallet; transaction: Transaction }> {
-    return http.post<{ wallet: Wallet; transaction: Transaction }>('/wallet/fund', payload, token);
+  ): Promise<FundWalletInitResponse> {
+    return http.post<FundWalletInitResponse>('/wallet/fund', payload, token);
+  },
+
+  async verifyFund(
+    token: string | null,
+    reference: string
+  ): Promise<FundWalletVerifyResponse> {
+    return http.post<FundWalletVerifyResponse>('/wallet/fund/verify', { reference }, token);
   },
 
   async getServices(): Promise<ServiceDescriptor[]> {

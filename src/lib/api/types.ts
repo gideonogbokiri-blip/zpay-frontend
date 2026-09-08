@@ -46,7 +46,7 @@ export type ServiceType = 'ELECTRICITY' | 'AIRTIME' | 'DATA' | 'TV' | 'WAEC' | '
 
 export type TransactionStatus = 'pending' | 'successful' | 'failed' | 'cancelled';
 
-export type PaymentMethod = 'wallet';
+export type PaymentMethod = 'wallet' | 'card' | 'bank_transfer';
 
 export type RegistrationStatus =
   | 'draft'
@@ -178,7 +178,17 @@ export interface RegisterServicePayload {
 export interface FundWalletPayload {
   amount: number;
   method: string;
-  idempotencyKey: string;
+  idempotencyKey?: string;
+}
+
+export interface FundWalletInitResponse {
+  reference: string;
+  authorizationUrl: string;
+}
+
+export interface FundWalletVerifyResponse {
+  wallet: Wallet;
+  transaction: Transaction | null;
 }
 
 export type ChatRole = 'user' | 'bot' | 'admin';

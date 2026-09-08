@@ -18,7 +18,7 @@ export const store: StoreState = {
   tokenUser: new Map(),
 };
 
-export const INITIAL_BALANCE = 25000;
+export const INITIAL_BALANCE = 0;
 
 export function registerSession(token: string, userId: string): void {
   store.tokenUser.set(token, userId);
