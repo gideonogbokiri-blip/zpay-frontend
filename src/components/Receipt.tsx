@@ -1,10 +1,11 @@
-import { Pressable, Share, StyleSheet, View } from 'react-native';
+import { Image, Pressable, Share, StyleSheet, View } from 'react-native';
 
 import { Icon } from './Icon';
 import { Button, Text } from './ui';
+import { EXAM_PROVIDER_LOGOS, PROVIDER_LOGOS } from '@/constants/provider-logos';
 import { formatNaira, formatDateTime } from '@/lib/format';
 import type { Transaction } from '@/lib/api';
-import { IconSize, Spacing } from '@/theme/tokens';
+import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
 export interface ReceiptProps {
@@ -14,6 +15,11 @@ export interface ReceiptProps {
 
 export function Receipt({ transaction, onClose }: ReceiptProps) {
   const colors = useTheme();
+
+  const logo =
+    (transaction.providerId && PROVIDER_LOGOS[transaction.providerId]) ||
+    EXAM_PROVIDER_LOGOS[transaction.service] ||
+    null;
 
   const onShare = async () => {
     try {
@@ -48,15 +54,31 @@ export function Receipt({ transaction, onClose }: ReceiptProps) {
           {formatNaira(transaction.total)}
         </Text>
 
+        {logo ? (
+          <View style={styles.provider}>
+            <Image source={logo} style={styles.providerLogo} resizeMode="contain" />
+            <Text variant="smallBold" color="textSecondary">
+              {transaction.serviceName}
+            </Text>
+          </View>
+        ) : null}
+
         <View style={styles.rows}>
           <Row label="Paid on" value={formatDateTime(transaction.createdAt)} />
-          <Row label="Service" value={transaction.serviceName} />
+          {logo ? null : <Row label="Service" value={transaction.serviceName} />}
           <Row label="Reference" value={transaction.reference} />
           {transaction.customerIdentifier ? (
             <Row label="Customer / service ID" value={transaction.customerIdentifier} />
           ) : null}
           {transaction.purchasedCode ? (
-            <Row label="Confirmation code" value={transaction.purchasedCode} />
+            <View style={[styles.tokenBox, { backgroundColor: colors.surfaceElevated, borderColor: colors.accent }]}>
+              <Text variant="caption" color="textSecondary">
+                Confirmation code
+              </Text>
+              <Text variant="bodyBold" style={[styles.tokenValue, { color: colors.text }]}>
+                {transaction.purchasedCode}
+              </Text>
+            </View>
           ) : null}
           {transaction.providerReference ? (
             <Row label="Provider reference" value={transaction.providerReference} />
@@ -117,6 +139,26 @@ const styles = StyleSheet.create({
   },
   amount: {
     marginVertical: Spacing.sm,
+  },
+  provider: {
+    alignItems: 'center',
+    gap: Spacing.xs,
+    marginVertical: Spacing.xs,
+  },
+  providerLogo: {
+    width: 44,
+    height: 44,
+  },
+  tokenBox: {
+    alignSelf: 'stretch',
+    borderRadius: Radii.md,
+    borderWidth: 1,
+    padding: Spacing.md,
+    alignItems: 'center',
+    gap: Spacing.xs,
+  },
+  tokenValue: {
+    textAlign: 'center',
   },
   rows: {
     alignSelf: 'stretch',

@@ -104,6 +104,7 @@ export interface Transaction {
   userId: string;
   service: ServiceType | 'WALLET';
   serviceName: string;
+  providerId?: string | null;
   amount: number;
   fee: number;
   total: number;
