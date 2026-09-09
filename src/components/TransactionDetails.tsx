@@ -44,6 +44,9 @@ export function TransactionDetails({ transaction }: TransactionDetailsProps) {
           ...(transaction.providerReference
             ? [{ label: 'Provider reference', value: transaction.providerReference }]
             : []),
+          ...(transaction.purchasedCode
+            ? [{ label: 'Confirmation code', value: transaction.purchasedCode }]
+            : []),
         ]}
       />
     </View>

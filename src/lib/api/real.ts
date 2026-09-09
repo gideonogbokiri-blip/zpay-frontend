@@ -58,8 +58,8 @@ export const realApi = {
     return http.get<DataBundle[] | TvPackage[]>(`/services/products/${service}/${providerId}`);
   },
 
-  async verifyMeter(providerId: string, meterNumber: string): Promise<VerifiedCustomer> {
-    return http.post<VerifiedCustomer>('/services/verify-meter', { providerId, meterNumber });
+  async verifyMeter(providerId: string, meterNumber: string, type?: 'prepaid' | 'postpaid'): Promise<VerifiedCustomer> {
+    return http.post<VerifiedCustomer>('/services/verify-meter', { providerId, meterNumber, type });
   },
 
   async verifyCustomer(providerId: string, smartcardNumber: string): Promise<VerifiedCustomer> {

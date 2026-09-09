@@ -90,6 +90,7 @@ export interface TvPackage {
 export interface VerifiedCustomer {
   customerName: string;
   customerAddress?: string;
+  meterType?: string;
 }
 
 export interface Wallet {
@@ -111,6 +112,9 @@ export interface Transaction {
   status: TransactionStatus;
   providerReference?: string | null;
   customerIdentifier?: string | null;
+  variationCode?: string | null;
+  vendorRequestId?: string | null;
+  purchasedCode?: string | null;
   metadata?: Record<string, unknown> | null;
   createdAt: string;
   updatedAt: string;
@@ -151,6 +155,8 @@ export interface PayServicePayload {
   amount: number;
   pin: string;
   idempotencyKey: string;
+  variationCode?: string;
+  phone?: string;
   metadata?: Record<string, unknown>;
 }
 

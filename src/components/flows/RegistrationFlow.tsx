@@ -1,10 +1,12 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
 
 import { PaymentResultScreen, type PaymentResult } from './PaymentResultScreen';
 import { PaymentSummary } from '../payment/PaymentSummary';
 import { WalletBalanceSummary } from '../payment/WalletBalanceSummary';
+import { Icon } from '../Icon';
 import { Button, Input, PinInput, Screen, Text } from '../ui';
 import { isInsufficientFunds, type ServiceApplication, type Transaction } from '@/lib/api';
 import { EXAM_PROVIDER_LOGOS } from '@/constants/provider-logos';
@@ -12,9 +14,8 @@ import { NIGERIAN_STATES, SUBJECTS } from '@/constants/services';
 import { useAuth } from '@/hooks/use-auth';
 import { useRegisterService, useRegistrationFee, useWallet } from '@/hooks/queries';
 import { formatNaira } from '@/lib/format';
-import { Radii, Spacing } from '@/theme/tokens';
+import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
-import { Image } from 'expo-image';
 
 export interface RegistrationFlowProps {
   service: 'WAEC' | 'JAMB' | 'NECO';
@@ -25,6 +26,25 @@ type Step = 'details' | 'review' | 'pin' | 'result';
 
 function makeIdempotencyKey(): string {
   return `reg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function ComingSoon({ serviceName }: { serviceName: string }) {
+  const colors = useTheme();
+  return (
+    <Screen title={serviceName} back>
+      <View style={styles.comingSoon}>
+        <View style={[styles.comingSoonBadge, { backgroundColor: colors.accentSoft }]}>
+          <Icon name="time-outline" size={IconSize.xxl} color={colors.accent} />
+        </View>
+        <Text variant="heading" style={styles.comingSoonTitle}>
+          Coming soon
+        </Text>
+        <Text variant="body" color="textSecondary" style={styles.comingSoonText}>
+          {serviceName} registration is not available yet. Check back soon — we're working on it.
+        </Text>
+      </View>
+    </Screen>
+  );
 }
 
 export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps) {
@@ -42,6 +62,7 @@ export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps
   const [email, setEmail] = useState(user?.email ?? '');
   const [state, setState] = useState('');
   const [subjects, setSubjects] = useState<string[]>([]);
+  const [profileId, setProfileId] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState<string | null>(null);
@@ -60,6 +81,7 @@ export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps
     if (!/^\S+@\S+\.\S+$/.test(email)) errors.email = 'Enter a valid email address.';
     if (!state) errors.state = 'Select the candidate’s state.';
     if (subjects.length < 3) errors.subjects = 'Select at least 3 subjects.';
+    if (service === 'JAMB' && !profileId.trim()) errors.profileId = 'Enter the candidate’s JAMB profile ID.';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -85,11 +107,19 @@ export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps
           state,
           subjects,
           exam: serviceName,
+          ...(service === 'JAMB' ? { profileId: profileId.trim() } : {}),
         },
         metadata: { provider: 'ZPAY Exams' },
       },
       {
         onSuccess: ({ transaction, application }: { transaction: Transaction; application: ServiceApplication }) => {
+          if (transaction.status === 'pending') {
+            setResult({
+              kind: 'pending',
+              message: 'Your registration payment is being confirmed by the exam provider. It usually completes within a minute.',
+            });
+            return;
+          }
           setResult({
             kind: 'success',
             transaction,
@@ -112,6 +142,10 @@ export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps
     );
   };
 
+  if (service === 'NECO') {
+    return <ComingSoon serviceName={serviceName} />;
+  }
+
   if (step === 'result') {
     return (
       <Screen title={serviceName} back>
@@ -129,6 +163,7 @@ export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps
           }}
           onHome={() => router.replace('/')}
           onFundWallet={() => router.push('/wallet/fund')}
+          onViewTransactions={() => router.replace('/history')}
           onCancel={() => {
             setPin('');
             setStep('review');
@@ -164,6 +199,16 @@ export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps
             autoCapitalize="words"
             error={formErrors.fullName ?? null}
           />
+          {service === 'JAMB' ? (
+            <Input
+              label="JAMB profile ID"
+              value={profileId}
+              onChangeText={(text) => setProfileId(text.replace(/[^0-9]/g, ''))}
+              placeholder="e.g. 0123456789"
+              keyboardType="number-pad"
+              error={formErrors.profileId ?? null}
+            />
+          ) : null}
           <Input
             label="Phone number"
             value={phone}
@@ -311,6 +356,27 @@ const styles = StyleSheet.create({
   step: {
     gap: Spacing.lg,
     paddingTop: Spacing.md,
+  },
+  comingSoon: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: Spacing.xxxl,
+    gap: Spacing.sm,
+  },
+  comingSoonBadge: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.md,
+  },
+  comingSoonTitle: {
+    textAlign: 'center',
+  },
+  comingSoonText: {
+    textAlign: 'center',
+    paddingHorizontal: Spacing.xxxl,
   },
   stepTitle: {
     marginBottom: Spacing.xs,

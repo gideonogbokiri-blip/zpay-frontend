@@ -283,7 +283,7 @@ export const backendApi = {
     return [];
   },
 
-  async verifyMeter(providerId: string, meterNumber: string): Promise<VerifiedCustomer> {
+  async verifyMeter(providerId: string, meterNumber: string, type?: 'prepaid' | 'postpaid'): Promise<VerifiedCustomer> {
     await delay(800);
     if (!/^\d{6,}$/.test(meterNumber)) {
       throw new ApiError(
@@ -291,7 +291,7 @@ export const backendApi = {
         'validation'
       );
     }
-    return { customerName: mockCustomerName(meterNumber) };
+    return { customerName: mockCustomerName(meterNumber), meterType: type === 'postpaid' ? 'postpaid' : 'prepaid' };
   },
 
   async verifyCustomer(providerId: string, smartcardNumber: string): Promise<VerifiedCustomer> {
@@ -382,6 +382,9 @@ export const backendApi = {
       status: 'pending',
       providerReference: null,
       customerIdentifier: payload.customerIdentifier ?? null,
+      variationCode: payload.variationCode ?? null,
+      vendorRequestId: null,
+      purchasedCode: null,
       metadata: payload.metadata ?? null,
       createdAt,
       updatedAt: createdAt,
@@ -407,6 +410,13 @@ export const backendApi = {
     debitWallet(userId, total);
     transaction.status = 'successful';
     transaction.providerReference = generateReference('PRV');
+    transaction.variationCode = payload.variationCode ?? null;
+    transaction.purchasedCode =
+      payload.service === 'WAEC' || payload.service === 'JAMB' || payload.service === 'NECO'
+        ? '1234567890123'
+        : payload.service === 'DATA'
+          ? `D${Math.random().toString(36).slice(2, 12).toUpperCase()}`
+          : null;
     transaction.updatedAt = new Date().toISOString();
     pushNotification(userId, {
       id: generateReference('ntf'),
@@ -430,6 +440,12 @@ export const backendApi = {
       throw new ApiError(
         { code: 'PIN_INVALID', message: 'Enter your 4-digit transaction PIN.', retryable: false },
         'validation'
+      );
+    }
+    if (payload.service === 'NECO') {
+      throw new ApiError(
+        { code: 'SERVICE_NOT_CONFIGURED', message: 'NECO registration is not available yet. Please check back soon.', retryable: false },
+        'unexpected'
       );
     }
     const existing = findIdempotent(userId, payload.idempotencyKey);
@@ -478,6 +494,9 @@ export const backendApi = {
       status: 'pending',
       providerReference: null,
       customerIdentifier: null,
+      variationCode: null,
+      vendorRequestId: null,
+      purchasedCode: null,
       metadata: payload.metadata ?? null,
       createdAt,
       updatedAt: createdAt,
@@ -488,6 +507,8 @@ export const backendApi = {
     debitWallet(userId, total);
     transaction.status = 'successful';
     transaction.providerReference = generateReference('PRV');
+    transaction.variationCode = null;
+    transaction.purchasedCode = '1234567890123';
     transaction.updatedAt = new Date().toISOString();
     pushNotification(userId, {
       id: generateReference('ntf'),

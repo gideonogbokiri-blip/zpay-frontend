@@ -55,6 +55,12 @@ export function Receipt({ transaction, onClose }: ReceiptProps) {
           {transaction.customerIdentifier ? (
             <Row label="Customer / service ID" value={transaction.customerIdentifier} />
           ) : null}
+          {transaction.purchasedCode ? (
+            <Row label="Confirmation code" value={transaction.purchasedCode} />
+          ) : null}
+          {transaction.providerReference ? (
+            <Row label="Provider reference" value={transaction.providerReference} />
+          ) : null}
           <Row label="Payment method" value="ZPAY Wallet" />
         </View>
       </View>

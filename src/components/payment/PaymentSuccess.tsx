@@ -45,6 +45,20 @@ export function PaymentSuccess({
         </View>
       ) : null}
 
+      {transaction.purchasedCode ? (
+        <View style={[styles.registration, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Text variant="label" color="textSecondary">
+            Confirmation code
+          </Text>
+          <Text variant="bodyBold" style={styles.code}>
+            {transaction.purchasedCode}
+          </Text>
+          <Text variant="caption" color="textMuted">
+            Keep this safe — you can also find it on your receipt.
+          </Text>
+        </View>
+      ) : null}
+
       <View style={styles.details}>
         <DetailRow label="Amount paid" value={formatNaira(transaction.total)} />
         <DetailRow label="Service" value={transaction.serviceName} />
@@ -108,6 +122,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: Spacing.lg,
     gap: Spacing.xs,
+  },
+  code: {
+    fontSize: 16,
+    letterSpacing: 1,
   },
   details: {
     alignSelf: 'stretch',

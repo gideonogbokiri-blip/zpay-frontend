@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import { InsufficientBalance } from '../payment/InsufficientBalance';
 import { PaymentFailure } from '../payment/PaymentFailure';
+import { PaymentPending } from '../payment/PaymentPending';
 import { PaymentSuccess } from '../payment/PaymentSuccess';
 import { ProcessingState } from '../payment/ProcessingState';
 import type { InsufficientFundsData, Transaction } from '@/lib/api';
@@ -9,6 +10,7 @@ import type { InsufficientFundsData, Transaction } from '@/lib/api';
 export type PaymentResult =
   | { kind: 'idle' }
   | { kind: 'processing' }
+  | { kind: 'pending'; message: string }
   | { kind: 'success'; transaction: Transaction; registrationStatus?: string }
   | { kind: 'insufficient'; data: InsufficientFundsData; message: string }
   | { kind: 'failure'; message: string };
@@ -22,6 +24,7 @@ export interface PaymentResultScreenProps {
   onHome?: () => void;
   onFundWallet?: () => void;
   onCancel?: () => void;
+  onViewTransactions?: () => void;
   fallback?: ReactNode;
 }
 
@@ -34,6 +37,7 @@ export function PaymentResultScreen({
   onHome,
   onFundWallet,
   onCancel,
+  onViewTransactions,
   fallback,
 }: PaymentResultScreenProps) {
   switch (result.kind) {
@@ -43,6 +47,14 @@ export function PaymentResultScreen({
           title="Processing payment"
           message="Please wait while we complete your payment. Do not close the app."
           stages={['Validating payment details', 'Contacting provider', 'Completing payment']}
+        />
+      );
+    case 'pending':
+      return (
+        <PaymentPending
+          message={result.message}
+          onViewTransactions={onViewTransactions}
+          onDone={onHome ?? onDone}
         />
       );
     case 'success':

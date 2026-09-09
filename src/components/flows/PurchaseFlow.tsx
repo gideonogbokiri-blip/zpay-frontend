@@ -30,6 +30,7 @@ export function PurchaseFlow({ service, serviceName, fee: serviceFee }: Purchase
   const [step, setStep] = useState<Step>('provider');
   const [provider, setProvider] = useState<Provider | null>(null);
   const [identifier, setIdentifier] = useState('');
+  const [meterType, setMeterType] = useState<'prepaid' | 'postpaid'>('prepaid');
   const [customerName, setCustomerName] = useState<string | null>(null);
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [verifyError, setVerifyError] = useState<string | null>(null);
@@ -57,9 +58,12 @@ export function PurchaseFlow({ service, serviceName, fee: serviceFee }: Purchase
     try {
       const result =
         service === 'ELECTRICITY'
-          ? await api.verifyMeter(provider.id, identifier.trim())
+          ? await api.verifyMeter(provider.id, identifier.trim(), meterType)
           : await api.verifyCustomer(provider.id, identifier.trim());
       setCustomerName(result.customerName);
+      if (result.meterType === 'prepaid' || result.meterType === 'postpaid') {
+        setMeterType(result.meterType);
+      }
     } catch (error) {
       setVerifyError(error instanceof Error ? error.message : 'Verification failed. Try again.');
       setCustomerName(null);
@@ -91,10 +95,15 @@ export function PurchaseFlow({ service, serviceName, fee: serviceFee }: Purchase
         amount: effectiveAmount,
         pin,
         idempotencyKey: makeIdempotencyKey(),
+        variationCode: service === 'ELECTRICITY' ? meterType : service === 'DATA' || service === 'TV' ? bundle?.id : undefined,
         metadata: provider ? { provider: provider.name } : undefined,
       },
       {
         onSuccess: (transaction: Transaction) => {
+          if (transaction.status === 'pending') {
+            setResult({ kind: 'pending', message: 'Your payment is being confirmed by the provider. It usually completes within a minute.' });
+            return;
+          }
           setResult({ kind: 'success', transaction });
         },
         onError: (error) => {
@@ -129,6 +138,7 @@ export function PurchaseFlow({ service, serviceName, fee: serviceFee }: Purchase
           }}
           onHome={() => router.replace('/')}
           onFundWallet={() => router.push('/wallet/fund')}
+          onViewTransactions={() => router.replace('/history')}
           onCancel={() => {
             setPin('');
             setStep('review');
@@ -155,6 +165,8 @@ export function PurchaseFlow({ service, serviceName, fee: serviceFee }: Purchase
           service={service}
           identifier={identifier}
           onIdentifierChange={setIdentifier}
+          meterType={meterType}
+          onMeterTypeChange={setMeterType}
           customerName={customerName}
           verifyLoading={verifyLoading}
           verifyError={verifyError}
@@ -327,6 +339,8 @@ interface CustomerStepProps {
   service: ServiceType;
   identifier: string;
   onIdentifierChange: (value: string) => void;
+  meterType: 'prepaid' | 'postpaid';
+  onMeterTypeChange: (value: 'prepaid' | 'postpaid') => void;
   customerName: string | null;
   verifyLoading: boolean;
   verifyError: string | null;
@@ -339,6 +353,8 @@ function CustomerStep({
   service,
   identifier,
   onIdentifierChange,
+  meterType,
+  onMeterTypeChange,
   customerName,
   verifyLoading,
   verifyError,
@@ -359,6 +375,33 @@ function CustomerStep({
       <Text variant="title" style={styles.stepTitle}>
         Customer details
       </Text>
+      {service === 'ELECTRICITY' ? (
+        <View style={styles.meterTypeRow}>
+          {(['prepaid', 'postpaid'] as const).map((type) => {
+            const selected = meterType === type;
+            return (
+              <Pressable
+                key={type}
+                onPress={() => onMeterTypeChange(type)}
+                accessibilityRole="button"
+                accessibilityState={{ selected }}
+                accessibilityLabel={type === 'prepaid' ? 'Prepaid meter' : 'Postpaid meter'}
+                style={({ pressed }) => [
+                  styles.meterTypeChip,
+                  {
+                    backgroundColor: selected ? colors.accentSoft : colors.surfaceElevated,
+                    borderColor: selected ? colors.accent : colors.border,
+                  },
+                  pressed && styles.pressed,
+                ]}>
+                <Text variant="smallBold" style={{ color: selected ? colors.accent : colors.text }}>
+                  {type === 'prepaid' ? 'Prepaid' : 'Postpaid'}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      ) : null}
       <Input
         label={label}
         value={identifier}
@@ -657,6 +700,18 @@ const styles = StyleSheet.create({
   providerLogo: {
     width: 38,
     height: 38,
+  },
+  meterTypeRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+  },
+  meterTypeChip: {
+    flex: 1,
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+    borderRadius: Radii.full,
+    borderWidth: 1,
   },
   pressed: {
     opacity: 0.75,
