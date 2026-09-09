@@ -14,6 +14,16 @@ export interface TransactionDetailsProps {
 export function TransactionDetails({ transaction }: TransactionDetailsProps) {
   const colors = useTheme();
 
+  const failureReason = (() => {
+    if (transaction.status !== 'failed') return null;
+    const vendor = (
+      transaction.metadata as { vendor?: { reason?: string; message?: string; code?: string } } | null | undefined
+    )?.vendor;
+    if (vendor && (vendor.reason || vendor.message)) return String(vendor.reason || vendor.message);
+    if (vendor && vendor.code) return `The provider rejected this request (${vendor.code}).`;
+    return null;
+  })();
+
   return (
     <View style={styles.container}>
       <View style={[styles.header, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -35,6 +45,9 @@ export function TransactionDetails({ transaction }: TransactionDetailsProps) {
           { label: 'Fee', value: formatNaira(transaction.fee) },
           { label: 'Total', value: formatNaira(transaction.total), strong: true },
           { label: 'Status', value: transaction.status },
+          ...(failureReason
+            ? [{ label: 'Why it failed', value: failureReason }]
+            : []),
           { label: 'Payment method', value: 'ZPAY Wallet' },
           { label: 'Date & time', value: formatDateTime(transaction.createdAt) },
           { label: 'Reference', value: transaction.reference, strong: true },
