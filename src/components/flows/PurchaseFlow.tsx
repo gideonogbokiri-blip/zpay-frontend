@@ -218,6 +218,20 @@ export function PurchaseFlow({ service, serviceName, fee: serviceFee }: Purchase
   );
 }
 
+const PROVIDER_COLORS: Record<string, { bg: string; text: string }> = {
+  ekedc: { bg: '#FEE2E2', text: '#DC2626' },
+  ikedc: { bg: '#DBEAFE', text: '#2563EB' },
+  phedc: { bg: '#F3E8FF', text: '#9333EA' },
+  aedc: { bg: '#FEF3C7', text: '#D97706' },
+  mtn: { bg: '#FEF9C3', text: '#CA8A04' },
+  airtel: { bg: '#FEE2E2', text: '#DC2626' },
+  glo: { bg: '#DCFCE7', text: '#16A34A' },
+  '9mobile': { bg: '#CCFBF1', text: '#0D9488' },
+  dstv: { bg: '#DBEAFE', text: '#1D4ED8' },
+  gotv: { bg: '#DCFCE7', text: '#15803D' },
+  startimes: { bg: '#FFEDD5', text: '#C2410C' },
+};
+
 interface ProviderStepProps {
   service: ServiceType;
   providers: Provider[];
@@ -241,6 +255,7 @@ function ProviderStep({ service, providers, selected, onSelect, onNext }: Provid
         <View style={styles.options}>
           {providers.map((p) => {
             const isSelected = p.id === selected;
+            const badgeStyle = PROVIDER_COLORS[p.id] || { bg: colors.accentSoft, text: colors.accent };
             return (
               <Pressable
                 key={p.id}
@@ -256,15 +271,26 @@ function ProviderStep({ service, providers, selected, onSelect, onNext }: Provid
                   },
                   pressed && styles.pressed,
                 ]}>
-                <View style={styles.optionMain}>
-                  <Text variant="body" style={{ color: isSelected ? colors.accent : colors.text }}>
-                    {p.name}
-                  </Text>
-                  {p.fee > 0 ? (
-                    <Text variant="caption" color="textMuted">
-                      Service fee {formatNaira(p.fee)}
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.md, flex: 1 }}>
+                  <View style={[styles.providerBadge, { backgroundColor: badgeStyle.bg }]}>
+                    <Text variant="smallBold" style={{ color: badgeStyle.text, fontSize: 11 }}>
+                      {p.name.slice(0, 3).toUpperCase()}
                     </Text>
-                  ) : null}
+                  </View>
+                  <View style={styles.optionMain}>
+                    <Text variant="body" style={{ color: isSelected ? colors.accent : colors.text, fontWeight: '600' }}>
+                      {p.name}
+                    </Text>
+                    {service === 'ELECTRICITY' ? (
+                      <Text variant="caption" color="textMuted">
+                        Prepaid & Postpaid Token
+                      </Text>
+                    ) : p.fee > 0 ? (
+                      <Text variant="caption" color="textMuted">
+                        Service fee {formatNaira(p.fee)}
+                      </Text>
+                    ) : null}
+                  </View>
                 </View>
                 <View style={[styles.radio, { borderColor: isSelected ? colors.accent : colors.textMuted }]}>
                   {isSelected ? <View style={[styles.radioDot, { backgroundColor: colors.accent }]} /> : null}
@@ -604,6 +630,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: Spacing.lg,
     borderRadius: Radii.md,
+  },
+  providerBadge: {
+    width: 42,
+    height: 42,
+    borderRadius: Radii.md,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   pressed: {
     opacity: 0.75,

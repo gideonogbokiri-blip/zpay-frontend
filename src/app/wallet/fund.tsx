@@ -16,8 +16,6 @@ import { normalizeError } from '@/lib/api/errors';
 import { Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
 
-const METHODS = ['Card', 'Bank Transfer'];
-
 type Stage = 'form' | 'processing' | 'success' | 'failure';
 
 function makeIdempotencyKey(): string {
@@ -38,7 +36,6 @@ export default function FundWalletScreen() {
   const colors = useTheme();
   const { user } = useAuth();
   const [amount, setAmount] = useState('');
-  const [method, setMethod] = useState(METHODS[0]);
   const [amountError, setAmountError] = useState<string | null>(null);
   const [stage, setStage] = useState<Stage>('form');
   const [failureMessage, setFailureMessage] = useState<string | undefined>();
@@ -62,7 +59,7 @@ export default function FundWalletScreen() {
     setAmountError(null);
     setStage('processing');
     fund.mutate(
-      { amount: parsedAmount, method, idempotencyKey: makeIdempotencyKey() },
+      { amount: parsedAmount, idempotencyKey: makeIdempotencyKey() },
       {
         onSuccess: (data) => {
           setPaystackReference(data.reference);
@@ -119,7 +116,7 @@ export default function FundWalletScreen() {
               Complete payment in the window that opened
             </Text>
             <Text variant="body" color="textSecondary" style={styles.confirmMsg}>
-              Pay {formatNaira(parsedAmount || 0)} by {method.toLowerCase()} in the Paystack checkout that just
+              Pay {formatNaira(parsedAmount || 0)} securely in the Paystack checkout that just
               opened. When you are done, tap the button below to confirm and credit your wallet.
             </Text>
             <View style={[styles.pendingHint, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -257,42 +254,6 @@ export default function FundWalletScreen() {
         ))}
       </View>
 
-      <View style={styles.methods}>
-        <Text variant="label" color="textSecondary">
-          Payment method
-        </Text>
-        {METHODS.map((m) => {
-          const selected = m === method;
-          return (
-            <Pressable
-              key={m}
-              onPress={() => setMethod(m)}
-              accessibilityRole="button"
-              accessibilityState={{ selected }}
-              accessibilityLabel={m}
-              style={({ pressed }) => [
-                styles.methodRow,
-                {
-                  backgroundColor: selected ? colors.accentSoft : colors.surfaceElevated,
-                  borderColor: selected ? colors.accent : colors.border,
-                },
-                pressed && styles.pressed,
-              ]}>
-              <Text variant="body" style={{ color: selected ? colors.accent : colors.text }}>
-                {m}
-              </Text>
-              <View
-                style={[
-                  styles.radio,
-                  { borderColor: selected ? colors.accent : colors.textMuted },
-                ]}>
-                {selected ? <View style={[styles.radioDot, { backgroundColor: colors.accent }]} /> : null}
-              </View>
-            </Pressable>
-          );
-        })}
-      </View>
-
       <View style={styles.summary}>
         <PaymentSummary
           rows={[
@@ -401,31 +362,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: Radii.full,
     borderWidth: 1,
-  },
-  methods: {
-    marginTop: Spacing.xxl,
-    gap: Spacing.sm,
-  },
-  methodRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: Spacing.lg,
-    borderRadius: Radii.md,
-    borderWidth: 1,
-  },
-  radio: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  radioDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
   },
   summary: {
     marginTop: Spacing.xxl,

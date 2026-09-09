@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, authApi } from '@/lib/api';
 import type {
   DataBundle,
+  FundWalletPayload,
   PayServicePayload,
   RegisterServicePayload,
   ServiceType,
@@ -117,7 +118,7 @@ export function useFundWallet() {
   const queryClient = useQueryClient();
   const { token } = useAuth();
   return useMutation({
-    mutationFn: (payload: { amount: number; method: string; idempotencyKey?: string }) =>
+    mutationFn: (payload: FundWalletPayload) =>
       api.fundWallet(token, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wallet'] });

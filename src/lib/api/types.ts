@@ -177,7 +177,7 @@ export interface RegisterServicePayload {
 
 export interface FundWalletPayload {
   amount: number;
-  method: string;
+  method?: string;
   idempotencyKey?: string;
 }
 
