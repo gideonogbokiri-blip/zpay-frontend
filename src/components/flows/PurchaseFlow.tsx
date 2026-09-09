@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
 
 import { PaymentResultScreen, type PaymentResult } from './PaymentResultScreen';
 import { PaymentSummary } from '../payment/PaymentSummary';
@@ -10,6 +11,7 @@ import { api, isInsufficientFunds, type DataBundle, type Provider, type ServiceT
 import { usePayService, useProducts, useProviders, useWallet, type Product } from '@/hooks/queries';
 import { formatNaira } from '@/lib/format';
 import { Radii, Spacing } from '@/theme/tokens';
+import { ELECTRICITY_PROVIDER_LOGOS } from '@/constants/provider-logos';
 import { useTheme } from '@/theme';
 
 export interface PurchaseFlowProps {
@@ -219,10 +221,17 @@ export function PurchaseFlow({ service, serviceName, fee: serviceFee }: Purchase
 }
 
 const PROVIDER_COLORS: Record<string, { bg: string; text: string }> = {
+  aedc: { bg: '#FEF3C7', text: '#B45309' },
+  bedc: { bg: '#FEE2E2', text: '#DC2626' },
+  eedc: { bg: '#F3E8FF', text: '#9333EA' },
   ekedc: { bg: '#FEE2E2', text: '#DC2626' },
+  ibedc: { bg: '#DBEAFE', text: '#2563EB' },
   ikedc: { bg: '#DBEAFE', text: '#2563EB' },
-  phedc: { bg: '#F3E8FF', text: '#9333EA' },
-  aedc: { bg: '#FEF3C7', text: '#D97706' },
+  jedc: { bg: '#DCFCE7', text: '#16A34A' },
+  kaedco: { bg: '#FEF3C7', text: '#D97706' },
+  kedco: { bg: '#FEF9C3', text: '#CA8A04' },
+  phedc: { bg: '#CCFBF1', text: '#0D9488' },
+  yedc: { bg: '#FEE2E2', text: '#DC2626' },
   mtn: { bg: '#FEF9C3', text: '#CA8A04' },
   airtel: { bg: '#FEE2E2', text: '#DC2626' },
   glo: { bg: '#DCFCE7', text: '#16A34A' },
@@ -256,6 +265,7 @@ function ProviderStep({ service, providers, selected, onSelect, onNext }: Provid
           {providers.map((p) => {
             const isSelected = p.id === selected;
             const badgeStyle = PROVIDER_COLORS[p.id] || { bg: colors.accentSoft, text: colors.accent };
+            const logo = service === 'ELECTRICITY' ? ELECTRICITY_PROVIDER_LOGOS[p.id] : undefined;
             return (
               <Pressable
                 key={p.id}
@@ -272,11 +282,17 @@ function ProviderStep({ service, providers, selected, onSelect, onNext }: Provid
                   pressed && styles.pressed,
                 ]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.md, flex: 1 }}>
-                  <View style={[styles.providerBadge, { backgroundColor: badgeStyle.bg }]}>
-                    <Text variant="smallBold" style={{ color: badgeStyle.text, fontSize: 11 }}>
-                      {p.name.slice(0, 3).toUpperCase()}
-                    </Text>
-                  </View>
+                  {logo ? (
+                    <View style={[styles.providerBadge, { backgroundColor: colors.white }]}>
+                      <Image source={logo} style={styles.providerLogo} contentFit="contain" />
+                    </View>
+                  ) : (
+                    <View style={[styles.providerBadge, { backgroundColor: badgeStyle.bg }]}>
+                      <Text variant="smallBold" style={{ color: badgeStyle.text, fontSize: 11 }}>
+                        {p.name.slice(0, 3).toUpperCase()}
+                      </Text>
+                    </View>
+                  )}
                   <View style={styles.optionMain}>
                     <Text variant="body" style={{ color: isSelected ? colors.accent : colors.text, fontWeight: '600' }}>
                       {p.name}
@@ -637,6 +653,10 @@ const styles = StyleSheet.create({
     borderRadius: Radii.md,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  providerLogo: {
+    width: 38,
+    height: 38,
   },
   pressed: {
     opacity: 0.75,
