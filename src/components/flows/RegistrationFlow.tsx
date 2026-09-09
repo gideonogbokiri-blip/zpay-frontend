@@ -7,12 +7,14 @@ import { PaymentSummary } from '../payment/PaymentSummary';
 import { WalletBalanceSummary } from '../payment/WalletBalanceSummary';
 import { Button, Input, PinInput, Screen, Text } from '../ui';
 import { isInsufficientFunds, type ServiceApplication, type Transaction } from '@/lib/api';
+import { EXAM_PROVIDER_LOGOS } from '@/constants/provider-logos';
 import { NIGERIAN_STATES, SUBJECTS } from '@/constants/services';
 import { useAuth } from '@/hooks/use-auth';
 import { useRegisterService, useRegistrationFee, useWallet } from '@/hooks/queries';
 import { formatNaira } from '@/lib/format';
 import { Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
+import { Image } from 'expo-image';
 
 export interface RegistrationFlowProps {
   service: 'WAEC' | 'JAMB' | 'NECO';
@@ -141,6 +143,11 @@ export function RegistrationFlow({ service, serviceName }: RegistrationFlowProps
       {step === 'details' ? (
         <View style={styles.step}>
           <View style={[styles.feeCard, { backgroundColor: colors.accentSoft }]}>
+            {EXAM_PROVIDER_LOGOS[service] ? (
+              <View style={styles.examBadge}>
+                <Image source={EXAM_PROVIDER_LOGOS[service]} style={styles.examLogo} contentFit="contain" />
+              </View>
+            ) : null}
             <Text variant="label" color="textSecondary">
               Registration fee
             </Text>
@@ -313,6 +320,20 @@ const styles = StyleSheet.create({
     borderRadius: Radii.md,
     gap: Spacing.xs,
     alignItems: 'center',
+  },
+  examBadge: {
+    width: 56,
+    height: 56,
+    borderRadius: Radii.full,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.xs,
+    overflow: 'hidden',
+  },
+  examLogo: {
+    width: 44,
+    height: 44,
   },
   field: {
     gap: Spacing.xs,

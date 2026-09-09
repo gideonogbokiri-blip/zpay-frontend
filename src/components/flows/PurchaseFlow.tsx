@@ -11,7 +11,7 @@ import { api, isInsufficientFunds, type DataBundle, type Provider, type ServiceT
 import { usePayService, useProducts, useProviders, useWallet, type Product } from '@/hooks/queries';
 import { formatNaira } from '@/lib/format';
 import { Radii, Spacing } from '@/theme/tokens';
-import { ELECTRICITY_PROVIDER_LOGOS } from '@/constants/provider-logos';
+import { PROVIDER_LOGOS } from '@/constants/provider-logos';
 import { useTheme } from '@/theme';
 
 export interface PurchaseFlowProps {
@@ -265,7 +265,7 @@ function ProviderStep({ service, providers, selected, onSelect, onNext }: Provid
           {providers.map((p) => {
             const isSelected = p.id === selected;
             const badgeStyle = PROVIDER_COLORS[p.id] || { bg: colors.accentSoft, text: colors.accent };
-            const logo = service === 'ELECTRICITY' ? ELECTRICITY_PROVIDER_LOGOS[p.id] : undefined;
+            const logo = PROVIDER_LOGOS[p.id];
             return (
               <Pressable
                 key={p.id}
