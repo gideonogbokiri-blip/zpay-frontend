@@ -20,7 +20,6 @@ function RootNavigator() {
           contentStyle: { backgroundColor: colors.background },
         }}>
         <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(landing)" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="wallet/fund" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="services/[service]" options={{ animation: 'slide_from_right' }} />
