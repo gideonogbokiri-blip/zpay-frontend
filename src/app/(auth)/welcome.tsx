@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 import { Icon, type IconName } from '@/components/Icon';
 import { Button, Screen, Text, View } from '@/components/ui';
@@ -51,6 +51,35 @@ export default function WelcomeScreen() {
         <Link href="/signup" asChild>
           <Button label="Create account" variant="secondary" />
         </Link>
+        <View style={styles.links}>
+          <Link href="/promo" asChild>
+            <Pressable accessibilityRole="link" accessibilityLabel="Promo landing page">
+              <Text variant="caption" color="accent">
+                Promo
+              </Text>
+            </Pressable>
+          </Link>
+          <Text variant="caption" color="textMuted">
+            ·
+          </Text>
+          <Link href="/terms" asChild>
+            <Pressable accessibilityRole="link" accessibilityLabel="Terms of Service">
+              <Text variant="caption" color="accent">
+                Terms
+              </Text>
+            </Pressable>
+          </Link>
+          <Text variant="caption" color="textMuted">
+            ·
+          </Text>
+          <Link href="/privacy" asChild>
+            <Pressable accessibilityRole="link" accessibilityLabel="Privacy Policy">
+              <Text variant="caption" color="accent">
+                Privacy
+              </Text>
+            </Pressable>
+          </Link>
+        </View>
       </View>
     </Screen>
   );
@@ -105,5 +134,12 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xxxl,
     paddingHorizontal: Spacing.xl,
     paddingTop: Spacing.xl,
+  },
+  links: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.md,
+    paddingTop: Spacing.lg,
   },
 });
