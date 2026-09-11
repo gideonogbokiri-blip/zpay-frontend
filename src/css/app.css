@@ -1,0 +1,603 @@
+/* App Dashboard & Mobile Screens */
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--bg-app);
+  position: relative;
+  width: 100%;
+}
+
+/* Standalone / Simulator Mode Switcher */
+.mode-switcher-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-medium);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 999;
+  box-shadow: var(--shadow-lg);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* App Top Header */
+.app-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--bg-app);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1E293B, #0F172A);
+  border: 2px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--zpay-green);
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+}
+
+.user-avatar .online-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: var(--zpay-green);
+  border-radius: 50%;
+  border: 2px solid var(--bg-app);
+}
+
+.user-greeting {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-greeting span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.user-greeting h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.header-action-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.header-icon-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--zpay-green);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--zpay-green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--zpay-green);
+}
+
+/* Screen Sub-Header with Back Button */
+.screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--bg-app);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.screen-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.back-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Balance Card */
+.balance-card {
+  margin: 10px 20px 20px 20px;
+  background: linear-gradient(135deg, #162035 0%, #0F172A 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.balance-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(0, 210, 106, 0.22) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.balance-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.balance-toggle-eye {
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.balance-toggle-eye:hover {
+  color: var(--zpay-green);
+}
+
+.balance-tag-pill {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background: rgba(0, 210, 106, 0.1);
+  color: var(--zpay-green);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 210, 106, 0.2);
+}
+
+.balance-amount {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.balance-currency {
+  font-size: 26px;
+  color: var(--zpay-green);
+}
+
+.balance-actions-row {
+  display: flex;
+  gap: 12px;
+}
+
+.balance-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Primary Actions (Send, Receive, QR) */
+.primary-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 0 20px;
+  margin-bottom: 28px;
+}
+
+.action-pill-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.action-pill-card:hover {
+  background: var(--bg-card);
+  border-color: var(--border-highlight);
+  transform: translateY(-2px);
+}
+
+.action-pill-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--zpay-green);
+  transition: all var(--transition-fast);
+}
+
+.action-pill-card:hover .action-pill-icon {
+  background: var(--zpay-green);
+  color: #051A0D;
+}
+
+.action-pill-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Quick Services Section */
+.app-section {
+  padding: 0 20px;
+  margin-bottom: 28px;
+}
+
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.section-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.section-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--zpay-green);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.service-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.service-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+
+.service-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.service-icon-box.airtime { background: rgba(245, 158, 11, 0.15); color: #F59E0B; }
+.service-icon-box.data { background: rgba(56, 189, 248, 0.15); color: #38BDF8; }
+.service-icon-box.bills { background: rgba(0, 210, 106, 0.15); color: #00D26A; }
+.service-icon-box.more { background: rgba(168, 85, 247, 0.15); color: #A855F7; }
+
+.service-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Recent Transactions List */
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.transaction-tile {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.transaction-tile:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tx-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tx-icon-in {
+  background: var(--zpay-green-light);
+  color: var(--zpay-green);
+}
+
+.tx-icon-out {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--color-danger);
+}
+
+.tx-info h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.tx-info span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tx-right {
+  text-align: right;
+}
+
+.tx-amount {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 2px;
+}
+
+.tx-amount.positive {
+  color: var(--zpay-green);
+}
+
+.tx-amount.negative {
+  color: var(--text-primary);
+}
+
+.tx-status {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Bottom App Navigation */
+.app-bottom-nav {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(13, 18, 31, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0 16px 0;
+  z-index: 40;
+}
+
+.nav-tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  padding: 4px 16px;
+  position: relative;
+}
+
+.nav-tab-item:hover, .nav-tab-item.active {
+  color: var(--zpay-green);
+}
+
+.nav-tab-item.active::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 24px;
+  height: 3px;
+  background: var(--zpay-green);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px var(--zpay-green);
+}
+
+/* QR Pay Camera Scanner */
+.qr-scanner-box {
+  width: 280px;
+  height: 280px;
+  border: 2px solid var(--zpay-green);
+  border-radius: 28px;
+  margin: 30px auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 210, 106, 0.2);
+  background: #000;
+}
+
+.qr-scanner-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--zpay-green), transparent);
+  box-shadow: 0 0 15px var(--zpay-green);
+  animation: scanBeam 2.5s ease-in-out infinite;
+}
+
+/* Airtime / Data Provider Selector */
+.network-selector-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.network-pill {
+  padding: 12px 6px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-subtle);
+  background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.network-pill.active {
+  border-color: var(--zpay-green);
+  background: var(--zpay-green-light);
+}
+
+.network-logo-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 11px;
+}
+
+.network-mtn { background: #FFCC00; color: #000; }
+.network-airtel { background: #FF0000; color: #FFF; }
+.network-glo { background: #2E8B57; color: #FFF; }
+.network-9mobile { background: #006400; color: #FFF; }
+
+/* Plan Cards for Data */
+.data-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.data-plan-card {
+  padding: 14px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.data-plan-card:hover, .data-plan-card.active {
+  border-color: var(--zpay-green);
+  background: var(--zpay-green-light);
+}
+
+/* Service Menu Cards */
+.service-menu-card:hover {
+  border-color: rgba(0, 210, 106, 0.4) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+

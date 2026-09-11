@@ -1,0 +1,449 @@
+/* Core Reusable Component Styles */
+
+/* Buttons */
+.zpay-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.zpay-btn:active {
+  transform: scale(0.98);
+}
+
+.zpay-btn-primary {
+  background-color: var(--zpay-green);
+  color: #041209;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(0, 210, 106, 0.25);
+}
+
+.zpay-btn-primary:hover {
+  background-color: var(--zpay-green-hover);
+  box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4);
+}
+
+.zpay-btn-secondary {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+}
+
+.zpay-btn-secondary:hover {
+  background-color: var(--bg-card);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.zpay-btn-outline {
+  background: transparent;
+  color: var(--zpay-green);
+  border: 1px solid var(--zpay-green);
+}
+
+.zpay-btn-outline:hover {
+  background-color: var(--zpay-green-light);
+}
+
+.zpay-btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.zpay-btn-ghost:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+
+.zpay-btn-block {
+  width: 100%;
+}
+
+.zpay-btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+}
+
+.zpay-btn-icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.zpay-btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+  color: var(--zpay-green);
+}
+
+/* Form Inputs */
+.zpay-form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.zpay-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.zpay-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.zpay-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 15px;
+  transition: all var(--transition-fast);
+}
+
+.zpay-input:focus {
+  border-color: var(--zpay-green);
+  box-shadow: 0 0 0 3px var(--zpay-green-light);
+}
+
+.zpay-input::placeholder {
+  color: var(--text-muted);
+}
+
+.zpay-input-icon {
+  position: absolute;
+  right: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.zpay-input-currency {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--zpay-green);
+  margin-right: 8px;
+}
+
+/* Cards & Containers */
+.zpay-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all var(--transition-fast);
+}
+
+.zpay-card:hover {
+  border-color: var(--border-medium);
+}
+
+.zpay-glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xl);
+}
+
+/* Badges */
+.zpay-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.zpay-badge-success {
+  background: var(--zpay-green-light);
+  color: var(--zpay-green);
+  border: 1px solid rgba(0, 210, 106, 0.25);
+}
+
+.zpay-badge-blue {
+  background: var(--color-blue-bg);
+  color: var(--color-blue);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.zpay-badge-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.zpay-badge-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* Segmented Tabs */
+.zpay-tabs {
+  display: flex;
+  background: var(--bg-input);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  gap: 4px;
+}
+
+.zpay-tab-btn {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.zpay-tab-btn.active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Amount Chips */
+.zpay-chips-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.zpay-chip {
+  padding: 10px 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.zpay-chip:hover {
+  border-color: var(--border-highlight);
+  color: var(--text-primary);
+}
+
+.zpay-chip.active {
+  background: var(--zpay-green-light);
+  border-color: var(--zpay-green);
+  color: var(--zpay-green);
+  font-weight: 700;
+}
+
+/* Modals & Bottom Sheets */
+.zpay-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.zpay-modal-backdrop.hidden {
+  display: none;
+}
+
+.zpay-modal-content {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xl);
+  max-width: 460px;
+  width: 100%;
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+  animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.zpay-bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-surface);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  border-top: 1px solid var(--border-medium);
+  padding: 24px 20px 36px 20px;
+  z-index: 1001;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.zpay-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--border-medium);
+  border-radius: 99px;
+  margin: 0 auto 20px auto;
+}
+
+/* PIN & OTP Input */
+.otp-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.otp-box {
+  width: 46px;
+  height: 54px;
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-medium);
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.otp-box:focus {
+  border-color: var(--zpay-green);
+  box-shadow: 0 0 0 3px var(--zpay-green-light);
+  transform: translateY(-2px);
+}
+
+/* Reusable PIN Pad */
+.pin-pad-dots {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border-medium);
+  transition: all 0.2s ease;
+}
+
+.pin-dot.filled {
+  background: var(--zpay-green);
+  border-color: var(--zpay-green);
+  box-shadow: 0 0 10px rgba(0, 210, 106, 0.5);
+  transform: scale(1.15);
+}
+
+.pin-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.pin-key {
+  height: 60px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.pin-key:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+
+.pin-key:active {
+  background: var(--zpay-green-light);
+  color: var(--zpay-green);
+  transform: scale(0.92);
+}
+
+.pin-key.key-action {
+  font-size: 16px;
+  border: none;
+  background: transparent;
+}
+
+/* Toast Notification */
+.zpay-toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.zpay-toast {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-left: 4px solid var(--zpay-green);
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+  pointer-events: auto;
+  animation: slideDownFade 0.3s ease forwards;
+  max-width: 360px;
+}
+
+.zpay-toast.toast-error {
+  border-left-color: var(--color-danger);
+}

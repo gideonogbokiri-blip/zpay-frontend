@@ -1,0 +1,690 @@
+/* Marketing Website Styles */
+
+/* Web Header / Nav */
+.web-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8, 12, 20, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 18px 0;
+}
+
+.web-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, var(--zpay-green), #00994B);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #051A0D;
+  font-weight: 900;
+  font-size: 20px;
+  box-shadow: var(--shadow-green);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.nav-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--zpay-green);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Hero Section */
+.web-hero {
+  padding: 80px 0 60px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 210, 106, 0.15) 0%, rgba(0, 210, 106, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.hero-title span {
+  background: linear-gradient(135deg, #00D26A 0%, #38BDF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+  max-width: 520px;
+}
+
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 36px;
+  padding-top: 30px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.hero-stat-item h4 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.hero-stat-item p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Phone Mockup Showcase (Zarox-grade 3D Display)
+   ============================================================ */
+.mockup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  perspective: 1400px;
+  padding: 10px 0;
+}
+
+/* Ambient glow under the phone */
+.mockup-glow {
+  position: absolute;
+  width: 320px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(0, 210, 106, 0.28) 0%, rgba(245, 184, 46, 0.12) 40%, transparent 70%);
+  filter: blur(50px);
+  z-index: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+.phone-mockup-frame {
+  width: 345px;
+  height: 680px;
+  background: #090D14;
+  border-radius: 48px;
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.16),
+    0 0 0 8px #182234,
+    0 0 0 10px rgba(255, 255, 255, 0.06),
+    0 30px 70px -15px rgba(0, 0, 0, 0.9),
+    0 15px 35px -5px rgba(0, 210, 106, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: perspective(1200px) rotateY(-7deg) rotateX(4deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+  animation: heroPhoneFloat 6s ease-in-out infinite;
+}
+
+.mockup-container:hover .phone-mockup-frame {
+  transform: perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(-8px) scale(1.02);
+  box-shadow:
+    0 0 0 2px rgba(0, 210, 106, 0.4),
+    0 0 0 8px #182234,
+    0 0 0 10px rgba(0, 210, 106, 0.2),
+    0 40px 90px -15px rgba(0, 0, 0, 0.95),
+    0 20px 45px -5px rgba(0, 210, 106, 0.35);
+}
+
+/* Glass shine overlay across the screen */
+.phone-glass-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 65%);
+  pointer-events: none;
+  z-index: 40;
+  border-top-left-radius: 44px;
+  border-top-right-radius: 44px;
+}
+
+/* Dynamic Island */
+.phone-dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 22px;
+  background: #000000;
+  border-radius: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.dynamic-island-cam {
+  width: 8px;
+  height: 8px;
+  background: #090D16;
+  border-radius: 50%;
+  border: 1px solid #1e293b;
+  box-shadow: inset 0 0 2px #38BDF8;
+}
+
+.dynamic-island-sensor {
+  width: 5px;
+  height: 5px;
+  background: #04070c;
+  border-radius: 50%;
+}
+
+/* Status Bar */
+.phone-status-bar {
+  padding: 10px 18px 4px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94A3B8;
+  position: relative;
+  z-index: 45;
+  background: #090D14;
+}
+
+.phone-screen {
+  flex: 1;
+  background: var(--bg-app);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+
+.phone-screen::-webkit-scrollbar {
+  display: none;
+}
+
+/* Floating interactive badges on hero */
+.floating-badge {
+  position: absolute;
+  padding: 10px 16px;
+  background: rgba(18, 24, 38, 0.94);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 25;
+  animation: pulseGlow 4s infinite alternate;
+  pointer-events: auto;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.floating-badge:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 16px 36px rgba(0, 210, 106, 0.25);
+}
+
+.floating-badge.badge-left {
+  top: 14%;
+  left: -48px;
+}
+
+.floating-badge.badge-right {
+  bottom: 22%;
+  right: -36px;
+}
+
+.floating-badge.badge-bottom {
+  bottom: 6%;
+  left: -24px;
+}
+
+@keyframes heroPhoneFloat {
+
+  0%,
+  100% {
+    transform: perspective(1200px) translateY(0px) rotateY(-7deg) rotateX(4deg);
+  }
+
+  50% {
+    transform: perspective(1200px) translateY(-16px) rotateY(-4deg) rotateX(2deg);
+  }
+}
+
+@keyframes heroPhoneFloatMobile {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Trust Strip */
+.trust-strip {
+  padding: 30px 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(13, 18, 31, 0.5);
+  margin-top: 40px;
+}
+
+.trust-items {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.trust-item svg {
+  color: var(--zpay-green);
+}
+
+/* Feature Section */
+.web-features {
+  padding: 100px 0;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 60px auto;
+}
+
+.section-tag {
+  color: var(--zpay-green);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.section-title {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.feature-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-highlight);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+.feature-icon-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: var(--zpay-green-light);
+  color: var(--zpay-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.feature-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* How It Works View */
+.how-it-works-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 60px;
+  position: relative;
+}
+
+.step-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 36px 30px;
+  position: relative;
+}
+
+.step-number {
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--zpay-green);
+  opacity: 0.8;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.step-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.step-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Security View */
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.security-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+.security-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--zpay-green-light);
+  color: var(--zpay-green);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Support & FAQ View */
+.faq-accordion {
+  max-width: 800px;
+  margin: 40px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.faq-question {
+  padding: 20px 24px;
+  font-size: 17px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.faq-answer {
+  padding: 0 24px 20px 24px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: none;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+.faq-item.active {
+  border-color: var(--border-medium);
+  background: var(--bg-card);
+}
+
+.faq-toggle-icon {
+  transition: transform 0.2s ease;
+}
+
+.faq-item.active .faq-toggle-icon {
+  transform: rotate(180deg);
+  color: var(--zpay-green);
+}
+
+/* Web Footer */
+.web-footer {
+  padding: 60px 0 40px 0;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-primary);
+  margin-top: 100px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 50px;
+  margin-bottom: 50px;
+}
+
+.footer-col h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.footer-col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col a {
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: color var(--transition-fast);
+}
+
+.footer-col a:hover {
+  color: var(--zpay-green);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30px;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 40px;
+    line-height: 1.15;
+  }
+
+  .hero-subtitle {
+    margin: 0 auto 32px auto;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
+  }
+
+  .hero-stats {
+    justify-content: center;
+  }
+
+  .mockup-container {
+    margin-top: 40px;
+    padding: 10px 0;
+  }
+
+  .phone-mockup-frame {
+    width: 320px;
+    height: 640px;
+    transform: none;
+    animation: heroPhoneFloatMobile 5s ease-in-out infinite;
+  }
+
+  .phone-mockup-frame:hover {
+    transform: translateY(-6px);
+  }
+
+  .floating-badge {
+    display: none;
+  }
+
+  .feature-grid,
+  .how-it-works-steps,
+  .security-grid,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .phone-mockup-frame {
+    width: 295px;
+    height: 610px;
+    border-radius: 42px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+  }
+}
