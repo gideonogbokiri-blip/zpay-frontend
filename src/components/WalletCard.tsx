@@ -14,20 +14,15 @@ export interface WalletCardProps {
   balance: number;
   loading?: boolean;
   hidden?: boolean;
-  onToggleHidden?: () => void;
   onFundPress?: () => void;
 }
 
-export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPress }: WalletCardProps) {
+export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCardProps) {
   const colors = useTheme();
-  const [localHidden, setLocalHidden] = useState(false);
   const [display, setDisplay] = useState(balance);
   const animatedBalance = useRef(new Animated.Value(balance)).current;
   const entranceOpacity = useRef(new Animated.Value(0)).current;
   const entranceY = useRef(new Animated.Value(12)).current;
-
-  const isHidden = hidden ?? localHidden;
-  const toggleHidden = onToggleHidden ?? (() => setLocalHidden((v) => !v));
 
   useEffect(() => {
     Animated.parallel([
@@ -60,7 +55,7 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
     };
   }, [balance, loading, animatedBalance]);
 
-  const balanceText = isHidden ? '••••••' : formatNaira(display);
+  const balanceText = hidden ? '••••••' : formatNaira(display);
   const isZero = balance === 0 && !loading;
 
   return (
@@ -81,14 +76,6 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
               My Wallet
             </Text>
           </View>
-          <Pressable
-            onPress={toggleHidden}
-            accessibilityRole="button"
-            accessibilityLabel={isHidden ? 'Show balance' : 'Hide balance'}
-            hitSlop={8}
-            style={({ pressed }) => [styles.eyeButton, pressed && styles.pressed]}>
-            <Ionicons name={isHidden ? 'eye-off-outline' : 'eye-outline'} size={IconSize.sm} color={colors.textSecondary} />
-          </Pressable>
         </View>
 
         <View style={styles.balanceBlock}>
@@ -106,7 +93,7 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
               {balanceText}
             </Text>
           )}
-          {isZero && !isHidden ? (
+          {isZero && !hidden ? (
             <Text variant="caption" color="accent" style={styles.zeroHint}>
               Fund your wallet to get started
             </Text>
@@ -177,16 +164,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 15,
   },
-  eyeButton: {
-    width: 34,
-    height: 34,
-    borderRadius: Radii.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.08)',
-  },
   balanceBlock: {
     marginTop: Spacing.md,
     gap: 2,
@@ -233,9 +210,5 @@ const styles = StyleSheet.create({
   fundPressed: {
     opacity: 0.9,
     transform: [{ scale: 0.97 }],
-  },
-  pressed: {
-    opacity: 0.75,
-    transform: [{ scale: 0.95 }],
   },
 });

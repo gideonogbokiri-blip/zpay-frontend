@@ -78,7 +78,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="service"
           options={{
-            title: 'Service',
+            title: 'Services',
             tabBarIcon: ({ focused, color }) => <TabIcon name="grid" focused={focused} color={color} />,
           }}
         />

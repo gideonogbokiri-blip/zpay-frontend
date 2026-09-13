@@ -185,7 +185,6 @@ export default function HomeScreen() {
           balance={wallet?.balance ?? 0}
           loading={walletLoading}
           hidden={hidden}
-          onToggleHidden={() => setHidden((v) => !v)}
           onFundPress={() => router.push('/wallet/fund')}
         />
         {walletError && !walletLoading ? (
