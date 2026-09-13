@@ -24,8 +24,7 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
   const [display, setDisplay] = useState(balance);
   const animatedBalance = useRef(new Animated.Value(balance)).current;
   const entranceOpacity = useRef(new Animated.Value(0)).current;
-  const entranceY = useRef(new Animated.Value(15)).current;
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const entranceY = useRef(new Animated.Value(12)).current;
 
   const isHidden = hidden ?? localHidden;
   const toggleHidden = onToggleHidden ?? (() => setLocalHidden((v) => !v));
@@ -34,44 +33,25 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
     Animated.parallel([
       Animated.timing(entranceOpacity, {
         toValue: 1,
-        duration: 500,
+        duration: 400,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
       }),
       Animated.timing(entranceY, {
         toValue: 0,
-        duration: 500,
+        duration: 400,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
       }),
     ]).start();
-
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.delay(1400),
-        Animated.timing(shimmer, {
-          toValue: 1,
-          duration: 2600,
-          easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmer, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
-  }, [entranceOpacity, entranceY, shimmer]);
+  }, [entranceOpacity, entranceY]);
 
   useEffect(() => {
     if (loading) return;
     const listener = animatedBalance.addListener(({ value }) => setDisplay(Math.round(value)));
     Animated.timing(animatedBalance, {
       toValue: balance,
-      duration: 700,
+      duration: 600,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: false,
     }).start();
@@ -80,28 +60,24 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
     };
   }, [balance, loading, animatedBalance]);
 
-  const shimmerX = shimmer.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-260, 340],
-  });
   const balanceText = isHidden ? '••••••' : formatNaira(display);
+  const isZero = balance === 0 && !loading;
 
   return (
     <Animated.View style={{ opacity: entranceOpacity, transform: [{ translateY: entranceY }] }}>
       <LinearGradient
-        colors={['#151A21', '#121820', '#221A0D']}
+        colors={['#151A21', '#11151B']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[styles.card, { borderColor: colors.border }]}>
-        <View pointerEvents="none" style={styles.goldHalo} />
-        <Animated.View pointerEvents="none" style={[styles.shimmer, { transform: [{ translateX: shimmerX }, { rotate: '18deg' }] }]} />
+        <View pointerEvents="none" style={styles.goldGlow} />
 
         <View style={styles.topRow}>
           <View style={styles.walletTitleRow}>
             <View style={styles.walletIconWrap}>
-              <Ionicons name="wallet-outline" size={IconSize.md} color={GOLD} />
+              <Ionicons name="wallet" size={IconSize.sm} color={GOLD} />
             </View>
-            <Text variant="bodyBold" style={styles.walletTitle}>
+            <Text variant="smallBold" style={styles.walletTitle}>
               My Wallet
             </Text>
           </View>
@@ -109,9 +85,9 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
             onPress={toggleHidden}
             accessibilityRole="button"
             accessibilityLabel={isHidden ? 'Show balance' : 'Hide balance'}
-            hitSlop={Spacing.sm}
+            hitSlop={8}
             style={({ pressed }) => [styles.eyeButton, pressed && styles.pressed]}>
-            <Ionicons name={isHidden ? 'eye-off-outline' : 'eye-outline'} size={IconSize.md} color="#FFFFFF" />
+            <Ionicons name={isHidden ? 'eye-off-outline' : 'eye-outline'} size={IconSize.sm} color={colors.textSecondary} />
           </Pressable>
         </View>
 
@@ -120,16 +96,21 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
             AVAILABLE BALANCE
           </Text>
           {loading ? (
-            <Text style={[styles.amount, { color: colors.textMuted }]}>------</Text>
+            <Text style={[styles.amount, { color: colors.textMuted }]}>₦------</Text>
           ) : (
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              minimumFontScale={0.58}
+              minimumFontScale={0.6}
               style={[styles.amount, { color: colors.text }]}>
               {balanceText}
             </Text>
           )}
+          {isZero && !isHidden ? (
+            <Text variant="caption" color="accent" style={styles.zeroHint}>
+              Fund your wallet to get started
+            </Text>
+          ) : null}
         </View>
 
         <View style={styles.bottomRow}>
@@ -138,15 +119,12 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
             accessibilityRole="button"
             accessibilityLabel="Fund wallet"
             style={({ pressed }) => [styles.fundButton, pressed && styles.fundPressed]}>
-            <Ionicons name="add" size={IconSize.md} color="#090C10" />
+            <Ionicons name="add-circle" size={18} color="#090C10" />
             <Text variant="smallBold" style={styles.fundText}>
               Fund Wallet
             </Text>
-            <Ionicons name="arrow-forward" size={IconSize.sm} color="#090C10" />
+            <Ionicons name="arrow-forward" size={14} color="#090C10" />
           </Pressable>
-          <View pointerEvents="none" style={styles.walletGraphic}>
-            <Ionicons name="card-outline" size={58} color="rgba(245,184,46,0.20)" />
-          </View>
         </View>
       </LinearGradient>
     </Animated.View>
@@ -156,31 +134,24 @@ export function WalletCard({ balance, loading, hidden, onToggleHidden, onFundPre
 const styles = StyleSheet.create({
   card: {
     width: '100%',
-    borderRadius: 24,
-    padding: Spacing.xl,
+    borderRadius: Radii.xl,
+    padding: Spacing.lg,
     borderWidth: 1,
     overflow: 'hidden',
     shadowColor: '#000000',
-    shadowOpacity: 0.32,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 14 },
-    elevation: 12,
+    shadowOpacity: 0.24,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 8,
   },
-  goldHalo: {
+  goldGlow: {
     position: 'absolute',
-    right: -86,
-    top: -80,
-    width: 190,
-    height: 190,
-    borderRadius: 95,
-    backgroundColor: 'rgba(245,184,46,0.13)',
-  },
-  shimmer: {
-    position: 'absolute',
-    top: -70,
-    width: 52,
-    height: 330,
-    backgroundColor: 'rgba(255,255,255,0.065)',
+    right: -40,
+    top: -40,
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    backgroundColor: 'rgba(245,184,46,0.08)',
   },
   topRow: {
     flexDirection: 'row',
@@ -190,79 +161,81 @@ const styles = StyleSheet.create({
   walletTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
   walletIconWrap: {
-    width: 42,
-    height: 42,
-    borderRadius: Radii.md,
+    width: 32,
+    height: 32,
+    borderRadius: Radii.sm,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(245,184,46,0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(245,184,46,0.22)',
+    borderColor: 'rgba(245,184,46,0.24)',
   },
   walletTitle: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 15,
   },
   eyeButton: {
-    width: 40,
-    height: 40,
+    width: 34,
+    height: 34,
     borderRadius: Radii.full,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.10)',
+    borderColor: 'rgba(255,255,255,0.08)',
   },
   balanceBlock: {
-    marginTop: Spacing.xxl,
-    gap: Spacing.xs,
+    marginTop: Spacing.md,
+    gap: 2,
   },
   label: {
-    letterSpacing: 1,
+    letterSpacing: 0.8,
+    fontSize: 11,
     fontWeight: '700',
   },
   amount: {
-    fontSize: FontSize.amount,
-    lineHeight: FontSize.amount + 8,
+    fontSize: 32,
+    lineHeight: 38,
     fontWeight: '900',
-    letterSpacing: -0.8,
+    letterSpacing: -0.5,
+  },
+  zeroHint: {
+    marginTop: 2,
+    fontWeight: '600',
   },
   bottomRow: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    gap: Spacing.md,
-    marginTop: Spacing.xl,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: Spacing.md,
   },
   fundButton: {
-    minHeight: 48,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     borderRadius: Radii.full,
     backgroundColor: GOLD,
     shadowColor: GOLD,
-    shadowOpacity: 0.22,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 8,
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
   },
   fundText: {
     color: '#090C10',
-  },
-  walletGraphic: {
-    opacity: 0.9,
+    fontSize: 14,
   },
   fundPressed: {
-    opacity: 0.92,
+    opacity: 0.9,
     transform: [{ scale: 0.97 }],
   },
   pressed: {
-    opacity: 0.76,
+    opacity: 0.75,
     transform: [{ scale: 0.95 }],
   },
 });

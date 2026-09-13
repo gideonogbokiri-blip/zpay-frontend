@@ -17,10 +17,10 @@ import { ZpayLogo } from '@/components/ZpayLogo';
 const GOLD = '#F5B82E';
 
 const SERVICE_COPY: Record<ServiceType, { title: string; subtitle: string; tint: string }> = {
-  ELECTRICITY: { title: 'Electricity', subtitle: 'Buy Electricity', tint: '#F5B82E' },
-  AIRTIME: { title: 'Airtime', subtitle: 'Top Up Airtime', tint: '#2563EB' },
-  DATA: { title: 'Data', subtitle: 'Buy Data', tint: '#22C55E' },
-  TV: { title: 'TV', subtitle: 'Pay TV Subscription', tint: '#A78BFA' },
+  ELECTRICITY: { title: 'Electricity', subtitle: 'Prepaid & postpaid', tint: '#F5B82E' },
+  AIRTIME: { title: 'Airtime', subtitle: 'All networks', tint: '#2563EB' },
+  DATA: { title: 'Data', subtitle: 'Instant bundles', tint: '#22C55E' },
+  TV: { title: 'TV & Exams', subtitle: 'DStv, GOtv, WAEC, JAMB', tint: '#A78BFA' },
   WAEC: { title: 'WAEC', subtitle: 'Register for WAEC', tint: '#22C55E' },
   JAMB: { title: 'JAMB', subtitle: 'Register for JAMB', tint: '#EF4444' },
   NECO: { title: 'NECO', subtitle: 'Register for NECO', tint: '#F78FB3' },
@@ -49,21 +49,21 @@ function HeaderIcon({ children, onPress, label }: { children: ReactNode; onPress
 function ServiceCard({ type, index }: { type: ServiceType; index: number }) {
   const colors = useTheme();
   const opacity = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(12)).current;
+  const translateY = useRef(new Animated.Value(10)).current;
   const copy = SERVICE_COPY[type] ?? { title: SERVICE_NAMES[type], subtitle: 'Pay in seconds', tint: SERVICE_META[type].color };
 
   useEffect(() => {
     Animated.parallel([
       Animated.timing(opacity, {
         toValue: 1,
-        duration: 400,
-        delay: 100 + index * 50,
+        duration: 350,
+        delay: 80 + index * 40,
         useNativeDriver: true,
       }),
       Animated.timing(translateY, {
         toValue: 0,
-        duration: 400,
-        delay: 100 + index * 50,
+        duration: 350,
+        delay: 80 + index * 40,
         useNativeDriver: true,
       }),
     ]).start();
@@ -80,7 +80,7 @@ function ServiceCard({ type, index }: { type: ServiceType; index: number }) {
           { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
           pressed && styles.cardPressed,
         ]}>
-        <View style={[styles.serviceIcon, { backgroundColor: withAlpha(copy.tint, 0.16), borderColor: withAlpha(copy.tint, 0.22) }]}>
+        <View style={[styles.serviceIcon, { backgroundColor: withAlpha(copy.tint, 0.16), borderColor: withAlpha(copy.tint, 0.24) }]}>
           <Icon name={SERVICE_META[type].icon as IconName} size={IconSize.md} color={copy.tint} />
         </View>
         <View style={styles.serviceFooter}>
@@ -92,7 +92,7 @@ function ServiceCard({ type, index }: { type: ServiceType; index: number }) {
               {copy.subtitle}
             </Text>
           </View>
-          <Icon name="arrow-forward" size={IconSize.sm} color={colors.textMuted} />
+          <Text style={{ color: GOLD, fontSize: 16, fontWeight: '700' }}>→</Text>
         </View>
       </Pressable>
     </Animated.View>
@@ -108,15 +108,16 @@ export default function HomeScreen() {
   const { data: notifications } = useNotifications();
   const [hidden, setHidden] = useState(false);
   const headerOpacity = useRef(new Animated.Value(0)).current;
-  const headerTranslateY = useRef(new Animated.Value(8)).current;
+  const headerTranslateY = useRef(new Animated.Value(6)).current;
 
   const serviceOrder =
     (services?.map((s) => s.type).filter((t) => ACTIVE_SERVICES.includes(t)) as ServiceType[]) ?? [];
   const visibleServices = serviceOrder.length ? serviceOrder : ACTIVE_SERVICES;
   const recent = transactions?.items.slice(0, 5) ?? [];
   const unreadCount = notifications?.filter((n) => !n.readAt).length ?? 0;
-  const fullName = user?.fullName?.trim() || 'Demo User';
-  const initial = fullName.charAt(0).toUpperCase();
+  
+  const firstName = user?.fullName?.trim() ? user.fullName.trim().split(' ')[0] : 'Thankgod';
+  const initial = firstName.charAt(0).toUpperCase();
 
   const greeting = (() => {
     const hour = new Date().getHours();
@@ -129,12 +130,12 @@ export default function HomeScreen() {
     Animated.parallel([
       Animated.timing(headerOpacity, {
         toValue: 1,
-        duration: 400,
+        duration: 350,
         useNativeDriver: true,
       }),
       Animated.timing(headerTranslateY, {
         toValue: 0,
-        duration: 400,
+        duration: 350,
         useNativeDriver: true,
       }),
     ]).start();
@@ -143,8 +144,9 @@ export default function HomeScreen() {
   return (
     <Screen title={undefined} scroll>
       <View style={styles.topBar}>
-        <ZpayLogo size={130} />
+        <ZpayLogo size={120} />
       </View>
+
       <Animated.View style={[styles.header, { opacity: headerOpacity, transform: [{ translateY: headerTranslateY }] }]}>
         <Link href="/me" asChild>
           <Pressable
@@ -155,11 +157,8 @@ export default function HomeScreen() {
           </Pressable>
         </Link>
         <View style={styles.headerText}>
-          <Text variant="small" color="textMuted" style={styles.greetingLabel}>
-            {greeting}
-          </Text>
-          <Text variant="heading" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.76} style={styles.userName}>
-            {fullName}
+          <Text variant="smallBold" color="text" style={styles.greetingLabel}>
+            {greeting} {firstName} 👋
           </Text>
           <Text variant="caption" color="textSecondary" numberOfLines={1} style={styles.subtitle}>
             Manage your bills and wallet here
@@ -194,6 +193,44 @@ export default function HomeScreen() {
             Couldn't refresh your balance. Check your connection.
           </Text>
         ) : null}
+      </View>
+
+      <View style={styles.quickActionsRow}>
+        <Pressable
+          onPress={() => router.push('/wallet/fund')}
+          style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(245,184,46,0.16)' }]}>
+            <Icon name="add-circle" size={IconSize.sm} color={GOLD} />
+          </View>
+          <Text variant="smallBold" style={styles.quickActionText}>Fund</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => router.push('/service')}
+          style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(37,99,235,0.16)' }]}>
+            <Icon name="flash" size={IconSize.sm} color="#2563EB" />
+          </View>
+          <Text variant="smallBold" style={styles.quickActionText}>Bills</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => router.push('/services/airtime')}
+          style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(34,197,94,0.16)' }]}>
+            <Icon name="phone-portrait" size={IconSize.sm} color="#22C55E" />
+          </View>
+          <Text variant="smallBold" style={styles.quickActionText}>Airtime</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => router.push('/services/data')}
+          style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(167,139,250,0.16)' }]}>
+            <Icon name="wifi" size={IconSize.sm} color="#A78BFA" />
+          </View>
+          <Text variant="smallBold" style={styles.quickActionText}>Data</Text>
+        </Pressable>
       </View>
 
       <View style={styles.section}>
@@ -234,8 +271,11 @@ export default function HomeScreen() {
         {recent.length === 0 ? (
           <View style={[styles.emptyCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }]}>
             <Icon name="receipt-outline" size={IconSize.xl} color={colors.textMuted} />
-            <Text variant="small" color="textMuted" style={styles.emptyText}>
-              No transactions yet. Pay a bill to get started.
+            <Text variant="smallBold" color="text" style={{ textAlign: 'center' }}>
+              No transactions yet
+            </Text>
+            <Text variant="caption" color="textMuted" style={styles.emptyText}>
+              Your completed transactions will appear here.
             </Text>
           </View>
         ) : (
@@ -251,101 +291,123 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  topBar: {
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.xs,
+    paddingBottom: Spacing.xs,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
     gap: Spacing.md,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.xl,
   },
   avatarWrap: {
-    width: 48,
-    height: 48,
+    width: 44,
+    height: 44,
     borderRadius: Radii.full,
+    backgroundColor: 'rgba(245, 184, 46, 0.16)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(245, 184, 46, 0.35)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: GOLD,
-    backgroundColor: '#151A21',
   },
   avatarInitial: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    lineHeight: 24,
+    color: GOLD,
+    fontSize: 18,
     fontWeight: '800',
   },
   headerText: {
     flex: 1,
-    minWidth: 0,
+    gap: 1,
   },
   greetingLabel: {
-    fontSize: 15,
-    fontWeight: '500',
-  },
-  userName: {
-    fontSize: 30,
-    lineHeight: 35,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    letterSpacing: -0.5,
+    fontSize: 16,
+    letterSpacing: -0.2,
   },
   subtitle: {
-    marginTop: 2,
+    fontSize: 13,
   },
   headerActions: {
     flexDirection: 'row',
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
   headerIcon: {
-    width: 42,
-    height: 42,
+    width: 38,
+    height: 38,
     borderRadius: Radii.full,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#151A21',
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.10)',
+    borderColor: 'rgba(255,255,255,0.08)',
   },
   headerIconPressed: {
-    opacity: 0.82,
+    opacity: 0.8,
     transform: [{ scale: 0.95 }],
   },
   unreadDot: {
     position: 'absolute',
-    top: 9,
-    right: 9,
+    top: 8,
+    right: 8,
     width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: '#EF4444',
   },
   walletWrap: {
-    marginTop: Spacing.xs,
+    paddingHorizontal: Spacing.lg,
+    marginTop: Spacing.sm,
   },
   walletError: {
     textAlign: 'center',
     marginTop: Spacing.sm,
   },
+  quickActionsRow: {
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.sm,
+    marginTop: Spacing.lg,
+  },
+  quickActionCard: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.md,
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    gap: Spacing.xs,
+  },
+  quickActionIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: Radii.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  quickActionText: {
+    fontSize: 12,
+  },
   section: {
-    marginTop: Spacing.xxxl,
-    gap: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    marginTop: Spacing.xxl,
+    gap: Spacing.md,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: Spacing.md,
   },
   sectionTitle: {
-    fontSize: 23,
-    lineHeight: 29,
+    fontSize: 20,
+    lineHeight: 26,
     fontWeight: '800',
   },
   viewAll: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    minHeight: 34,
   },
   viewAllText: {
     color: GOLD,
@@ -360,16 +422,16 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   serviceCard: {
-    minHeight: 138,
+    minHeight: 120,
     borderRadius: Radii.xl,
     borderWidth: 1,
-    padding: Spacing.lg,
+    padding: Spacing.md,
     justifyContent: 'space-between',
   },
   serviceIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: Radii.md,
+    width: 38,
+    height: 38,
+    borderRadius: Radii.sm,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -378,32 +440,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
   serviceText: {
     flex: 1,
     minWidth: 0,
-    gap: 2,
+    gap: 1,
   },
   cardPressed: {
-    opacity: 0.86,
+    opacity: 0.85,
     transform: [{ scale: 0.97 }],
   },
   transactionList: {
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
   emptyCard: {
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: Spacing.sm,
     borderRadius: Radii.xl,
     borderWidth: 1,
-    padding: Spacing.xxl,
+    padding: Spacing.xl,
   },
   emptyText: {
     textAlign: 'center',
-  },
-  topBar: {
-    paddingVertical: Spacing.xs,
-    alignItems: 'flex-start',
   },
 });
