@@ -115,23 +115,14 @@ export default function LoginScreen() {
   return (
     <Screen title={undefined} scroll contentStyle={styles.screen}>
       <View style={[styles.layout, wide ? styles.layoutWide : styles.layoutMobile]}>
-        <Animated.View style={[styles.visualPanel, wide ? styles.visualPanelWide : styles.visualPanelMobile, reveal(0)]}>
-          <Animated.View pointerEvents="none" style={[styles.visualGlow, { opacity: glow }]} />
-          <Image source={loginVisual} resizeMode="cover" style={styles.visualImage} />
-          <View style={styles.visualCopy}>
-            <Text style={styles.visualTitle}>Pay smarter with ZPAY</Text>
-            <Text style={styles.visualText}>Bills, airtime, data, exams and wallet funding in one secure Nigerian app.</Text>
-          </View>
-        </Animated.View>
-
         <Animated.View
           style={[
             styles.formPanel,
             wide ? styles.formPanelWide : styles.formPanelMobile,
             { backgroundColor: wide ? colors.surface : 'transparent', borderColor: wide ? colors.border : 'transparent' },
-            reveal(1),
+            reveal(0),
           ]}>
-          <Animated.View style={[styles.brandRow, !wide && styles.brandRowMobile, reveal(2)]}>
+          <Animated.View style={[styles.brandRow, !wide && styles.brandRowMobile, reveal(1)]}>
             <ZpayLogo size={wide ? 72 : 108} />
             <View style={[styles.brandTextWrap, !wide && styles.brandTextWrapMobile]}>
               <Text style={[styles.brand, !wide && styles.brandMobile, { color: colors.accent }]}>ZPay</Text>
@@ -139,16 +130,16 @@ export default function LoginScreen() {
             </View>
           </Animated.View>
 
-          <Animated.View style={reveal(3)}>
+          <Animated.View style={reveal(2)}>
             <Text variant="bodyBold" style={[styles.cardTitle, !wide && styles.cardTitleMobile]} color="text">Welcome Back</Text>
             <Text variant="small" color="textSecondary" style={[styles.cardSubtitle, !wide && styles.cardSubtitleMobile]}>Login to continue to your account.</Text>
           </Animated.View>
 
-          <Animated.View style={reveal(4)}>
+          <Animated.View style={reveal(3)}>
             <InlineError message={error} />
           </Animated.View>
 
-          <Animated.View style={[styles.field, reveal(4)]}>
+          <Animated.View style={[styles.field, reveal(3)]}>
             <View style={styles.inputIcon}>
               <Ionicons name="person-outline" size={IconSize.sm} color={colors.accent} />
             </View>
@@ -171,7 +162,7 @@ export default function LoginScreen() {
             />
           </Animated.View>
 
-          <Animated.View style={[styles.field, reveal(5)]}>
+          <Animated.View style={[styles.field, reveal(4)]}>
             <View style={styles.inputIcon}>
               <Ionicons name="lock-closed-outline" size={IconSize.sm} color={colors.accent} />
             </View>
@@ -202,25 +193,34 @@ export default function LoginScreen() {
             />
           </Animated.View>
 
-          <Animated.View style={[styles.linksRow, reveal(6)]}>
+          <Animated.View style={[styles.linksRow, reveal(5)]}>
             <Link href="/forgot-password" asChild><Text variant="small" color="accent">Forgot password?</Text></Link>
             <Link href="/signup" asChild><Text variant="smallBold" color="accent">Create account</Text></Link>
           </Animated.View>
 
-          <Animated.View style={reveal(7)}>
+          <Animated.View style={reveal(6)}>
             <Button label="Login" loading={submitting} disabled={submitting} onPress={handleSubmit(onSubmit)} />
           </Animated.View>
 
-          <Animated.View style={reveal(8)}>
+          <Animated.View style={reveal(7)}>
             <Link href="/signup" asChild>
               <Button label="Create free account" variant="secondary" style={styles.signupButtonUnder} />
             </Link>
           </Animated.View>
 
-          <Animated.View style={[styles.secureNote, reveal(8)]}>
+          <Animated.View style={[styles.secureNote, reveal(7)]}>
             <Ionicons name="lock-closed-outline" size={14} color={colors.textMuted} />
             <Text variant="small" color="textMuted">Secure login powered by zPay</Text>
           </Animated.View>
+        </Animated.View>
+
+        <Animated.View style={[styles.visualPanel, wide ? styles.visualPanelWide : styles.visualPanelMobile, reveal(8)]}>
+          <Animated.View pointerEvents="none" style={[styles.visualGlow, { opacity: glow }]} />
+          <Image source={loginVisual} resizeMode="cover" style={styles.visualImage} />
+          <View style={styles.visualCopy}>
+            <Text style={styles.visualTitle}>Pay smarter with ZPAY</Text>
+            <Text style={styles.visualText}>Bills, airtime, data, exams and wallet funding in one secure Nigerian app.</Text>
+          </View>
         </Animated.View>
       </View>
     </Screen>
