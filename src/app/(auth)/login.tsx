@@ -77,7 +77,7 @@ export default function LoginScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const reveal = useReveal(8);
+  const reveal = useReveal(9);
 
   const glow = useRef(new Animated.Value(0.45)).current;
   useEffect(() => {
@@ -115,16 +115,14 @@ export default function LoginScreen() {
   return (
     <Screen title={undefined} scroll contentStyle={styles.screen}>
       <View style={[styles.layout, wide ? styles.layoutWide : styles.layoutMobile]}>
-        {wide ? (
-          <Animated.View style={[styles.visualPanel, styles.visualPanelWide, reveal(0)]}>
-            <Animated.View pointerEvents="none" style={[styles.visualGlow, { opacity: glow }]} />
-            <Image source={loginVisual} resizeMode="cover" style={styles.visualImage} />
-            <View style={styles.visualCopy}>
-              <Text style={styles.visualTitle}>Pay smarter with ZPAY</Text>
-              <Text style={styles.visualText}>Bills, airtime, data, exams and wallet funding in one secure Nigerian app.</Text>
-            </View>
-          </Animated.View>
-        ) : null}
+        <Animated.View style={[styles.visualPanel, wide ? styles.visualPanelWide : styles.visualPanelMobile, reveal(0)]}>
+          <Animated.View pointerEvents="none" style={[styles.visualGlow, { opacity: glow }]} />
+          <Image source={loginVisual} resizeMode="cover" style={styles.visualImage} />
+          <View style={styles.visualCopy}>
+            <Text style={styles.visualTitle}>Pay smarter with ZPAY</Text>
+            <Text style={styles.visualText}>Bills, airtime, data, exams and wallet funding in one secure Nigerian app.</Text>
+          </View>
+        </Animated.View>
 
         <Animated.View
           style={[
@@ -213,7 +211,13 @@ export default function LoginScreen() {
             <Button label="Login" loading={submitting} disabled={submitting} onPress={handleSubmit(onSubmit)} />
           </Animated.View>
 
-          <Animated.View style={[styles.secureNote, reveal(7)]}>
+          <Animated.View style={reveal(8)}>
+            <Link href="/signup" asChild>
+              <Button label="Create free account" variant="secondary" style={styles.signupButtonUnder} />
+            </Link>
+          </Animated.View>
+
+          <Animated.View style={[styles.secureNote, reveal(8)]}>
             <Ionicons name="lock-closed-outline" size={14} color={colors.textMuted} />
             <Text variant="small" color="textMuted">Secure login powered by zPay</Text>
           </Animated.View>
@@ -252,6 +256,11 @@ const styles = StyleSheet.create({
   visualPanelWide: {
     flex: 1.05,
     minHeight: 680,
+  },
+  visualPanelMobile: {
+    width: '100%',
+    height: 320,
+    marginBottom: Spacing.sm,
   },
   formPanel: {
     borderRadius: Radii.xxl,
@@ -390,5 +399,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.xxs,
+  },
+  signupButtonUnder: {
+    marginTop: Spacing.xs,
   },
 });
