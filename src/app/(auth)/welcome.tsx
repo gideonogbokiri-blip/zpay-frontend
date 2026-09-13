@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { Image, ImageBackground, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Image, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Icon, type IconName } from '@/components/Icon';
@@ -88,73 +88,76 @@ export default function WelcomeScreen() {
     );
   }
 
-  // Mobile layout: Immersive background image with gradient and glass cards
+  // Mobile layout: Immersive background image with absolute container and gradient overlay
   return (
     <Screen title={undefined} scroll contentStyle={styles.contentMobile}>
-      <ImageBackground source={loginVisual} resizeMode="cover" style={styles.mobileBg}>
-        <LinearGradient
-          colors={['rgba(9, 12, 16, 0.4)', 'rgba(9, 12, 16, 0.92)', '#090C10']}
-          style={styles.mobileGradient}
-        >
-          <View style={styles.mobileInner}>
-            <ZpayLogo size={140} style={styles.mobileLogo} />
+      <View style={styles.mobileContainer}>
+        <View style={styles.mobileBgContainer} pointerEvents="none">
+          <Image source={loginVisual} resizeMode="cover" style={styles.mobileBgImage} />
+          <LinearGradient
+            colors={['rgba(9, 12, 16, 0.5)', 'rgba(9, 12, 16, 0.92)', '#090C10']}
+            style={styles.mobileGradient}
+          />
+        </View>
 
-            <View style={styles.mobileHeader}>
-              <Text variant="heading" style={[styles.titleMobile, { color: '#FFFFFF' }]}>
-                Welcome to ZPAY
-              </Text>
-              <Text variant="body" style={[styles.taglineMobile, { color: 'rgba(255,255,255,0.85)' }]}>
-                Pay bills, buy airtime and register for exams in one place.
-              </Text>
-            </View>
+        <View style={styles.mobileInner}>
+          <ZpayLogo size={130} style={styles.mobileLogo} />
 
-            <View style={styles.features}>
-              {FEATURES.map((f) => (
-                <View key={f.label} style={[styles.featureMobile, { backgroundColor: 'rgba(17, 21, 27, 0.88)', borderColor: 'rgba(255,255,255,0.12)' }]}>
-                  <View style={[styles.featureIcon, { backgroundColor: 'rgba(245, 184, 46, 0.16)' }]}>
-                    <Icon name={f.icon} size={IconSize.md} color="#F5B82E" />
-                  </View>
-                  <View style={styles.featureText}>
-                    <Text variant="smallBold" style={{ color: '#FFFFFF' }}>{f.label}</Text>
-                    <Text variant="caption" style={{ color: '#94A3B8' }}>
-                      {f.caption}
-                    </Text>
-                  </View>
-                  <Icon name="chevron-forward" size={IconSize.sm} color="#94A3B8" />
+          <View style={styles.mobileHeader}>
+            <Text variant="heading" style={[styles.titleMobile, { color: '#FFFFFF' }]}>
+              Welcome to ZPAY
+            </Text>
+            <Text variant="body" style={[styles.taglineMobile, { color: 'rgba(255,255,255,0.85)' }]}>
+              Pay bills, buy airtime and register for exams in one place.
+            </Text>
+          </View>
+
+          <View style={styles.features}>
+            {FEATURES.map((f) => (
+              <View key={f.label} style={[styles.featureMobile, { backgroundColor: 'rgba(17, 21, 27, 0.88)', borderColor: 'rgba(255,255,255,0.12)' }]}>
+                <View style={[styles.featureIcon, { backgroundColor: 'rgba(245, 184, 46, 0.16)' }]}>
+                  <Icon name={f.icon} size={IconSize.md} color="#F5B82E" />
                 </View>
-              ))}
-            </View>
-
-            <View style={styles.actionsMobile}>
-              <Link href="/login" asChild>
-                <Button label="Log in →" />
-              </Link>
-              <Link href="/signup" asChild>
-                <Button label="Create account" variant="secondary" />
-              </Link>
-              <View style={styles.links}>
-                <Link href="/promo" asChild>
-                  <Pressable accessibilityRole="link" accessibilityLabel="Promo">
-                    <Text variant="smallBold" color="accent">Promo</Text>
-                  </Pressable>
-                </Link>
-                <Text variant="caption" color="textMuted">•</Text>
-                <Link href="/terms" asChild>
-                  <Pressable accessibilityRole="link" accessibilityLabel="Terms">
-                    <Text variant="smallBold" color="accent">Terms</Text>
-                  </Pressable>
-                </Link>
-                <Text variant="caption" color="textMuted">•</Text>
-                <Link href="/privacy" asChild>
-                  <Pressable accessibilityRole="link" accessibilityLabel="Privacy">
-                    <Text variant="smallBold" color="accent">Privacy</Text>
-                  </Pressable>
-                </Link>
+                <View style={styles.featureText}>
+                  <Text variant="smallBold" style={{ color: '#FFFFFF' }}>{f.label}</Text>
+                  <Text variant="caption" style={{ color: '#94A3B8' }}>
+                    {f.caption}
+                  </Text>
+                </View>
+                <Icon name="chevron-forward" size={IconSize.sm} color="#94A3B8" />
               </View>
+            ))}
+          </View>
+
+          <View style={styles.actionsMobile}>
+            <Link href="/login" asChild>
+              <Button label="Log in →" />
+            </Link>
+            <Link href="/signup" asChild>
+              <Button label="Create account" variant="secondary" />
+            </Link>
+            <View style={styles.links}>
+              <Link href="/promo" asChild>
+                <Pressable accessibilityRole="link" accessibilityLabel="Promo">
+                  <Text variant="smallBold" color="accent">Promo</Text>
+                </Pressable>
+              </Link>
+              <Text variant="caption" color="textMuted">•</Text>
+              <Link href="/terms" asChild>
+                <Pressable accessibilityRole="link" accessibilityLabel="Terms">
+                  <Text variant="smallBold" color="accent">Terms</Text>
+                </Pressable>
+              </Link>
+              <Text variant="caption" color="textMuted">•</Text>
+              <Link href="/privacy" asChild>
+                <Pressable accessibilityRole="link" accessibilityLabel="Privacy">
+                  <Text variant="smallBold" color="accent">Privacy</Text>
+                </Pressable>
+              </Link>
             </View>
           </View>
-        </LinearGradient>
-      </ImageBackground>
+        </View>
+      </View>
     </Screen>
   );
 }
@@ -236,8 +239,8 @@ const styles = StyleSheet.create({
   actionsMobile: {
     gap: Spacing.md,
     width: '100%',
-    marginTop: Spacing.lg,
-    paddingBottom: Spacing.xxl,
+    marginTop: Spacing.md,
+    paddingBottom: Spacing.lg,
   },
   links: {
     flexDirection: 'row',
@@ -260,22 +263,39 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  mobileBg: {
+  mobileContainer: {
     flex: 1,
+    position: 'relative',
     width: '100%',
-    minHeight: '100%',
+  },
+  mobileBgContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 600,
+    overflow: 'hidden',
+    zIndex: 0,
+  },
+  mobileBgImage: {
+    width: '100%',
+    height: '100%',
   },
   mobileGradient: {
-    flex: 1,
-    width: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   mobileInner: {
     flex: 1,
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xxl,
+    zIndex: 1,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.xl,
     paddingBottom: Spacing.xxl,
     justifyContent: 'center',
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
   mobileLogo: {
     alignItems: 'flex-start',
@@ -286,12 +306,12 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   titleMobile: {
-    fontSize: 32,
-    lineHeight: 38,
+    fontSize: 30,
+    lineHeight: 36,
     fontWeight: '900',
   },
   taglineMobile: {
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
