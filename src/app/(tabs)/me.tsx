@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useKyc, useNotifications } from '@/hooks/queries';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
+import { ZpayLogo } from '@/components/ZpayLogo';
 
 export default function MeScreen() {
   const colors = useTheme();
@@ -29,6 +30,7 @@ export default function MeScreen() {
   return (
     <Screen title="Me" subtitle="Account and settings">
       <View style={styles.profile}>
+        <ZpayLogo size={130} style={{ marginBottom: Spacing.sm }} />
         <View style={styles.avatarGlow} pointerEvents="none" />
         <View style={[styles.avatar, { backgroundColor: colors.accentSoft, borderColor: 'rgba(245, 184, 46, 0.35)' }]}> 
           <Icon name="person" size={IconSize.xxl} color={colors.accent} />

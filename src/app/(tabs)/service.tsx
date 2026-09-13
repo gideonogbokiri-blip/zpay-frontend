@@ -13,6 +13,7 @@ import {
 import { useNotifications, useServices } from '@/hooks/queries';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
+import { ZpayLogo } from '@/components/ZpayLogo';
 
 const POPULAR_CAPTIONS: Record<string, string> = {
   ELECTRICITY: 'Prepaid & postpaid bills',
@@ -129,9 +130,7 @@ export default function ServiceScreen() {
   return (
     <Screen variant="dark" title={undefined} scroll>
       <View style={styles.header}>
-        <Text variant="title" style={styles.brand}>
-          ZPAY
-        </Text>
+        <ZpayLogo size={130} />
         <Link href="/notifications" asChild>
           <Pressable
             accessibilityRole="button"

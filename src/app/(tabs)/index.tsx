@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/use-auth';
 import type { ServiceType } from '@/lib/api';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme';
+import { ZpayLogo } from '@/components/ZpayLogo';
 
 const GOLD = '#F5B82E';
 
@@ -141,6 +142,9 @@ export default function HomeScreen() {
 
   return (
     <Screen title={undefined} scroll>
+      <View style={styles.topBar}>
+        <ZpayLogo size={130} />
+      </View>
       <Animated.View style={[styles.header, { opacity: headerOpacity, transform: [{ translateY: headerTranslateY }] }]}>
         <Link href="/me" asChild>
           <Pressable
@@ -397,5 +401,9 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     textAlign: 'center',
+  },
+  topBar: {
+    paddingVertical: Spacing.xs,
+    alignItems: 'flex-start',
   },
 });

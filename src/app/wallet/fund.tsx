@@ -209,7 +209,7 @@ export default function FundWalletScreen() {
             <Ionicons name="card-outline" size={18} color={colors.accent} />
           </View>
           <View style={styles.accountTitleWrap}>
-            <Text variant="smallBold" color="accent">Transfer to your ZPAY account</Text>
+            <Text variant="smallBold" color="accent">ZPAY Virtual Account</Text>
             <Text variant="caption" color="textMuted">Use your phone number as the account number</Text>
           </View>
         </View>
@@ -225,7 +225,7 @@ export default function FundWalletScreen() {
           <Text variant="body" color="textSecondary">{user.fullName}</Text>
         ) : null}
         <Text variant="caption" color="textMuted">
-          Send money to this account from any Nigerian bank or app. It lands in your ZPAY wallet instantly.
+          Deposit funds to this account from any Nigerian bank or app. It lands in your ZPAY wallet instantly.
         </Text>
       </View>
 

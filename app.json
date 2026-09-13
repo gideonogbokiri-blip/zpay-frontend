@@ -8,15 +8,14 @@
     "scheme": "zpay",
     "userInterfaceStyle": "dark",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "backgroundColor": "#0B0B0C"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0B0B0C",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundImage": "./assets/images/icon.png"
       },
       "package": "com.zpay.app",
       "predictiveBackGestureEnabled": false
@@ -26,7 +25,7 @@
       "favicon": "./assets/images/favicon.png",
       "name": "ZPAY",
       "shortName": "ZPAY",
-      "themeColor": "#00C54C",
+      "themeColor": "#F5B82E",
       "backgroundColor": "#0B0B0C",
       "display": "standalone",
       "description": "Pay bills, buy airtime, data, TV subscriptions and register for WAEC, JAMB and NECO in one place."
@@ -38,7 +37,7 @@
         {
           "backgroundColor": "#0B0B0C",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 120
+          "imageWidth": 160
         }
       ]
     ],
