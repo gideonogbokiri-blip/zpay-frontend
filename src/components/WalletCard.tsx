@@ -22,19 +22,19 @@ export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCard
   const [display, setDisplay] = useState(balance);
   const animatedBalance = useRef(new Animated.Value(balance)).current;
   const entranceOpacity = useRef(new Animated.Value(0)).current;
-  const entranceY = useRef(new Animated.Value(12)).current;
+  const entranceY = useRef(new Animated.Value(8)).current;
 
   useEffect(() => {
     Animated.parallel([
       Animated.timing(entranceOpacity, {
         toValue: 1,
-        duration: 400,
+        duration: 350,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
       }),
       Animated.timing(entranceY, {
         toValue: 0,
-        duration: 400,
+        duration: 350,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
       }),
@@ -46,7 +46,7 @@ export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCard
     const listener = animatedBalance.addListener(({ value }) => setDisplay(Math.round(value)));
     Animated.timing(animatedBalance, {
       toValue: balance,
-      duration: 600,
+      duration: 500,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: false,
     }).start();
@@ -61,16 +61,14 @@ export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCard
   return (
     <Animated.View style={{ opacity: entranceOpacity, transform: [{ translateY: entranceY }] }}>
       <LinearGradient
-        colors={['#151A21', '#11151B']}
+        colors={['#181D26', '#11151B']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[styles.card, { borderColor: colors.border }]}>
-        <View pointerEvents="none" style={styles.goldGlow} />
-
         <View style={styles.topRow}>
           <View style={styles.walletTitleRow}>
             <View style={styles.walletIconWrap}>
-              <Ionicons name="wallet" size={IconSize.sm} color={GOLD} />
+              <Ionicons name="wallet-outline" size={18} color={GOLD} />
             </View>
             <Text variant="smallBold" style={styles.walletTitle}>
               My Wallet
@@ -106,7 +104,7 @@ export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCard
             accessibilityRole="button"
             accessibilityLabel="Fund wallet"
             style={({ pressed }) => [styles.fundButton, pressed && styles.fundPressed]}>
-            <Ionicons name="add-circle" size={18} color="#090C10" />
+            <Ionicons name="add-circle" size={16} color="#090C10" />
             <Text variant="smallBold" style={styles.fundText}>
               Fund Wallet
             </Text>
@@ -122,23 +120,14 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     borderRadius: Radii.xl,
-    padding: Spacing.lg,
+    padding: Spacing.xl,
     borderWidth: 1,
     overflow: 'hidden',
     shadowColor: '#000000',
-    shadowOpacity: 0.24,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 8,
-  },
-  goldGlow: {
-    position: 'absolute',
-    right: -40,
-    top: -40,
-    width: 130,
-    height: 130,
-    borderRadius: 65,
-    backgroundColor: 'rgba(245,184,46,0.08)',
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 6,
   },
   topRow: {
     flexDirection: 'row',
@@ -151,33 +140,34 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   walletIconWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: Radii.sm,
+    width: 36,
+    height: 36,
+    borderRadius: Radii.md,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(245,184,46,0.12)',
+    backgroundColor: 'rgba(245,184,46,0.14)',
     borderWidth: 1,
-    borderColor: 'rgba(245,184,46,0.24)',
+    borderColor: 'rgba(245,184,46,0.28)',
   },
   walletTitle: {
     color: '#FFFFFF',
     fontSize: 15,
+    fontWeight: '700',
   },
   balanceBlock: {
-    marginTop: Spacing.md,
-    gap: 2,
+    marginTop: Spacing.lg,
+    gap: 4,
   },
   label: {
-    letterSpacing: 0.8,
+    letterSpacing: 1,
     fontSize: 11,
     fontWeight: '700',
   },
   amount: {
-    fontSize: 32,
-    lineHeight: 38,
+    fontSize: 34,
+    lineHeight: 40,
     fontWeight: '900',
-    letterSpacing: -0.5,
+    letterSpacing: -0.6,
   },
   zeroHint: {
     marginTop: 2,
@@ -187,18 +177,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: Spacing.md,
+    marginTop: Spacing.lg,
   },
   fundButton: {
-    height: 40,
+    height: 42,
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
-    paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.lg,
     borderRadius: Radii.full,
     backgroundColor: GOLD,
     shadowColor: GOLD,
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.22,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
@@ -206,6 +196,7 @@ const styles = StyleSheet.create({
   fundText: {
     color: '#090C10',
     fontSize: 14,
+    fontWeight: '700',
   },
   fundPressed: {
     opacity: 0.9,

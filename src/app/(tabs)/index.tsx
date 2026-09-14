@@ -49,21 +49,21 @@ function HeaderIcon({ children, onPress, label }: { children: ReactNode; onPress
 function ServiceCard({ type, index }: { type: ServiceType; index: number }) {
   const colors = useTheme();
   const opacity = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(10)).current;
+  const translateY = useRef(new Animated.Value(8)).current;
   const copy = SERVICE_COPY[type] ?? { title: SERVICE_NAMES[type], subtitle: 'Pay in seconds', tint: SERVICE_META[type].color };
 
   useEffect(() => {
     Animated.parallel([
       Animated.timing(opacity, {
         toValue: 1,
-        duration: 350,
-        delay: 80 + index * 40,
+        duration: 320,
+        delay: 60 + index * 30,
         useNativeDriver: true,
       }),
       Animated.timing(translateY, {
         toValue: 0,
-        duration: 350,
-        delay: 80 + index * 40,
+        duration: 320,
+        delay: 60 + index * 30,
         useNativeDriver: true,
       }),
     ]).start();
@@ -80,7 +80,7 @@ function ServiceCard({ type, index }: { type: ServiceType; index: number }) {
           { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
           pressed && styles.cardPressed,
         ]}>
-        <View style={[styles.serviceIcon, { backgroundColor: withAlpha(copy.tint, 0.16), borderColor: withAlpha(copy.tint, 0.24) }]}>
+        <View style={[styles.serviceIcon, { backgroundColor: withAlpha(copy.tint, 0.14), borderColor: withAlpha(copy.tint, 0.24) }]}>
           <Icon name={SERVICE_META[type].icon as IconName} size={IconSize.md} color={copy.tint} />
         </View>
         <View style={styles.serviceFooter}>
@@ -130,12 +130,12 @@ export default function HomeScreen() {
     Animated.parallel([
       Animated.timing(headerOpacity, {
         toValue: 1,
-        duration: 350,
+        duration: 320,
         useNativeDriver: true,
       }),
       Animated.timing(headerTranslateY, {
         toValue: 0,
-        duration: 350,
+        duration: 320,
         useNativeDriver: true,
       }),
     ]).start();
@@ -198,7 +198,7 @@ export default function HomeScreen() {
         <Pressable
           onPress={() => router.push('/wallet/fund')}
           style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
-          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(245,184,46,0.16)' }]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(245,184,46,0.14)' }]}>
             <Icon name="add-circle" size={IconSize.sm} color={GOLD} />
           </View>
           <Text variant="smallBold" style={styles.quickActionText}>Fund</Text>
@@ -207,7 +207,7 @@ export default function HomeScreen() {
         <Pressable
           onPress={() => router.push('/service')}
           style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
-          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(37,99,235,0.16)' }]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(37,99,235,0.14)' }]}>
             <Icon name="flash" size={IconSize.sm} color="#2563EB" />
           </View>
           <Text variant="smallBold" style={styles.quickActionText}>Bills</Text>
@@ -216,7 +216,7 @@ export default function HomeScreen() {
         <Pressable
           onPress={() => router.push('/services/airtime')}
           style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
-          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(34,197,94,0.16)' }]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(34,197,94,0.14)' }]}>
             <Icon name="phone-portrait" size={IconSize.sm} color="#22C55E" />
           </View>
           <Text variant="smallBold" style={styles.quickActionText}>Airtime</Text>
@@ -225,7 +225,7 @@ export default function HomeScreen() {
         <Pressable
           onPress={() => router.push('/services/data')}
           style={({ pressed }) => [styles.quickActionCard, { backgroundColor: colors.surfaceElevated, borderColor: colors.border }, pressed && styles.cardPressed]}>
-          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(167,139,250,0.16)' }]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(167,139,250,0.14)' }]}>
             <Icon name="wifi" size={IconSize.sm} color="#A78BFA" />
           </View>
           <Text variant="smallBold" style={styles.quickActionText}>Data</Text>
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   },
   walletWrap: {
     paddingHorizontal: Spacing.lg,
-    marginTop: Spacing.sm,
+    marginTop: Spacing.xs,
   },
   walletError: {
     textAlign: 'center',
