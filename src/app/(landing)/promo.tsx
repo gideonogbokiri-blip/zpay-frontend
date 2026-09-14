@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, useWindowDimensions, View, type DimensionValue } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Icon, type IconName } from '@/components/Icon';
 import { Text } from '@/components/ui';
@@ -10,85 +11,112 @@ import { ZpayLogo } from '@/components/ZpayLogo';
 import { ACTIVE_SERVICES, REGISTRATION_SERVICES, SERVICE_META, SERVICE_NAMES } from '@/constants/services';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
 
-const SITE_MAX = 1200;
-const NAV_HEIGHT = 70;
+const SITE_MAX = 1240;
+const NAV_HEIGHT = 76;
 
 const C = {
-  bg: '#090C10',
-  band: '#0D1117',
-  surface: '#131821',
-  elevated: '#1A212C',
-  accent: '#F5B82E',
-  accentDark: '#D99A12',
+  bg: '#0B0F17',
+  surface: '#111827',
+  surfaceCard: '#1E293B',
+  elevated: '#1F2937',
+  accent: '#3B82F6', // Electric Blue
+  accentCyan: '#10B981', // Vibrant Emerald/Cyan
+  gold: '#F5B82E', // ZPAY Gold
   text: '#FFFFFF',
   secondary: '#94A3B8',
   muted: '#64748B',
   border: 'rgba(255,255,255,0.08)',
-  heroTop: '#131821',
-  heroBottom: '#0D1117',
+  glow: 'rgba(59, 130, 246, 0.15)',
 };
 
-type SectionKey = 'services' | 'wallet' | 'how' | 'why' | 'support';
+type SectionKey = 'services' | 'bento' | 'how' | 'why' | 'support';
 
 const NAV_LINKS: { key: SectionKey; label: string }[] = [
   { key: 'services', label: 'Services' },
-  { key: 'wallet', label: 'Wallet' },
-  { key: 'how', label: 'How it works' },
+  { key: 'bento', label: 'Features' },
+  { key: 'how', label: 'How it Works' },
   { key: 'why', label: 'Why ZPAY' },
   { key: 'support', label: 'Support' },
 ];
 
 const SERVICE_DETAILS: Record<string, { desc: string; badges: string[] }> = {
   ELECTRICITY: {
-    desc: 'Prepaid & Postpaid power tokens across all DisCos',
-    badges: ['IKEDC', 'EKEDC', 'AEDC', 'PHED', 'IBEDC'],
+    desc: 'Instant prepaid & postpaid tokens across all 11 DisCos with zero downtime.',
+    badges: ['IKEDC', 'EKEDC', 'AEDC', 'PHED', 'IBEDC', 'KEDCO'],
   },
   AIRTIME: {
-    desc: 'Instant top-up with zero service fees',
+    desc: 'Instant top-up for all networks with cashback rewards.',
     badges: ['MTN', 'Airtel', 'Glo', '9mobile'],
   },
   DATA: {
-    desc: 'Affordable daily, weekly and monthly data bundles',
+    desc: 'Affordable daily, weekly and monthly high-speed data bundles.',
     badges: ['MTN', 'Airtel', 'Glo', '9mobile'],
   },
   TV: {
-    desc: 'DStv, GOtv & StarTimes instant subscription renewal',
+    desc: 'DStv, GOtv & StarTimes instant subscription activation.',
     badges: ['DStv', 'GOtv', 'StarTimes'],
   },
   WAEC: {
-    desc: 'WAEC registration & scratch card pins',
-    badges: ['Registration', 'Result Checker'],
+    desc: 'WAEC registration & scratch card PIN delivery.',
+    badges: ['Registration', 'Result Pins'],
   },
   JAMB: {
-    desc: 'JAMB UTME profile creation & PIN vending',
+    desc: 'JAMB UTME profile creation & PIN vending.',
     badges: ['UTME', 'Direct Entry'],
   },
   NECO: {
-    desc: 'NECO exam registration pins',
+    desc: 'NECO SSCE exam registration pins.',
     badges: ['SSCE', 'NECO'],
   },
 };
 
-const STEPS = [
-  { step: '01', title: 'Fund your wallet', caption: 'Add money securely to your ZPAY wallet via bank transfer or card.' },
-  { step: '02', title: 'Choose a service', caption: 'Select electricity, airtime, data, cable TV or education.' },
-  { step: '03', title: 'Pay & get your result', caption: 'Get your token, subscription, top-up or receipt instantly.' },
+const BENTO_CARDS = [
+  {
+    title: 'Instant Prepaid Electricity Delivery',
+    subtitle: 'Tokens delivered in under 3 seconds directly to your phone and receipt.',
+    tag: '⚡ Lightning Fast',
+    span: 'large',
+  },
+  {
+    title: 'Bank-Grade Security',
+    subtitle: 'Secured with Paystack integration and 256-bit SSL encryption.',
+    tag: '🔒 100% Secure',
+    span: 'medium',
+  },
+  {
+    title: 'All-in-One Utility Wallet',
+    subtitle: 'Fund once, pay power, airtime, data and exams with zero hidden fees.',
+    tag: '💎 Zero Hidden Fees',
+    span: 'medium',
+  },
+  {
+    title: '99.9% Success Rate',
+    subtitle: 'Backed by redundant carrier APIs and 24/7 automated reconciliation.',
+    tag: '🚀 Ultra Reliable',
+    span: 'small',
+  },
 ];
 
-const BENEFITS = [
-  { icon: 'shield-checkmark' as IconName, title: 'Secure payments', caption: 'Bank-grade security and encryption on every transaction.' },
-  { icon: 'flash' as IconName, title: 'Instant delivery', caption: 'Electricity tokens and airtime arrive in seconds.' },
-  { icon: 'phone-portrait' as IconName, title: 'All-in-one platform', caption: 'No need to juggle multiple apps for everyday bills.' },
-  { icon: 'receipt' as IconName, title: 'Digital receipts', caption: 'Easily track spending with instant digital receipts.' },
-  { icon: 'headset' as IconName, title: 'Dedicated support', caption: 'Friendly 24/7 customer assistance when you need help.' },
-  { icon: 'globe' as IconName, title: 'Built for Nigeria', caption: 'Optimized specifically for everyday Nigerian payment needs.' },
+const STEPS = [
+  { step: '01', title: 'Fund Your Wallet', caption: 'Add funds securely via bank transfer or debit card in seconds.' },
+  { step: '02', title: 'Select a Service', caption: 'Choose electricity, airtime, data, cable TV, or exam registration.' },
+  { step: '03', title: 'Instant Delivery', caption: 'Receive your tokens, pins, or top-up instantly on screen & via SMS.' },
+];
+
+const WHY_ITEMS = [
+  { icon: 'shield-checkmark', title: 'Secure & Encrypted', desc: 'Protected by enterprise-grade security standards.' },
+  { icon: 'flash', title: 'Instant Delivery', desc: 'Zero wait time for electricity tokens and top-ups.' },
+  { icon: 'layers', title: 'All-in-One App', desc: 'Manage every monthly utility from a single wallet.' },
+  { icon: 'receipt', title: 'Digital Receipts', desc: 'Instant itemized receipts for effortless tracking.' },
+  { icon: 'headset', title: '24/7 Support', desc: 'Dedicated customer success team ready to assist.' },
+  { icon: 'globe', title: 'Built for Nigeria', desc: 'Tailored specifically for Nigerian payment workflows.' },
 ];
 
 const STATS = [
-  { value: '11+', label: 'Power providers' },
-  { value: '4', label: 'Mobile networks' },
-  { value: '7+', label: 'Everyday services' },
-  { value: '99.9%', label: 'Success rate' },
+  { value: '11+', label: 'Power DisCos' },
+  { value: '4', label: 'Mobile Networks' },
+  { value: '7+', label: 'Everyday Services' },
+  { value: '99.9%', label: 'Uptime SLA' },
 ];
 
 function SiteButton({
@@ -139,59 +167,86 @@ function SiteButton({
   return inner;
 }
 
-function PhoneMockup() {
+function InteractiveHeroWidget() {
+  const [activeTab, setActiveTab] = useState<'ELECTRICITY' | 'AIRTIME' | 'DATA' | 'TV'>('ELECTRICITY');
+
   return (
-    <View style={styles.phone}>
-      <View style={styles.notch} />
-      <View style={styles.mockApp}>
-        <LinearGradient colors={[C.accent, C.accentDark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.mockWallet}>
-          <Text variant="caption" style={styles.mockWalletLabel}>
-            Available balance
-          </Text>
-          <Text variant="heading" style={styles.mockWalletAmount}>
-            ₦124,500.00
-          </Text>
-        </LinearGradient>
-        <Text variant="caption" style={[styles.mockSection, { color: C.muted }]}>
-          Quick Actions
-        </Text>
-        <View style={styles.mockActions}>
-          {ACTIVE_SERVICES.map((type) => {
-            const meta = SERVICE_META[type];
-            return (
-              <View key={type} style={[styles.mockAction, { backgroundColor: C.surface, borderColor: C.border }]}>
-                <Icon name={meta.icon} size={IconSize.sm} color={meta.color} />
-                <Text variant="caption" style={{ color: C.secondary, fontSize: 11 }}>
-                  {SERVICE_NAMES[type]}
-                </Text>
-              </View>
-            );
-          })}
+    <View style={styles.heroWidgetCard}>
+      <View style={styles.widgetHeader}>
+        <View style={styles.widgetDotRow}>
+          <View style={[styles.dot, { backgroundColor: '#EF4444' }]} />
+          <View style={[styles.dot, { backgroundColor: '#F5B82E' }]} />
+          <View style={[styles.dot, { backgroundColor: '#10B981' }]} />
         </View>
-        <Text variant="caption" style={[styles.mockSection, { color: C.muted }]}>
-          Recent Activity
-        </Text>
-        {[
-          { icon: 'flash' as IconName, title: 'IKEDC Prepaid', caption: 'Token: 8492-3920', amount: '-₦5,000', color: '#FFB020' },
-          { icon: 'phone-portrait' as IconName, title: 'MTN Airtime', caption: '0803 123 4567', amount: '-₦2,000', color: '#4DABF7' },
-        ].map((row) => (
-          <View key={row.title} style={[styles.mockRow, { backgroundColor: C.surface, borderColor: C.border }]}>
-            <View style={[styles.mockRowIcon, { backgroundColor: withAlpha(row.color, 0.16) }]}>
-              <Icon name={row.icon} size={IconSize.sm} color={row.color} />
-            </View>
-            <View style={styles.mockRowText}>
-              <Text variant="smallBold" style={{ color: C.text }}>
-                {row.title}
-              </Text>
-              <Text variant="caption" style={{ color: C.muted, fontSize: 10 }}>
-                {row.caption}
-              </Text>
-            </View>
-            <Text variant="smallBold" style={{ color: C.accent }}>
-              {row.amount}
-            </Text>
+        <Text variant="caption" style={{ color: C.secondary, fontSize: 11 }}>zpay.app/secure-portal</Text>
+        <View style={styles.secureBadge}>
+          <Ionicons name="lock-closed" size={10} color="#10B981" />
+          <Text variant="caption" style={{ color: '#10B981', fontSize: 10, fontWeight: '700' }}>SECURE</Text>
+        </View>
+      </View>
+
+      <View style={styles.widgetBalanceBox}>
+        <Text variant="caption" style={{ color: C.secondary, fontSize: 11, fontWeight: '700', letterSpacing: 1 }}>WALLET BALANCE</Text>
+        <View style={styles.widgetBalanceRow}>
+          <Text variant="display" style={{ color: C.text, fontSize: 28, fontWeight: '900' }}>₦245,800.00</Text>
+          <View style={styles.liveBadge}>
+            <View style={styles.livePulse} />
+            <Text variant="caption" style={{ color: '#10B981', fontSize: 10, fontWeight: '800' }}>LIVE</Text>
           </View>
+        </View>
+      </View>
+
+      <View style={styles.widgetTabs}>
+        {(['ELECTRICITY', 'AIRTIME', 'DATA', 'TV'] as const).map((tab) => (
+          <Pressable
+            key={tab}
+            onPress={() => setActiveTab(tab)}
+            style={[styles.widgetTab, activeTab === tab && styles.widgetTabActive]}
+          >
+            <Text variant="caption" style={{ color: activeTab === tab ? '#0B0F17' : C.secondary, fontWeight: '700', fontSize: 11 }}>
+              {tab}
+            </Text>
+          </Pressable>
         ))}
+      </View>
+
+      <View style={styles.widgetContent}>
+        {activeTab === 'ELECTRICITY' && (
+          <View style={styles.widgetForm}>
+            <Text variant="smallBold" style={{ color: C.text }}>IKEDC Prepaid · Meter #450918239</Text>
+            <View style={styles.widgetResultBox}>
+              <Text variant="caption" style={{ color: '#10B981', fontWeight: '700' }}>✓ Token Generated Successfully</Text>
+              <Text variant="bodyBold" style={{ color: C.text, letterSpacing: 1.5, fontSize: 15 }}>4819-2094-8591-2094</Text>
+            </View>
+          </View>
+        )}
+        {activeTab === 'AIRTIME' && (
+          <View style={styles.widgetForm}>
+            <Text variant="smallBold" style={{ color: C.text }}>MTN Instant Top-Up · 0803 123 4567</Text>
+            <View style={styles.widgetResultBox}>
+              <Text variant="caption" style={{ color: '#10B981', fontWeight: '700' }}>✓ ₦5,000 Airtime Credited</Text>
+              <Text variant="caption" style={{ color: C.secondary }}>Transaction Ref: ZP-984201984</Text>
+            </View>
+          </View>
+        )}
+        {activeTab === 'DATA' && (
+          <View style={styles.widgetForm}>
+            <Text variant="smallBold" style={{ color: C.text }}>Airtel 10GB Monthly Bundle</Text>
+            <View style={styles.widgetResultBox}>
+              <Text variant="caption" style={{ color: '#10B981', fontWeight: '700' }}>✓ Data Bundle Delivered</Text>
+              <Text variant="caption" style={{ color: C.secondary }}>Active until Oct 14, 2026</Text>
+            </View>
+          </View>
+        )}
+        {activeTab === 'TV' && (
+          <View style={styles.widgetForm}>
+            <Text variant="smallBold" style={{ color: C.text }}>DStv Compact Plus · IUC: 7019283746</Text>
+            <View style={styles.widgetResultBox}>
+              <Text variant="caption" style={{ color: '#10B981', fontWeight: '700' }}>✓ Subscription Renewed</Text>
+              <Text variant="caption" style={{ color: C.secondary }}>Valid for 30 Days</Text>
+            </View>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -208,7 +263,7 @@ function withAlpha(hex: string, alpha: number): string {
 export default function PromoLanding() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const isWide = width >= 900;
+  const isWide = width >= 960;
   const [menuOpen, setMenuOpen] = useState(false);
 
   const scrollRef = useRef<ScrollView>(null);
@@ -234,7 +289,7 @@ export default function PromoLanding() {
             <Link href="/(landing)/promo" asChild>
               <Pressable accessibilityRole="link" accessibilityLabel="ZPAY home">
                 <View style={styles.navBrand}>
-                  <ZpayLogo size={120} />
+                  <ZpayLogo size={130} />
                 </View>
               </Pressable>
             </Link>
@@ -263,7 +318,7 @@ export default function PromoLanding() {
                   accessibilityRole="button"
                   accessibilityLabel="Toggle menu"
                   style={styles.hamburger}>
-                  <Icon name={menuOpen ? 'close' : 'menu'} size={24} color={C.text} />
+                  <Ionicons name={menuOpen ? 'close' : 'menu'} size={24} color={C.text} />
                 </Pressable>
               )}
             </View>
@@ -287,58 +342,66 @@ export default function PromoLanding() {
 
       <ScrollView ref={scrollRef} style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* HERO SECTION */}
-        <LinearGradient colors={[C.heroTop, C.heroBottom]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.heroBand}>
+        <View style={styles.heroSection}>
+          <View style={styles.heroGlowBackdrop} />
           <View style={[styles.container, styles.heroInner]}>
             <View style={[styles.heroText, isWide && styles.heroTextWide]}>
-              <View style={styles.heroBadge}>
-                <Text variant="caption" style={{ color: C.accent, fontWeight: '700' }}>
-                  ⚡ Nigeria's Smartest Utility Wallet
+              <View style={styles.topBadge}>
+                <View style={styles.pulseDot} />
+                <Text variant="caption" style={{ color: '#3B82F6', fontWeight: '700', fontSize: 12 }}>
+                  ✨ Introducing ZPAY — 0% Transaction Fees on Bills
                 </Text>
               </View>
+
               <Text variant="display" style={[styles.heroTitle, !isWide && styles.heroTitleNarrow]}>
-                Everyday payments,{' '}
-                <Text variant="display" style={[styles.heroTitle, { color: C.accent }]}>
-                  made simple.
-                </Text>
+                The Smarter Way to{' '}
+                <Text variant="display" style={[styles.heroTitle, styles.gradientText]}>
+                  Pay Bills &amp; Top Up
+                </Text>{' '}
+                in Nigeria
               </Text>
+
               <Text variant="body" style={[styles.heroSub, { color: C.secondary }]}>
-                Pay electricity bills, buy airtime &amp; data, subscribe to TV, and handle exam services — all from one secure ZPAY wallet.
+                Experience lightning-fast electricity tokens, airtime, data, cable TV, and exam registrations backed by bank-grade security.
               </Text>
+
               <View style={[styles.heroCtas, isWide && styles.heroCtasWide]}>
                 <SiteButton label="Get Started — It's Free" href="/signup" variant="primary" />
-                <SiteButton label="Sign In" href="/login" variant="ghost" />
+                <SiteButton label="Watch Demo" href="/login" variant="ghost" />
               </View>
-            </View>
-            <View style={[styles.heroMock, isWide && styles.heroMockWide]}>
-              <PhoneMockup />
-            </View>
-          </View>
-        </LinearGradient>
 
-        {/* TRUST / STATS */}
-        <View style={[styles.band, { backgroundColor: C.band, borderTopWidth: 1, borderBottomWidth: 1, borderColor: C.border }]}>
-          <View style={styles.container}>
-            <View style={[styles.statsGrid, isWide ? styles.statsGridWide : styles.statsGridMobile]}>
-              {STATS.map((stat, i) => (
-                <View key={stat.label} style={styles.statBox}>
-                  <Text variant="display" style={{ color: C.accent, fontSize: isWide ? 42 : 34 }}>
-                    {stat.value}
-                  </Text>
-                  <Text variant="smallBold" style={{ color: C.secondary, textTransform: 'uppercase', letterSpacing: 1 }}>
-                    {stat.label}
+              <View style={styles.socialProofRow}>
+                <View style={styles.avatarStack}>
+                  <View style={[styles.avatarCircle, { backgroundColor: '#3B82F6' }]}><Text style={styles.avatarTxt}>A</Text></View>
+                  <View style={[styles.avatarCircle, { backgroundColor: '#10B981', marginLeft: -10 }]}><Text style={styles.avatarTxt}>K</Text></View>
+                  <View style={[styles.avatarCircle, { backgroundColor: '#F5B82E', marginLeft: -10 }]}><Text style={styles.avatarTxt}>T</Text></View>
+                  <View style={[styles.avatarCircle, { backgroundColor: '#8B5CF6', marginLeft: -10 }]}><Text style={styles.avatarTxt}>O</Text></View>
+                </View>
+                <View style={styles.socialTextCol}>
+                  <View style={styles.starsRow}>
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Ionicons key={s} name="star" size={13} color="#F5B82E" />
+                    ))}
+                  </View>
+                  <Text variant="caption" style={{ color: C.secondary, fontSize: 12 }}>
+                    Trusted by <Text style={{ color: C.text, fontWeight: '700' }}>50,000+</Text> Nigerians
                   </Text>
                 </View>
-              ))}
+              </View>
+            </View>
+
+            <View style={[styles.heroVisual, isWide && styles.heroVisualWide]}>
+              <InteractiveHeroWidget />
             </View>
           </View>
         </View>
 
-        {/* SERVICES SECTION */}
+        {/* SUPPORTED SERVICES SECTION */}
         <View style={[styles.band, { backgroundColor: C.bg }]} {...banner('services')}>
           <View style={styles.container}>
             <View style={styles.headRow}>
               <Text variant="label" style={{ color: C.accent }}>
-                Our Services
+                Supported Utilities
               </Text>
               <Text variant="heading" style={[styles.sectionTitle, { color: C.text }]}>
                 Everything you need, in one place
@@ -354,7 +417,7 @@ export default function PromoLanding() {
                 const detail = SERVICE_DETAILS[type] ?? { desc: 'Fast & reliable payment', badges: [] };
                 return (
                   <View key={type} style={[styles.serviceCard, { backgroundColor: C.surface, borderColor: C.border }]}>
-                    <View style={[styles.serviceCardHeader]}>
+                    <View style={styles.serviceCardHeader}>
                       <View style={[styles.serviceIconWrap, { backgroundColor: withAlpha(meta.color, 0.16), borderColor: withAlpha(meta.color, 0.3) }]}>
                         <Icon name={meta.icon} size={IconSize.lg} color={meta.color} />
                       </View>
@@ -386,38 +449,47 @@ export default function PromoLanding() {
           </View>
         </View>
 
-        {/* WALLET SHOWCASE */}
-        <View style={[styles.band, { backgroundColor: C.band }]} {...banner('wallet')}>
-          <View style={[styles.container, styles.showcaseInner, isWide && styles.showcaseWide]}>
-            <View style={styles.showcaseText}>
-              <Text variant="label" style={{ color: C.accent }}>
-                Secure Wallet
+        {/* BENTO GRID FEATURES SECTION */}
+        <View style={[styles.band, { backgroundColor: C.surface }]} {...banner('bento')}>
+          <View style={styles.container}>
+            <View style={styles.headRow}>
+              <Text variant="label" style={{ color: C.accentCyan }}>
+                Powerful Features
               </Text>
               <Text variant="heading" style={[styles.sectionTitle, { color: C.text }]}>
-                One wallet. Everything you need.
+                Built for speed and absolute reliability
               </Text>
-              <Text variant="body" style={[styles.sectionSub, { color: C.secondary, marginBottom: Sp.md }]} format>
-                Fund your ZPAY wallet instantly with bank transfer or debit cards via Paystack. Enjoy lightning-fast bill payments and complete spending visibility.
+              <Text variant="body" style={[styles.sectionSub, { color: C.secondary }]}>
+                Engineered with modern fintech architecture to ensure your transactions never fail.
               </Text>
-              {[
-                'Fund your wallet securely in seconds',
-                'Pay electricity, airtime, data and TV instantly',
-                'Keep track of every transaction history',
-                'Get instant digital receipts for all payments',
-                'Dedicated 24/7 customer assistance',
-              ].map((check) => (
-                <View key={check} style={styles.checkRow}>
-                  <View style={[styles.checkIcon, { backgroundColor: withAlpha(C.accent, 0.15) }]}>
-                    <Icon name="checkmark" size={IconSize.xs} color={C.accent} />
-                  </View>
-                  <Text variant="body" style={{ color: C.text }}>
-                    {check}
-                  </Text>
-                </View>
-              ))}
             </View>
-            <View style={styles.showcaseMock}>
-              <PhoneMockup />
+
+            <View style={styles.bentoGrid}>
+              <View style={[styles.bentoCardLarge, { backgroundColor: C.surfaceCard, borderColor: C.border }]}>
+                <View style={styles.bentoBadge}><Text style={styles.bentoBadgeTxt}>{BENTO_CARDS[0].tag}</Text></View>
+                <Text variant="heading" style={{ color: C.text, fontSize: 24, marginTop: Sp.sm }}>{BENTO_CARDS[0].title}</Text>
+                <Text variant="body" style={{ color: C.secondary, marginTop: Sp.xs, maxWidth: 440 }}>{BENTO_CARDS[0].subtitle}</Text>
+                <View style={styles.bentoReceiptPreview}>
+                  <View style={styles.bentoReceiptRow}>
+                    <Text variant="caption" style={{ color: C.secondary }}>IKEDC Prepaid Token</Text>
+                    <Text variant="caption" style={{ color: '#10B981', fontWeight: '700' }}>SUCCESS</Text>
+                  </View>
+                  <Text variant="bodyBold" style={{ color: C.text, letterSpacing: 1, marginTop: 4 }}>4819-2094-8591-2094</Text>
+                </View>
+              </View>
+
+              <View style={styles.bentoCol}>
+                <View style={[styles.bentoCardMedium, { backgroundColor: C.surfaceCard, borderColor: C.border }]}>
+                  <View style={styles.bentoBadge}><Text style={styles.bentoBadgeTxt}>{BENTO_CARDS[1].tag}</Text></View>
+                  <Text variant="bodyBold" style={{ color: C.text, fontSize: 18, marginTop: Sp.sm }}>{BENTO_CARDS[1].title}</Text>
+                  <Text variant="caption" style={{ color: C.secondary, marginTop: 4 }}>{BENTO_CARDS[1].subtitle}</Text>
+                </View>
+                <View style={[styles.bentoCardMedium, { backgroundColor: C.surfaceCard, borderColor: C.border }]}>
+                  <View style={styles.bentoBadge}><Text style={styles.bentoBadgeTxt}>{BENTO_CARDS[2].tag}</Text></View>
+                  <Text variant="bodyBold" style={{ color: C.text, fontSize: 18, marginTop: Sp.sm }}>{BENTO_CARDS[2].title}</Text>
+                  <Text variant="caption" style={{ color: C.secondary, marginTop: 4 }}>{BENTO_CARDS[2].subtitle}</Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -427,10 +499,10 @@ export default function PromoLanding() {
           <View style={styles.container}>
             <View style={styles.headRow}>
               <Text variant="label" style={{ color: C.accent }}>
-                Simple Process
+                Simple Workflow
               </Text>
               <Text variant="heading" style={[styles.sectionTitle, { color: C.text }]}>
-                How ZPAY works
+                How ZPAY works in 3 steps
               </Text>
             </View>
             <View style={[styles.grid, isWide ? styles.grid3 : styles.grid1]}>
@@ -452,27 +524,27 @@ export default function PromoLanding() {
         </View>
 
         {/* WHY CHOOSE ZPAY */}
-        <View style={[styles.band, { backgroundColor: C.band }]} {...banner('why')}>
+        <View style={[styles.band, { backgroundColor: C.surface }]} {...banner('why')}>
           <View style={styles.container}>
             <View style={styles.headRow}>
-              <Text variant="label" style={{ color: C.accent }}>
-                Benefits
+              <Text variant="label" style={{ color: C.accentCyan }}>
+                Why ZPAY
               </Text>
               <Text variant="heading" style={[styles.sectionTitle, { color: C.text }]}>
-                Why choose ZPAY?
+                Designed for everyday Nigerian payments
               </Text>
             </View>
             <View style={[styles.grid, isWide ? styles.grid3 : styles.grid2]}>
-              {BENEFITS.map((b) => (
-                <View key={b.title} style={[styles.benefitCard, { backgroundColor: C.surface, borderColor: C.border }]}>
+              {WHY_ITEMS.map((w) => (
+                <View key={w.title} style={[styles.benefitCard, { backgroundColor: C.surfaceCard, borderColor: C.border }]}>
                   <View style={[styles.benefitIcon, { backgroundColor: withAlpha(C.accent, 0.14) }]}>
-                    <Icon name={b.icon} size={IconSize.md} color={C.accent} />
+                    <Icon name={w.icon} size={IconSize.md} color={C.accent} />
                   </View>
                   <Text variant="smallBold" style={{ color: C.text, fontSize: 16 }}>
-                    {b.title}
+                    {w.title}
                   </Text>
                   <Text variant="caption" style={{ color: C.secondary, lineHeight: 20 }}>
-                    {b.caption}
+                    {w.desc}
                   </Text>
                 </View>
               ))}
@@ -480,16 +552,34 @@ export default function PromoLanding() {
           </View>
         </View>
 
-        {/* CTA BAND */}
-        <LinearGradient colors={[C.accent, C.accentDark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.ctaBand}>
+        {/* TRUST STATS */}
+        <View style={[styles.band, { backgroundColor: C.bg, borderTopWidth: 1, borderBottomWidth: 1, borderColor: C.border }]}>
+          <View style={styles.container}>
+            <View style={[styles.statsGrid, isWide ? styles.statsGridWide : styles.statsGridMobile]}>
+              {STATS.map((stat) => (
+                <View key={stat.label} style={styles.statBox}>
+                  <Text variant="display" style={{ color: C.accent, fontSize: isWide ? 44 : 36, fontWeight: '900' }}>
+                    {stat.value}
+                  </Text>
+                  <Text variant="smallBold" style={{ color: C.secondary, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    {stat.label}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* CTA BANNER */}
+        <LinearGradient colors={['#3B82F6', '#1D4ED8']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.ctaBand}>
           <View style={[styles.container, styles.ctaInner]}>
             <Text variant="heading" style={styles.ctaTitle}>
-              Ready to make everyday payments easier?
+              Ready to simplify your monthly bills?
             </Text>
             <Text variant="body" style={styles.ctaSub}>
-              Create your free ZPAY account and get started in less than 2 minutes.
+              Create your free ZPAY account and experience lightning-fast utility payments today.
             </Text>
-            <SiteButton label="Get Started — It's Free" href="/signup" variant="primary" style={styles.ctaBtn} />
+            <SiteButton label="Get Started — It's Free" href="/signup" variant="secondary" style={styles.ctaBtn} />
           </View>
         </LinearGradient>
 
@@ -499,8 +589,8 @@ export default function PromoLanding() {
             <View style={[styles.footerGrid, isWide && styles.footerGridWide]}>
               <View style={styles.footerBrand}>
                 <ZpayLogo size={130} />
-                <Text variant="caption" style={{ color: C.secondary, lineHeight: 20, maxWidth: 300, marginTop: Sp.xs }}>
-                  One secure wallet for all your everyday payments — bills, top-ups and exam registrations.
+                <Text variant="caption" style={{ color: C.secondary, lineHeight: 20, maxWidth: 320, marginTop: Sp.xs }}>
+                  ZPAY is Nigeria's premier utility wallet app. Pay power, airtime, data and exam registrations securely with zero transaction fees.
                 </Text>
               </View>
 
@@ -563,7 +653,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: Sp.sm,
+    paddingVertical: Sp.md,
   },
   navBrand: {
     flexDirection: 'row',
@@ -616,8 +706,20 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: Sp.xxxl,
   },
-  heroBand: {
-    paddingVertical: 64,
+  heroSection: {
+    position: 'relative',
+    paddingVertical: 72,
+    overflow: 'hidden',
+  },
+  heroGlowBackdrop: {
+    position: 'absolute',
+    top: -100,
+    left: '25%',
+    width: 500,
+    height: 500,
+    borderRadius: 250,
+    backgroundColor: C.glow,
+    opacity: 0.7,
   },
   heroInner: {
     flexDirection: 'row',
@@ -627,52 +729,201 @@ const styles = StyleSheet.create({
   },
   heroText: {
     flex: 1,
-    gap: Sp.md,
+    gap: Sp.lg,
   },
   heroTextWide: {
     paddingRight: Sp.xl,
   },
-  heroBadge: {
+  topBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Sp.xs,
     alignSelf: 'flex-start',
-    backgroundColor: withAlpha(C.accent, 0.12),
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
     borderWidth: 1,
-    borderColor: withAlpha(C.accent, 0.3),
+    borderColor: 'rgba(59, 130, 246, 0.25)',
     borderRadius: Radii.full,
     paddingHorizontal: Sp.md,
     paddingVertical: 6,
   },
+  pulseDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#3B82F6',
+  },
   heroTitle: {
     color: C.text,
-    fontSize: 48,
-    lineHeight: 56,
+    fontSize: 52,
+    lineHeight: 60,
     fontWeight: '900',
+    letterSpacing: -1,
   },
   heroTitleNarrow: {
     fontSize: 36,
     lineHeight: 44,
   },
+  gradientText: {
+    color: '#3B82F6',
+  },
   heroSub: {
     fontSize: 18,
     lineHeight: 28,
-    maxWidth: 520,
+    maxWidth: 540,
   },
   heroCtas: {
     gap: Sp.md,
-    marginTop: Sp.sm,
+    marginTop: Sp.xs,
   },
   heroCtasWide: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  heroMock: {
+  socialProofRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: Sp.xxl,
+    gap: Sp.md,
+    marginTop: Sp.sm,
   },
-  heroMockWide: {
-    marginTop: 0,
+  avatarStack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatarCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: C.bg,
+  },
+  avatarTxt: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  socialTextCol: {
+    gap: 2,
+  },
+  starsRow: {
+    flexDirection: 'row',
+    gap: 2,
+  },
+  heroVisual: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  heroVisualWide: {
+    alignItems: 'flex-end',
+  },
+  heroWidgetCard: {
+    width: '100%',
+    maxWidth: 380,
+    backgroundColor: C.surfaceCard,
+    borderRadius: Radii.xxl,
+    borderWidth: 1,
+    borderColor: C.border,
+    padding: Sp.lg,
+    gap: Sp.md,
+    shadowColor: '#000',
+    shadowOpacity: 0.4,
+    shadowRadius: 30,
+    shadowOffset: { width: 0, height: 16 },
+    elevation: 20,
+  },
+  widgetHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  widgetDotRow: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  secureBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: Radii.full,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.25)',
+  },
+  widgetBalanceBox: {
+    backgroundColor: C.surface,
+    padding: Sp.md,
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    borderColor: C.border,
+    gap: 4,
+  },
+  widgetBalanceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  liveBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: Radii.full,
+  },
+  livePulse: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#10B981',
+  },
+  widgetTabs: {
+    flexDirection: 'row',
+    backgroundColor: C.surface,
+    borderRadius: Radii.md,
+    padding: 3,
+    borderWidth: 1,
+    borderColor: C.border,
+  },
+  widgetTab: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 6,
+    borderRadius: Radii.sm,
+  },
+  widgetTabActive: {
+    backgroundColor: '#3B82F6',
+  },
+  widgetContent: {
+    backgroundColor: C.surface,
+    padding: Sp.md,
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    borderColor: C.border,
+    minHeight: 90,
+    justifyContent: 'center',
+  },
+  widgetForm: {
+    gap: Sp.xs,
+  },
+  widgetResultBox: {
+    backgroundColor: C.surfaceCard,
+    padding: Sp.sm,
+    borderRadius: Radii.md,
+    borderWidth: 1,
+    borderColor: C.border,
+    gap: 2,
   },
   band: {
-    paddingVertical: 64,
+    paddingVertical: 72,
   },
   headRow: {
     marginBottom: Sp.xxl,
@@ -680,9 +931,9 @@ const styles = StyleSheet.create({
     gap: Sp.xs,
   },
   sectionTitle: {
-    fontSize: 32,
-    lineHeight: 38,
-    fontWeight: '800',
+    fontSize: 34,
+    lineHeight: 42,
+    fontWeight: '900',
     color: C.text,
   },
   sectionSub: {
@@ -695,9 +946,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: Sp.lg,
   },
-  grid3: {
-    // handled via width in item
-  },
+  grid3: {},
   grid2: {},
   grid1: {},
   serviceCard: {
@@ -738,33 +987,54 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  showcaseInner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Sp.xxxl,
+  bentoGrid: {
+    gap: Sp.lg,
   },
-  showcaseWide: {},
-  showcaseText: {
-    flex: 1,
-    gap: Sp.sm,
+  bentoCardLarge: {
+    borderRadius: Radii.xxl,
+    borderWidth: 1,
+    padding: Sp.xxl,
+    overflow: 'hidden',
   },
-  showcaseMock: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  checkRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Sp.md,
-    marginTop: 4,
-  },
-  checkIcon: {
-    width: 24,
-    height: 24,
+  bentoBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(59, 130, 246, 0.12)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: Radii.full,
+    borderWidth: 1,
+    borderColor: 'rgba(59, 130, 246, 0.25)',
+  },
+  bentoBadgeTxt: {
+    color: '#3B82F6',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  bentoReceiptPreview: {
+    marginTop: Sp.lg,
+    backgroundColor: C.surface,
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    borderColor: C.border,
+    padding: Sp.lg,
+    maxWidth: 380,
+  },
+  bentoReceiptRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
+  },
+  bentoCol: {
+    flexDirection: 'row',
+    gap: Sp.lg,
+    flexWrap: 'wrap',
+  },
+  bentoCardMedium: {
+    flex: 1,
+    minWidth: 280,
+    borderRadius: Radii.xl,
+    borderWidth: 1,
+    padding: Sp.xl,
   },
   stepCard: {
     width: '31%',
@@ -810,27 +1080,27 @@ const styles = StyleSheet.create({
     minWidth: 140,
   },
   ctaBand: {
-    paddingVertical: 64,
+    paddingVertical: 72,
   },
   ctaInner: {
     alignItems: 'center',
     gap: Sp.md,
   },
   ctaTitle: {
-    color: '#090C10',
+    color: '#FFFFFF',
     textAlign: 'center',
-    fontSize: 36,
-    lineHeight: 42,
+    fontSize: 38,
+    lineHeight: 46,
     fontWeight: '900',
   },
   ctaSub: {
-    color: 'rgba(9,12,16,0.8)',
+    color: 'rgba(255,255,255,0.85)',
     textAlign: 'center',
     fontSize: 16,
   },
   ctaBtn: {
     marginTop: Sp.sm,
-    backgroundColor: '#090C10',
+    backgroundColor: '#0B0F17',
   },
   footerGrid: {
     flexDirection: 'column',
@@ -864,107 +1134,36 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   btnPrimary: {
-    backgroundColor: C.accent,
+    backgroundColor: '#3B82F6',
+    shadowColor: '#3B82F6',
+    shadowOpacity: 0.35,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 8,
   },
   btnPrimaryText: {
-    color: '#090C10',
+    color: '#FFFFFF',
     fontWeight: '800',
   },
   btnSecondary: {
-    backgroundColor: C.elevated,
-    borderWidth: 1,
-    borderColor: C.border,
+    backgroundColor: '#FFFFFF',
   },
   btnSecondaryText: {
-    color: C.text,
+    color: '#0B0F17',
     fontWeight: '800',
   },
   btnGhost: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: 'rgba(255,255,255,0.2)',
   },
   btnGhostText: {
+    ContentColor: C.text,
     color: C.text,
     fontWeight: '700',
   },
   pressed: {
-    opacity: 0.8,
-  },
-  phone: {
-    width: 240,
-    borderWidth: 6,
-    borderRadius: 36,
-    borderColor: '#2A3140',
-    backgroundColor: '#10141B',
-    padding: 10,
-    gap: 10,
-    shadowColor: '#000000',
-    shadowOpacity: 0.5,
-    shadowRadius: 30,
-    shadowOffset: { width: 0, height: 16 },
-    elevation: 16,
-  },
-  notch: {
-    alignSelf: 'center',
-    width: 80,
-    height: 18,
-    borderRadius: 10,
-    backgroundColor: '#2A3140',
-  },
-  mockApp: {
-    gap: 8,
-  },
-  mockWallet: {
-    borderRadius: Radii.md,
-    padding: Sp.md,
-    gap: 2,
-  },
-  mockWalletLabel: {
-    color: 'rgba(9,12,16,0.7)',
-    fontWeight: '700',
-  },
-  mockWalletAmount: {
-    color: '#090C10',
-    fontSize: 20,
-    fontWeight: '900',
-  },
-  mockSection: {
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-    fontSize: 10,
-    fontWeight: '700',
-    marginTop: 4,
-  },
-  mockActions: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  mockAction: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 3,
-    borderRadius: Radii.sm,
-    paddingVertical: 8,
-    borderWidth: 1,
-  },
-  mockRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Sp.sm,
-    borderRadius: Radii.md,
-    padding: 8,
-    borderWidth: 1,
-  },
-  mockRowIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: Radii.sm,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mockRowText: {
-    flex: 1,
-    gap: 1,
+    opacity: 0.85,
+    transform: [{ scale: 0.98 }],
   },
 });
