@@ -198,6 +198,17 @@ export interface FundWalletVerifyResponse {
   transaction: Transaction | null;
 }
 
+export interface DedicatedAccount {
+  accountId: number;
+  accountNumber: string;
+  bankName: string;
+  bankCode: string;
+  accountName: string;
+  currency: string;
+  active: boolean;
+  createdAt: string | null;
+}
+
 export type ChatRole = 'user' | 'bot' | 'admin';
 
 export interface ChatMessage {

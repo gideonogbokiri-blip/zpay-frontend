@@ -4,6 +4,7 @@ import type {
   ChatMessage,
   ChatThread,
   DataBundle,
+  DedicatedAccount,
   FundWalletInitResponse,
   FundWalletPayload,
   FundWalletVerifyResponse,
@@ -44,6 +45,10 @@ export const realApi = {
     reference: string
   ): Promise<FundWalletVerifyResponse> {
     return http.post<FundWalletVerifyResponse>('/wallet/fund/verify', { reference }, token);
+  },
+
+  async getDVA(token: string | null): Promise<DedicatedAccount> {
+    return http.get<DedicatedAccount>('/wallet/dva', token);
   },
 
   async getServices(): Promise<ServiceDescriptor[]> {

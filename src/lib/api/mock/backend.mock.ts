@@ -4,6 +4,7 @@ import type {
   ChatMessage,
   ChatThread,
   DataBundle,
+  DedicatedAccount,
   FundWalletInitResponse,
   FundWalletPayload,
   FundWalletVerifyResponse,
@@ -260,6 +261,22 @@ export const backendApi = {
       createdAt: new Date().toISOString(),
     });
     return { wallet: { ...wallet }, transaction };
+  },
+
+  async getDVA(token: string | null): Promise<DedicatedAccount> {
+    await delay(350);
+    requireUserId(token);
+    const number = `901${String(Math.floor(1000000 + Math.random() * 8999999))}`;
+    return {
+      accountId: 1,
+      accountNumber: number,
+      bankName: 'Paystack Test Bank',
+      bankCode: '111',
+      accountName: 'ZPAY User',
+      currency: 'NGN',
+      active: true,
+      createdAt: new Date().toISOString(),
+    };
   },
 
   async getServices(): Promise<ServiceDescriptor[]> {

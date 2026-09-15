@@ -25,6 +25,16 @@ export function invalidateWallet(queryClient: ReturnType<typeof useQueryClient>)
   return queryClient.invalidateQueries({ queryKey: ['wallet'] });
 }
 
+export function useDVA() {
+  const { token } = useAuth();
+  return useQuery({
+    queryKey: ['dva', token],
+    queryFn: () => api.getDVA(token),
+    enabled: Boolean(token),
+    retry: false,
+  });
+}
+
 export function useServices() {
   return useQuery({
     queryKey: ['services'],
