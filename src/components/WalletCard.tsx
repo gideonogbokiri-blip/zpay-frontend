@@ -77,22 +77,22 @@ export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCard
         </View>
 
         <View style={styles.balanceBlock}>
-          <Text variant="caption" color="textMuted" style={styles.label}>
+          <Text variant="caption" style={styles.label}>
             AVAILABLE BALANCE
           </Text>
           {loading ? (
-            <Text style={[styles.amount, { color: colors.textMuted }]}>₦------</Text>
+            <Text style={[styles.amount, { color: 'rgba(255,255,255,0.4)' }]}>₦------</Text>
           ) : (
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               minimumFontScale={0.6}
-              style={[styles.amount, { color: colors.text }]}>
+              style={[styles.amount, { color: colors.white }]}>
               {balanceText}
             </Text>
           )}
           {isZero && !hidden ? (
-            <Text variant="caption" color="accent" style={styles.zeroHint}>
+            <Text variant="caption" style={styles.zeroHint}>
               Fund your wallet to get started
             </Text>
           ) : null}
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     fontSize: 11,
     fontWeight: '700',
+    color: 'rgba(255,255,255,0.6)',
   },
   amount: {
     fontSize: 34,
@@ -172,6 +173,7 @@ const styles = StyleSheet.create({
   zeroHint: {
     marginTop: 2,
     fontWeight: '600',
+    color: GOLD,
   },
   bottomRow: {
     flexDirection: 'row',

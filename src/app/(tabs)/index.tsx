@@ -35,12 +35,17 @@ function withAlpha(hex: string, alpha: number): string {
 }
 
 function HeaderIcon({ children, onPress, label }: { children: ReactNode; onPress?: () => void; label: string }) {
+  const colors = useTheme();
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      style={({ pressed }) => [styles.headerIcon, pressed && styles.headerIconPressed]}>
+      style={({ pressed }) => [
+        styles.headerIcon,
+        { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
+        pressed && styles.headerIconPressed,
+      ]}>
       {children}
     </Pressable>
   );
@@ -338,9 +343,7 @@ const styles = StyleSheet.create({
     borderRadius: Radii.full,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.06)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.08)',
   },
   headerIconPressed: {
     opacity: 0.8,

@@ -6,9 +6,10 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#0B0B0C",
-  "theme_color": "#00C54C",
+  "theme_color": "#F5B82E",
   "categories": ["finance", "business", "utilities"],
   "icons": [
     {

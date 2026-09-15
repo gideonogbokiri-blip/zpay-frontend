@@ -128,7 +128,7 @@ export default function ServiceScreen() {
   const compactPopular = displayServices.slice(1);
 
   return (
-    <Screen variant="dark" title={undefined} scroll>
+    <Screen title={undefined} scroll>
       <View style={styles.header}>
         <ZpayLogo size={130} />
         <Link href="/notifications" asChild>
