@@ -11,7 +11,7 @@ import { useNotifications, useServices, useTransactions, useWallet } from '@/hoo
 import { useAuth } from '@/hooks/use-auth';
 import type { ServiceType } from '@/lib/api';
 import { IconSize, Radii, Spacing } from '@/theme/tokens';
-import { useTheme } from '@/theme';
+import { useTheme, useThemeSwitch } from '@/theme';
 import { ZpayLogo } from '@/components/ZpayLogo';
 
 const GOLD = '#F5B82E';
@@ -104,8 +104,11 @@ function ServiceCard({ type, index }: { type: ServiceType; index: number }) {
   );
 }
 
+const THEME_ICON: Record<string, IconName> = { dark: 'moon', light: 'sunny', system: 'phone-portrait-outline' };
+
 export default function HomeScreen() {
   const colors = useTheme();
+  const { preference, cyclePreference } = useThemeSwitch();
   const { user } = useAuth();
   const { data: wallet, isLoading: walletLoading, isError: walletError } = useWallet();
   const { data: services } = useServices();
@@ -179,8 +182,8 @@ export default function HomeScreen() {
               {unreadCount > 0 ? <View style={styles.unreadDot} /> : null}
             </Pressable>
           </Link>
-          <HeaderIcon label={hidden ? 'Show balance' : 'Hide balance'} onPress={() => setHidden((v) => !v)}>
-            <Icon name={hidden ? 'eye-off-outline' : 'eye-outline'} size={IconSize.md} color={colors.text} />
+          <HeaderIcon label={`Theme: ${preference}`} onPress={cyclePreference}>
+            <Icon name={THEME_ICON[preference]} size={IconSize.md} color={colors.text} />
           </HeaderIcon>
         </View>
       </Animated.View>
@@ -190,6 +193,7 @@ export default function HomeScreen() {
           balance={wallet?.balance ?? 0}
           loading={walletLoading}
           hidden={hidden}
+          onToggleHidden={() => setHidden((v) => !v)}
           onFundPress={() => router.push('/wallet/fund')}
         />
         {walletError && !walletLoading ? (

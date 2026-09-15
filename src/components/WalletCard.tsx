@@ -15,9 +15,10 @@ export interface WalletCardProps {
   loading?: boolean;
   hidden?: boolean;
   onFundPress?: () => void;
+  onToggleHidden?: () => void;
 }
 
-export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCardProps) {
+export function WalletCard({ balance, loading, hidden, onFundPress, onToggleHidden }: WalletCardProps) {
   const colors = useTheme();
   const [display, setDisplay] = useState(balance);
   const animatedBalance = useRef(new Animated.Value(balance)).current;
@@ -74,6 +75,15 @@ export function WalletCard({ balance, loading, hidden, onFundPress }: WalletCard
               My Wallet
             </Text>
           </View>
+          {onToggleHidden ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={hidden ? 'Show balance' : 'Hide balance'}
+              onPress={onToggleHidden}
+              style={({ pressed }) => [styles.eyeButton, pressed && styles.eyePressed]}>
+              <Ionicons name={hidden ? 'eye-off-outline' : 'eye-outline'} size={18} color="rgba(255,255,255,0.85)" />
+            </Pressable>
+          ) : null}
         </View>
 
         <View style={styles.balanceBlock}>
@@ -153,6 +163,20 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '700',
+  },
+  eyeButton: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
+  },
+  eyePressed: {
+    opacity: 0.7,
+    transform: [{ scale: 0.95 }],
   },
   balanceBlock: {
     marginTop: Spacing.lg,

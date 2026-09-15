@@ -5,10 +5,12 @@ import { ZpayLogo } from '@/components/ZpayLogo';
 import { Spacing } from '@/theme/tokens';
 import { useTheme, useThemeSwitch, useThemeVariant } from '@/theme';
 
+const LABELS = { dark: 'Dark', light: 'Light', system: 'System' } as const;
+
 export default function MoodLanding() {
   const colors = useTheme();
   const variant = useThemeVariant();
-  const { toggleVariant, setVariant } = useThemeSwitch();
+  const { preference, setPreference, cyclePreference } = useThemeSwitch();
 
   return (
     <Screen title="ZPAY" subtitle="Financial Freedom, Anywhere">
@@ -26,19 +28,20 @@ export default function MoodLanding() {
             Mood Switch
           </Text>
           <Text variant="body" color="textSecondary" style={styles.moodDesc}>
-            Pick a mood that suits your vibe. Light for bright, sunny days; dark for late-night ease. Your choice is
-            saved automatically.
+            Pick a mood that suits your vibe. Light for bright, sunny days; dark for late-night ease. System follows
+            your device setting. Your choice is saved automatically.
           </Text>
           <Text variant="label" color="accent" style={styles.currentMode}>
-            Current mode: {variant === 'dark' ? 'Dark' : 'Light'}
+            Current mode: {LABELS[preference]} ({variant === 'dark' ? 'Dark' : 'Light'})
           </Text>
         </View>
 
         <View style={styles.actions}>
-          <Button label="Toggle Mood" onPress={toggleVariant} />
+          <Button label="Cycle Mood" onPress={cyclePreference} />
           <View style={{ flexDirection: 'row', gap: Spacing.md }}>
-            <Button label="Light" variant={variant === 'light' ? 'primary' : 'outline'} onPress={() => setVariant('light')} />
-            <Button label="Dark" variant={variant === 'dark' ? 'primary' : 'outline'} onPress={() => setVariant('dark')} />
+            <Button label="Light" variant={preference === 'light' ? 'primary' : 'outline'} onPress={() => setPreference('light')} />
+            <Button label="System" variant={preference === 'system' ? 'primary' : 'outline'} onPress={() => setPreference('system')} />
+            <Button label="Dark" variant={preference === 'dark' ? 'primary' : 'outline'} onPress={() => setPreference('dark')} />
           </View>
         </View>
 

@@ -4,12 +4,12 @@ import { Animated, Pressable, ScrollView, StyleSheet, type ViewStyle } from 'rea
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomTabInset, IconSize, MaxContentWidth, Radii, Spacing } from '@/theme/tokens';
-import { ThemeProvider, useTheme, type ThemeVariant } from '@/theme';
+import { ThemeProvider, useTheme, type ThemePreference } from '@/theme';
 import { Text } from './Text';
 import { View } from './View';
 
 export interface ScreenProps extends PropsWithChildren {
-  variant?: ThemeVariant;
+  preference?: ThemePreference;
   title?: string;
   subtitle?: string;
   headerRight?: ReactNode;
@@ -19,7 +19,7 @@ export interface ScreenProps extends PropsWithChildren {
 }
 
 export function Screen({
-  variant = 'dark',
+  preference = 'system',
   title,
   subtitle,
   headerRight,
@@ -29,7 +29,7 @@ export function Screen({
   children,
 }: ScreenProps) {
   return (
-    <ThemeProvider variant={variant}>
+    <ThemeProvider preference={preference}>
       <ScreenInner
         title={title}
         subtitle={subtitle}
@@ -51,7 +51,7 @@ function ScreenInner({
   back,
   contentStyle,
   children,
-}: Omit<ScreenProps, 'variant'>) {
+}: Omit<ScreenProps, 'preference'>) {
   const colors = useTheme();
   const insets = useSafeAreaInsets();
   const opacity = useRef(new Animated.Value(0)).current;
