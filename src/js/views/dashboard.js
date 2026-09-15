@@ -4,12 +4,15 @@ import { showToast } from '../components/notifications.js';
 
 export function renderDashboardView() {
   const isHidden = store.user.isBalanceHidden;
-  const balanceDisplay = isHidden ? '₦••••••' : store.formatMoney(store.balance);
+  const balanceDisplay = isHidden ? '₦ ••••••' : store.formatMoney(store.balance);
   const recentTxs = store.transactions.slice(0, 5);
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
   return `
-    <div class="app-wrapper">
-      <!-- App Top Header -->
+    <div class="app-wrapper" style="padding-bottom: 80px;">
+
+      <!-- Top Header -->
       <header class="app-top-header">
         <div class="user-profile-header">
           <a href="#/app/profile" class="user-avatar">
@@ -17,7 +20,7 @@ export function renderDashboardView() {
             <div class="online-indicator"></div>
           </a>
           <div class="user-greeting">
-            <span>Good morning 👋</span>
+            <span>${greeting} 👋</span>
             <h4>${store.user.name}</h4>
           </div>
         </div>
@@ -29,65 +32,54 @@ export function renderDashboardView() {
         </div>
       </header>
 
-      <!-- Main Balance Card -->
+      <!-- Balance Card -->
       <div class="balance-card">
         <div class="balance-header">
           <div class="balance-label">
-            <span>Available Balance</span>
-            <span class="balance-toggle-eye" id="toggle-balance-btn" title="Toggle Balance">
-              ${isHidden ? `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-              ` : `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              `}
+            <span>Wallet Balance</span>
+            <span class="balance-toggle-eye" id="toggle-balance-btn">
+              ${isHidden
+                ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+                : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+              }
             </span>
           </div>
-          <span class="balance-tag-pill" id="copy-tag-pill" style="cursor: pointer;" title="Copy tag">
-            ${store.user.tag}
-          </span>
+          <span class="balance-tag-pill" id="copy-tag-pill" style="cursor:pointer;" title="Copy tag">${store.user.tag}</span>
         </div>
+        <div class="balance-amount" id="dashboard-balance-amount">${balanceDisplay}</div>
 
-        <div class="balance-amount" id="dashboard-balance-amount">
-          ${balanceDisplay}
-        </div>
-
+        <!-- Primary Actions: Send & Receive -->
         <div class="balance-actions-row">
-          <a href="#/app/add-money" class="zpay-btn zpay-btn-primary balance-btn">
+          <a href="#/app/send" class="zpay-btn zpay-btn-primary balance-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            Send
+          </a>
+          <a href="#/app/receive" class="zpay-btn balance-btn" style="background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.2);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Receive
+          </a>
+          <a href="#/app/add-money" class="zpay-btn balance-btn" style="background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.15);">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Fund Wallet
-          </a>
-          <a href="#/app/qr-pay" class="zpay-btn zpay-btn-secondary balance-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            QR Pay
+            Fund
           </a>
         </div>
       </div>
 
-      <!-- Primary Action Cards (Fund Wallet, QR Pay) -->
-      <div class="primary-actions-grid" style="grid-template-columns: repeat(2, 1fr);">
-        <a href="#/app/add-money" class="action-pill-card">
-          <div class="action-pill-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7"/><path d="M16 19h6m-3-3v6"/></svg>
-          </div>
-          <span class="action-pill-label">Fund Wallet</span>
-        </a>
-
-        <a href="#/app/qr-pay" class="action-pill-card">
-          <div class="action-pill-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          </div>
-          <span class="action-pill-label">QR Pay</span>
-        </a>
-      </div>
-
-      <!-- Quick Services -->
+      <!-- Quick Actions Grid (OPay style) -->
       <div class="app-section">
-        <div class="section-title-row">
-          <h4 class="section-heading">Quick Services</h4>
-          <a href="#/app/bills" class="section-link">View All &rarr;</a>
-        </div>
-
-        <div class="services-grid">
+        <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:10px;">
+          <a href="#/app/send" class="service-card">
+            <div class="service-icon-box" style="background:rgba(234,0,41,0.12); color:var(--zpay-green);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <span class="service-name">Send</span>
+          </a>
+          <a href="#/app/receive" class="service-card">
+            <div class="service-icon-box" style="background:rgba(56,189,248,0.12); color:var(--color-blue);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </div>
+            <span class="service-name">Receive</span>
+          </a>
           <a href="#/app/airtime" class="service-card">
             <div class="service-icon-box airtime">📱</div>
             <span class="service-name">Airtime</span>
@@ -98,55 +90,89 @@ export function renderDashboardView() {
           </a>
           <a href="#/app/bills" class="service-card">
             <div class="service-icon-box bills">⚡</div>
-            <span class="service-name">Bills</span>
+            <span class="service-name">Electricity</span>
+          </a>
+          <a href="#/app/qr-pay" class="service-card">
+            <div class="service-icon-box" style="background:rgba(245,158,11,0.12); color:var(--color-warning);">⛶</div>
+            <span class="service-name">QR Pay</span>
           </a>
           <a href="#/app/bills" class="service-card">
+            <div class="service-icon-box" style="background:rgba(168,85,247,0.12); color:var(--color-purple);">📺</div>
+            <span class="service-name">Cable TV</span>
+          </a>
+          <a href="#/app/services" class="service-card">
             <div class="service-icon-box more">⋯</div>
             <span class="service-name">More</span>
           </a>
         </div>
       </div>
 
-      <!-- Recent Transactions -->
-      <div class="app-section" style="flex: 1;">
-        <div class="section-title-row">
-          <h4 class="section-heading">Recent Transactions</h4>
-          <a href="#/app/transactions" class="section-link">See All &rarr;</a>
-        </div>
-
-        <div class="transactions-list" id="dashboard-tx-list">
-          ${recentTxs.map(tx => {
-            const isPositive = tx.type === 'in';
-            const iconSvg = isPositive 
-              ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
-              : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>`;
-            
-            return `
-              <div class="transaction-tile" data-tx-id="${tx.id}">
-                <div class="tx-left">
-                  <div class="tx-icon-box ${isPositive ? 'tx-icon-in' : 'tx-icon-out'}">
-                    ${iconSvg}
-                  </div>
-                  <div class="tx-info">
-                    <h5>${tx.title}</h5>
-                    <span>${tx.date}</span>
-                  </div>
-                </div>
-                <div class="tx-right">
-                  <div class="tx-amount ${isPositive ? 'positive' : 'negative'}">
-                    ${isPositive ? '+' : '-'}${store.formatMoney(tx.amount)}
-                  </div>
-                  <span class="tx-status" style="color: ${isPositive ? 'var(--zpay-green)' : 'var(--text-muted)'};">
-                    ${tx.status}
-                  </span>
-                </div>
-              </div>
-            `;
-          }).join('')}
+      <!-- Cooperative Banner -->
+      <div class="app-section">
+        <div style="
+          background: linear-gradient(135deg, #1a0007 0%, #0d0003 60%, #1a0007 100%);
+          border: 1px solid rgba(234,0,41,0.3);
+          border-radius: var(--radius-lg);
+          padding: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        ">
+          <div>
+            <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:rgba(234,0,41,0.8); font-weight:700;">Zenith Bank Cooperative</div>
+            <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">Access Loans • Osusu • Community</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:4px;">All cooperative services in one place</div>
+          </div>
+          <a href="#/app/services" style="background:var(--zpay-green); color:#fff; border-radius:var(--radius-sm); padding:8px 14px; font-size:12px; font-weight:700; white-space:nowrap; text-decoration:none; flex-shrink:0;">
+            Go →
+          </a>
         </div>
       </div>
 
-      <!-- Bottom Nav (Section 11: Home | Payments | Activity | Profile) -->
+      <!-- Recent Transactions -->
+      <div class="app-section" style="flex:1;">
+        <div class="section-title-row">
+          <h4 class="section-heading">Recent Transactions</h4>
+          <a href="#/app/transactions" class="section-link">See All →</a>
+        </div>
+
+        <div class="transactions-list" id="dashboard-tx-list">
+          ${recentTxs.length === 0
+            ? `<div style="text-align:center; padding:40px 20px; color:var(--text-muted);">
+                <div style="font-size:32px; margin-bottom:10px;">💸</div>
+                <div style="font-size:14px; font-weight:600;">No transactions yet</div>
+                <div style="font-size:12px; margin-top:4px;">Start by funding your wallet</div>
+               </div>`
+            : recentTxs.map(tx => {
+                const isIn = tx.type === 'in';
+                return `
+                  <div class="transaction-tile" data-tx-id="${tx.id}">
+                    <div class="tx-left">
+                      <div class="tx-icon-box ${isIn ? 'tx-icon-in' : 'tx-icon-out'}">
+                        ${isIn
+                          ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`
+                          : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`
+                        }
+                      </div>
+                      <div class="tx-info">
+                        <h5>${tx.title}</h5>
+                        <span>${tx.date}</span>
+                      </div>
+                    </div>
+                    <div class="tx-right">
+                      <div class="tx-amount ${isIn ? 'positive' : 'negative'}">
+                        ${isIn ? '+' : '-'}${store.formatMoney(tx.amount)}
+                      </div>
+                      <span class="tx-status" style="color:${tx.status === 'Successful' ? 'var(--zpay-green)' : 'var(--text-muted)'};">${tx.status}</span>
+                    </div>
+                  </div>`;
+              }).join('')
+          }
+        </div>
+      </div>
+
+      <!-- Bottom Nav -->
       <nav class="app-bottom-nav">
         <a href="#/app" class="nav-tab-item active">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -170,37 +196,35 @@ export function renderDashboardView() {
 }
 
 export function initDashboardListeners() {
-  const eyeBtn = document.getElementById('toggle-balance-btn');
-  if (eyeBtn) {
-    eyeBtn.addEventListener('click', () => {
-      store.toggleBalanceVisibility();
-      window.location.reload();
-    });
-  }
+  document.getElementById('toggle-balance-btn')?.addEventListener('click', () => {
+    store.toggleBalanceVisibility();
+    const isHidden = store.user.isBalanceHidden;
+    const balEl = document.getElementById('dashboard-balance-amount');
+    const eyeBtn = document.getElementById('toggle-balance-btn');
+    if (balEl) {
+      balEl.textContent = isHidden ? '₦ ••••••' : store.formatMoney(store.balance);
+    }
+    if (eyeBtn) {
+      eyeBtn.innerHTML = isHidden
+        ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+        : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    }
+  });
 
-  const copyTag = document.getElementById('copy-tag-pill');
-  if (copyTag) {
-    copyTag.addEventListener('click', () => {
-      navigator.clipboard?.writeText(store.user.tag);
-      showToast(`Copied ${store.user.tag} to clipboard! 📋`);
-    });
-  }
+  document.getElementById('copy-tag-pill')?.addEventListener('click', () => {
+    navigator.clipboard?.writeText(store.user.tag);
+    showToast(`Copied ${store.user.tag}! 📋`);
+  });
 
-  // Click transaction to view receipt
-  const tiles = document.querySelectorAll('.transaction-tile');
-  tiles.forEach(tile => {
+  document.querySelectorAll('.transaction-tile').forEach(tile => {
     tile.addEventListener('click', () => {
-      const txId = tile.dataset.txId;
-      const tx = store.transactions.find(t => t.id === txId);
+      const tx = store.transactions.find(t => t.id === tile.dataset.txId);
       if (tx) openReceiptModal(tx);
     });
   });
 
-  const notifBtn = document.getElementById('header-notif-btn');
-  if (notifBtn) {
-    notifBtn.addEventListener('click', () => {
-      const notifs = store.notifications.map(n => `• ${n.title}: ${n.message}`).join('\n\n');
-      alert(`🔔 ZPay Notifications:\n\n${notifs}`);
-    });
-  }
+  document.getElementById('header-notif-btn')?.addEventListener('click', () => {
+    const notifs = store.notifications.map(n => `• ${n.title}: ${n.message}`).join('\n\n');
+    alert(`🔔 Notifications:\n\n${notifs}`);
+  });
 }

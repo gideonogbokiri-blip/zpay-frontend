@@ -23,14 +23,14 @@
 
 .zpay-btn-primary {
   background-color: var(--zpay-green);
-  color: #041209;
+  color: #FFFFFF;
   font-weight: 700;
-  box-shadow: 0 4px 16px rgba(0, 210, 106, 0.25);
+  box-shadow: 0 4px 16px rgba(234, 0, 41, 0.3);
 }
 
 .zpay-btn-primary:hover {
   background-color: var(--zpay-green-hover);
-  box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4);
+  box-shadow: 0 8px 25px rgba(234, 0, 41, 0.45);
 }
 
 .zpay-btn-secondary {
@@ -372,7 +372,7 @@
 .pin-dot.filled {
   background: var(--zpay-green);
   border-color: var(--zpay-green);
-  box-shadow: 0 0 10px rgba(0, 210, 106, 0.5);
+  box-shadow: 0 0 10px rgba(234, 0, 41, 0.5);
   transform: scale(1.15);
 }
 

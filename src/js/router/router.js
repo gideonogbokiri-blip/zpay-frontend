@@ -18,6 +18,14 @@ import { renderBillsView, initBillsListeners } from '../views/bills.js';
 import { renderServicesView, initServicesListeners } from '../views/services.js';
 import { renderActivityView, initActivityListeners } from '../views/activity.js';
 import { renderProfileView, initProfileListeners } from '../views/profile.js';
+import { renderLoansView, initLoansListeners } from '../views/loans.js';
+import { renderAtmView, initAtmListeners } from '../views/atm.js';
+import { renderCommunityView, initCommunityListeners } from '../views/community.js';
+import { renderOsusuView, initOsusuListeners } from '../views/osusu.js';
+import { renderZrefView, initZrefListeners } from '../views/zref.js';
+import { renderZsoView, initZsoListeners } from '../views/zso.js';
+import { renderSendMoneyView, initSendMoneyListeners } from '../views/sendMoney.js';
+import { renderReceiveMoneyView, initReceiveMoneyListeners } from '../views/receiveMoney.js';
 
 class Router {
   constructor(appElement) {
@@ -94,9 +102,16 @@ class Router {
         listenerInit = initDashboardListeners;
         break;
       case '/app/add-money':
-      case '/app/send':
         html = renderAddMoneyView();
         listenerInit = initAddMoneyListeners;
+        break;
+      case '/app/send':
+        html = renderSendMoneyView();
+        listenerInit = initSendMoneyListeners;
+        break;
+      case '/app/receive':
+        html = renderReceiveMoneyView();
+        listenerInit = initReceiveMoneyListeners;
         break;
       case '/app/qr-pay':
         html = renderQrPayView();
@@ -126,6 +141,31 @@ class Router {
       case '/app/profile':
         html = renderProfileView();
         listenerInit = initProfileListeners;
+        break;
+
+      case '/app/loans':
+        html = renderLoansView();
+        listenerInit = initLoansListeners;
+        break;
+      case '/app/atm':
+        html = renderAtmView();
+        listenerInit = initAtmListeners;
+        break;
+      case '/app/community':
+        html = renderCommunityView();
+        listenerInit = initCommunityListeners;
+        break;
+      case '/app/osusu':
+        html = renderOsusuView();
+        listenerInit = initOsusuListeners;
+        break;
+      case '/app/zref':
+        html = renderZrefView();
+        listenerInit = initZrefListeners;
+        break;
+      case '/app/zso':
+        html = renderZsoView();
+        listenerInit = initZsoListeners;
         break;
 
       default:

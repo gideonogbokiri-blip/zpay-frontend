@@ -1,10 +1,10 @@
 :root {
-  /* Brand Colors */
-  --zpay-green: #00D26A;
-  --zpay-green-hover: #00B85C;
-  --zpay-green-dark: #00994B;
-  --zpay-green-light: rgba(0, 210, 106, 0.12);
-  --zpay-green-glow: rgba(0, 210, 106, 0.25);
+  /* Brand Colors - Zenith Red */
+  --zpay-green: #EA0029; /* Keeping variable name for compatibility, but it's red now */
+  --zpay-green-hover: #C60020;
+  --zpay-green-dark: #9B0016;
+  --zpay-green-light: rgba(234, 0, 41, 0.12);
+  --zpay-green-glow: rgba(234, 0, 41, 0.25);
   
   /* Dark Theme (Default) */
   --bg-app: #080C14;
@@ -17,7 +17,7 @@
   
   --border-subtle: rgba(255, 255, 255, 0.07);
   --border-medium: rgba(255, 255, 255, 0.12);
-  --border-highlight: rgba(0, 210, 106, 0.4);
+  --border-highlight: rgba(234, 0, 41, 0.4);
   
   --text-primary: #FFFFFF;
   --text-secondary: #94A3B8;
@@ -38,7 +38,7 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
-  --shadow-green: 0 8px 25px rgba(0, 210, 106, 0.25);
+  --shadow-green: 0 8px 25px rgba(234, 0, 41, 0.25);
   --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 
   /* Radii */
@@ -70,7 +70,7 @@
   
   --border-subtle: rgba(0, 0, 0, 0.08);
   --border-medium: rgba(0, 0, 0, 0.15);
-  --border-highlight: rgba(0, 210, 106, 0.6);
+  --border-highlight: rgba(234, 0, 41, 0.6);
   
   --text-primary: #0F172A;
   --text-secondary: #475569;
@@ -80,6 +80,6 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
-  --shadow-green: 0 8px 25px rgba(0, 210, 106, 0.2);
+  --shadow-green: 0 8px 25px rgba(234, 0, 41, 0.2);
   --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
 }

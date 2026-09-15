@@ -175,7 +175,7 @@
   right: -40px;
   width: 140px;
   height: 140px;
-  background: radial-gradient(circle, rgba(0, 210, 106, 0.22) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(234, 0, 41, 0.18) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -209,11 +209,11 @@
 .balance-tag-pill {
   font-size: 11px;
   font-family: var(--font-mono);
-  background: rgba(0, 210, 106, 0.1);
+  background: rgba(234, 0, 41, 0.1);
   color: var(--zpay-green);
   padding: 4px 10px;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(0, 210, 106, 0.2);
+  border: 1px solid rgba(234, 0, 41, 0.2);
 }
 
 .balance-amount {
@@ -511,7 +511,7 @@
   margin: 30px auto;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 30px rgba(0, 210, 106, 0.2);
+  box-shadow: 0 0 30px rgba(234, 0, 41, 0.2);
   background: #000;
 }
 
@@ -596,8 +596,37 @@
 
 /* Service Menu Cards */
 .service-menu-card:hover {
-  border-color: rgba(0, 210, 106, 0.4) !important;
+  border-color: rgba(234, 0, 41, 0.4) !important;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  width: 44px;
+  height: 24px;
+  background: var(--border-medium);
+  border-radius: 99px;
+  position: relative;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+}
+.toggle-switch.on {
+  background: var(--zpay-green);
+}
+.toggle-switch.on::after {
+  transform: translateX(20px);
 }
 
