@@ -3,15 +3,24 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Screen, Text } from '@/components/ui';
 import { Spacing } from '@/theme/tokens';
-import { useTheme } from '@/theme';
+import { useTheme, useThemeSwitch, useThemeVariant } from '@/theme';
 
 export default function SettingsScreen() {
   const colors = useTheme();
+  const variant = useThemeVariant();
+  const { setVariant } = useThemeSwitch();
+  const darkMode = variant === 'dark';
   const [biometrics, setBiometrics] = useState(false);
   const [notifications, setNotifications] = useState(true);
 
   return (
     <Screen title="Settings" subtitle="App preferences" back scroll>
+      <SettingToggle
+        label="Dark mode"
+        description="Dark theme for late-night ease"
+        value={darkMode}
+        onChange={(value) => setVariant(value ? 'dark' : 'light')}
+      />
       <SettingToggle
         label="Biometric authentication"
         description="Use Face ID / fingerprint to approve payments"
