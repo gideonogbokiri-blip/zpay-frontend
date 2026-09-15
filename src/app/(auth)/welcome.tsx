@@ -59,12 +59,6 @@ export default function WelcomeScreen() {
                 <Button label="Create account" variant="secondary" />
               </Link>
               <View style={styles.links}>
-                <Link href="/promo" asChild>
-                  <Pressable accessibilityRole="link" accessibilityLabel="Promo">
-                    <Text variant="smallBold" color="accent">Promo</Text>
-                  </Pressable>
-                </Link>
-                <Text variant="caption" color="textMuted">•</Text>
                 <Link href="/terms" asChild>
                   <Pressable accessibilityRole="link" accessibilityLabel="Terms">
                     <Text variant="smallBold" color="accent">Terms</Text>
@@ -137,12 +131,6 @@ export default function WelcomeScreen() {
               <Button label="Create account" variant="secondary" />
             </Link>
             <View style={styles.links}>
-              <Link href="/promo" asChild>
-                <Pressable accessibilityRole="link" accessibilityLabel="Promo">
-                  <Text variant="smallBold" color="accent">Promo</Text>
-                </Pressable>
-              </Link>
-              <Text variant="caption" color="textMuted">•</Text>
               <Link href="/terms" asChild>
                 <Pressable accessibilityRole="link" accessibilityLabel="Terms">
                   <Text variant="smallBold" color="accent">Terms</Text>
