@@ -15,7 +15,8 @@
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": false
-        }
+        },
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
