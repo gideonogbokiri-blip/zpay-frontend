@@ -1,305 +1,157 @@
 import { Link } from 'expo-router';
-import { Image, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Icon, type IconName } from '@/components/Icon';
-import { Button, Screen, Text } from '@/components/ui';
-import { ZpayLogo } from '@/components/ZpayLogo';
-import { IconSize, Radii, Shadow, Spacing } from '@/theme/tokens';
-import { useTheme } from '@/theme';
+import { Button, Text } from '@/components/ui';
+import { Spacing, TouchTarget } from '@/theme/tokens';
 
-const loginVisual = require('../../../assets/images/login-visual.png');
-
-const FEATURES: { icon: IconName; label: string; caption: string }[] = [
-  { icon: 'flash', label: 'Electricity', caption: 'Prepaid & postpaid across 11 DisCos' },
-  { icon: 'phone-portrait', label: 'Airtime', caption: 'All networks' },
-  { icon: 'wifi', label: 'Data', caption: 'Instant bundles for every network' },
-  { icon: 'tv', label: 'TV & Exams', caption: 'DStv, GOtv, WAEC, JAMB, NECO' },
-];
+const welcomeVideo = require('../../../assets/videos/welcome.mp4');
 
 export default function WelcomeScreen() {
-  const colors = useTheme();
-  const { width } = useWindowDimensions();
-  const wide = width >= 860;
+  const [showVideo, setShowVideo] = useState(false);
 
-  if (wide) {
-    return (
-      <Screen title={undefined} scroll contentStyle={styles.contentWide}>
-        <View style={styles.layoutWide}>
-          <View style={styles.brandPanel}>
-            <ZpayLogo size={150} style={styles.logoWrap} />
-            <Text variant="heading" style={[styles.title, { color: colors.text }]}>
-              Welcome to ZPAY
-            </Text>
-            <Text variant="body" color="textSecondary" style={styles.tagline}>
-              Pay bills, buy airtime, data, TV, and exam registrations in one secure Nigerian app.
-            </Text>
+  useEffect(() => {
+    setShowVideo(true);
+  }, []);
 
-            <View style={styles.features}>
-              {FEATURES.map((f) => (
-                <View key={f.label} style={[styles.feature, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-                  <View style={[styles.featureIcon, { backgroundColor: colors.accentSoft }]}>
-                    <Icon name={f.icon} size={IconSize.md} color={colors.accent} />
-                  </View>
-                  <View style={styles.featureText}>
-                    <Text variant="smallBold">{f.label}</Text>
-                    <Text variant="caption" color="textMuted">
-                      {f.caption}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </View>
+  const player = useVideoPlayer(welcomeVideo, (p) => {
+    p.loop = true;
+    p.muted = true;
+    p.play();
+  });
 
-            <View style={styles.actions}>
-              <Link href="/login" asChild>
-                <Button label="Log in" />
-              </Link>
-              <Link href="/signup" asChild>
-                <Button label="Create account" variant="secondary" />
-              </Link>
-              <View style={styles.links}>
-                <Link href="/terms" asChild>
-                  <Pressable accessibilityRole="link" accessibilityLabel="Terms">
-                    <Text variant="smallBold" color="accent">Terms</Text>
-                  </Pressable>
-                </Link>
-                <Text variant="caption" color="textMuted">•</Text>
-                <Link href="/privacy" asChild>
-                  <Pressable accessibilityRole="link" accessibilityLabel="Privacy">
-                    <Text variant="smallBold" color="accent">Privacy</Text>
-                  </Pressable>
-                </Link>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.visualPanelWide}>
-            <Image source={loginVisual} resizeMode="cover" style={styles.visualImage} />
-          </View>
-        </View>
-      </Screen>
-    );
-  }
-
-  // Mobile layout: Immersive background image with absolute container and gradient overlay
   return (
-    <Screen title={undefined} scroll contentStyle={styles.contentMobile}>
-      <View style={styles.mobileContainer}>
-        <View style={styles.mobileBgContainer} pointerEvents="none">
-          <Image source={loginVisual} resizeMode="cover" style={styles.mobileBgImage} />
-          <LinearGradient
-            colors={['rgba(9, 12, 16, 0.5)', 'rgba(9, 12, 16, 0.92)', '#090C10']}
-            style={styles.mobileGradient}
-          />
-        </View>
+    <View style={styles.root}>
+      <StatusBar style="light" />
+      <View style={styles.videoLayer}>
+        {showVideo ? <VideoView player={player} style={styles.video} contentFit="cover" nativeControls={false} /> : null}
+      </View>
+      <LinearGradient colors={['rgba(0,0,0,0.55)', 'rgba(0,0,0,0.7)']} style={styles.overlay} />
 
-        <View style={styles.mobileInner}>
-          <ZpayLogo size={130} style={styles.mobileLogo} />
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.container}>
+          <Text style={styles.title}>
+            Welcome to <Text style={styles.titleGold}>Zpay</Text>
+          </Text>
+          <Text style={styles.tagline}>Money, Simplified</Text>
 
-          <View style={styles.mobileHeader}>
-            <Text variant="heading" style={[styles.titleMobile, { color: '#FFFFFF' }]}>
-              Welcome to ZPAY
-            </Text>
-            <Text variant="body" style={[styles.taglineMobile, { color: 'rgba(255,255,255,0.85)' }]}>
-              Pay bills, buy airtime and register for exams in one place.
-            </Text>
-          </View>
-
-          <View style={styles.features}>
-            {FEATURES.map((f) => (
-              <View key={f.label} style={[styles.featureMobile, { backgroundColor: 'rgba(17, 21, 27, 0.88)', borderColor: 'rgba(255,255,255,0.12)' }]}>
-                <View style={[styles.featureIcon, { backgroundColor: 'rgba(245, 184, 46, 0.16)' }]}>
-                  <Icon name={f.icon} size={IconSize.md} color="#F5B82E" />
-                </View>
-                <View style={styles.featureText}>
-                  <Text variant="smallBold" style={{ color: '#FFFFFF' }}>{f.label}</Text>
-                  <Text variant="caption" style={{ color: '#94A3B8' }}>
-                    {f.caption}
-                  </Text>
-                </View>
-                <Icon name="chevron-forward" size={IconSize.sm} color="#94A3B8" />
-              </View>
-            ))}
-          </View>
-
-          <View style={styles.actionsMobile}>
+          <View style={styles.actions}>
             <Link href="/login" asChild>
-              <Button label="Log in →" />
+              <Button label="Login" style={styles.loginBtn} labelStyle={styles.loginLabel} />
             </Link>
             <Link href="/signup" asChild>
-              <Button label="Create account" variant="secondary" />
+              <Button label="Create Account" style={styles.createBtn} labelStyle={styles.createLabel} />
             </Link>
-            <View style={styles.links}>
-              <Link href="/terms" asChild>
-                <Pressable accessibilityRole="link" accessibilityLabel="Terms">
-                  <Text variant="smallBold" color="accent">Terms</Text>
-                </Pressable>
-              </Link>
-              <Text variant="caption" color="textMuted">•</Text>
-              <Link href="/privacy" asChild>
-                <Pressable accessibilityRole="link" accessibilityLabel="Privacy">
-                  <Text variant="smallBold" color="accent">Privacy</Text>
-                </Pressable>
-              </Link>
-            </View>
+            <Text style={styles.terms}>
+              By continuing, you agree to our <Link href="/terms" asChild><Text style={styles.termsLink}>Terms and Conditions</Text></Link>
+            </Text>
           </View>
         </View>
-      </View>
-    </Screen>
+      </SafeAreaView>
+    </View>
   );
 }
 
+const GOLD = '#F5B82E';
+const GOLD_END = '#D99614';
+
 const styles = StyleSheet.create({
-  contentWide: {
+  root: {
     flex: 1,
-    maxWidth: 1240,
-    width: '100%',
-    alignSelf: 'center',
+    backgroundColor: '#000000',
   },
-  contentMobile: {
-    flex: 1,
-  },
-  layoutWide: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.xxl,
-    paddingVertical: Spacing.xxl,
-    paddingHorizontal: Spacing.xl,
-    minHeight: 760,
-  },
-  brandPanel: {
-    flex: 1,
-    gap: Spacing.md,
-    maxWidth: 520,
-  },
-  logoWrap: {
-    alignItems: 'flex-start',
-    marginBottom: Spacing.xs,
-  },
-  title: {
-    fontSize: 36,
-    lineHeight: 42,
-    fontWeight: '900',
-  },
-  tagline: {
-    lineHeight: 24,
-    marginBottom: Spacing.sm,
-  },
-  features: {
-    gap: Spacing.sm,
-    width: '100%',
-    marginVertical: Spacing.xs,
-  },
-  feature: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    padding: Spacing.md,
-    borderRadius: Radii.lg,
-    borderWidth: 1,
-  },
-  featureMobile: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    padding: Spacing.md,
-    borderRadius: Radii.lg,
-    borderWidth: 1,
-  },
-  featureIcon: {
-    width: IconSize.xxl,
-    height: IconSize.xxl,
-    borderRadius: Radii.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  featureText: {
-    flex: 1,
-    gap: 2,
-  },
-  actions: {
-    gap: Spacing.md,
-    width: '100%',
-    marginTop: Spacing.md,
-  },
-  actionsMobile: {
-    gap: Spacing.md,
-    width: '100%',
-    marginTop: Spacing.md,
-    paddingBottom: Spacing.lg,
-  },
-  links: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.md,
-    paddingTop: Spacing.xs,
-  },
-  visualPanelWide: {
-    flex: 1.1,
-    height: 700,
-    overflow: 'hidden',
-    borderRadius: Radii.xxl,
-    backgroundColor: '#151A21',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
-    ...Shadow,
-  },
-  visualImage: {
-    width: '100%',
-    height: '100%',
-  },
-  mobileContainer: {
-    flex: 1,
-    position: 'relative',
-    width: '100%',
-  },
-  mobileBgContainer: {
+  videoLayer: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 600,
-    overflow: 'hidden',
+    bottom: 0,
     zIndex: 0,
   },
-  mobileBgImage: {
+  video: {
     width: '100%',
     height: '100%',
   },
-  mobileGradient: {
+overlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
-  mobileInner: {
+  safe: {
     flex: 1,
-    zIndex: 1,
-    paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.xxl,
+    zIndex: 2,
+    width: '100%',
+    maxWidth: 520,
+    alignSelf: 'center',
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
+    gap: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xxl,
   },
-  mobileLogo: {
-    alignItems: 'flex-start',
-    marginBottom: Spacing.xs,
+  title: {
+    fontSize: 40,
+    lineHeight: 48,
+    fontWeight: '900',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    color: '#FFFFFF',
   },
-  mobileHeader: {
-    gap: Spacing.xs,
-    marginBottom: Spacing.xs,
-  },
-  titleMobile: {
-    fontSize: 30,
-    lineHeight: 36,
+  titleGold: {
+    color: GOLD,
     fontWeight: '900',
   },
-  taglineMobile: {
-    fontSize: 14,
-    lineHeight: 20,
+  tagline: {
+    fontSize: 13,
+    fontWeight: '300',
+    letterSpacing: 4,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    color: 'rgba(255,255,255,0.75)',
+  },
+  actions: {
+    alignSelf: 'stretch',
+    gap: Spacing.md,
+    marginTop: Spacing.lg,
+  },
+  loginBtn: {
+    backgroundColor: GOLD,
+    borderColor: GOLD_END,
+    borderRadius: 999,
+    minHeight: TouchTarget.standard,
+  },
+  loginLabel: {
+    color: '#FFFFFF',
+  },
+  createBtn: {
+    backgroundColor: '#1F2733',
+    borderColor: 'rgba(255,255,255,0.35)',
+    borderRadius: 999,
+    minHeight: TouchTarget.standard,
+  },
+  createLabel: {
+    color: '#FFFFFF',
+  },
+  terms: {
+    marginTop: Spacing.xs,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    fontSize: 12,
+    lineHeight: 18,
+    color: 'rgba(255,255,255,0.65)',
+  },
+  termsLink: {
+    color: GOLD,
+    textDecorationLine: 'underline',
   },
 });
