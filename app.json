@@ -8,8 +8,15 @@
     "scheme": "zpay",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "com.zpay.app",
       "icon": "./assets/images/icon.png",
-      "backgroundColor": "#0B0B0C"
+      "backgroundColor": "#0B0B0C",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
