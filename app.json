@@ -51,6 +51,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "30f886dc-edf8-45d3-bbbf-98181616e999"
+      }
+    },
+    "owner": "zarox-energy"
   }
 }
