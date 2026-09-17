@@ -1,6 +1,7 @@
+import { Asset } from 'expo-asset';
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -13,10 +14,27 @@ const welcomeVideo = require('../../../assets/videos/welcome.mp4');
 
 export default function WelcomeScreen() {
   const [showVideo, setShowVideo] = useState(false);
+  const [webVideoSrc, setWebVideoSrc] = useState<string | null>(null);
 
   useEffect(() => {
     setShowVideo(true);
   }, []);
+
+  const isWeb = Platform.OS === 'web';
+
+  // On web, resolve the bundled mp4 to its real, served URL string (browsers
+  // need a URL, not a Metro module id, in <video src>). Cache-buster forces a
+  // fresh fetch past any stale service-worker/cache from the old build.
+  useEffect(() => {
+    if (!isWeb) return;
+    Asset.fromModule(welcomeVideo)
+      .downloadAsync()
+      .then((a) => setWebVideoSrc(`${a.localUri ?? a.uri}?v=2`))
+      .catch(() => {
+        const u = Asset.fromModule(welcomeVideo).uri;
+        if (u) setWebVideoSrc(`${u}?v=2`);
+      });
+  }, [isWeb]);
 
   const player = useVideoPlayer(welcomeVideo, (p) => {
     p.loop = true;
@@ -24,11 +42,21 @@ export default function WelcomeScreen() {
     p.play();
   });
 
+  const renderVideo = (style: object) => {
+    if (isWeb) {
+      // Native <video> with inline autoplay/muted/loop attrs — the only way to
+      // get reliable autoplay on web (browser autoplay-policy drops JS play()).
+      if (!webVideoSrc) return null;
+      return <video src={webVideoSrc} autoPlay muted loop playsInline style={style} key={webVideoSrc} />;
+    }
+    return <VideoView player={player} style={style} contentFit="cover" nativeControls={false} />;
+  };
+
   return (
     <View style={styles.root}>
       <StatusBar style="light" />
       <View style={styles.videoLayer}>
-        {showVideo ? <VideoView player={player} style={styles.video} contentFit="cover" nativeControls={false} /> : null}
+        {showVideo ? renderVideo(styles.video) : null}
       </View>
       <LinearGradient colors={['rgba(0,0,0,0.55)', 'rgba(0,0,0,0.7)']} style={styles.overlay} />
 
