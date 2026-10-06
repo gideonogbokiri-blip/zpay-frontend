@@ -15,7 +15,10 @@ export function renderZrefView() {
       <div style="padding: 20px; display: flex; flex-direction: column; gap: 20px;">
         <!-- Revenue Summary -->
         <div class="balance-card" style="background: linear-gradient(135deg, #0d0003 0%, #1a0007 100%); border:1px solid rgba(234,0,41,0.3);">
-          <div class="balance-label">🏛️ Community Revenue Paid (2026)</div>
+          <div class="balance-label" style="display:flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/></svg>
+            Community Revenue Paid (2026)
+          </div>
           <div class="balance-amount" style="margin: 10px 0;">₦45,000.00</div>
           <div style="display:flex; gap:16px;">
             <div>
@@ -38,7 +41,9 @@ export function renderZrefView() {
           <div class="transactions-list" id="zref-pending-list">
             <div class="transaction-tile" id="due-item-1">
               <div class="tx-left">
-                <div class="tx-icon-box" style="background:rgba(234,0,41,0.1); font-size:18px;">🏛️</div>
+                <div class="tx-icon-box" style="background:rgba(234,0,41,0.1); color:var(--zpay-green);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/></svg>
+                </div>
                 <div class="tx-info">
                   <h5>Annual General Due</h5>
                   <span>Due: Dec 31, 2026</span>
@@ -52,7 +57,9 @@ export function renderZrefView() {
 
             <div class="transaction-tile" id="due-item-2">
               <div class="tx-left">
-                <div class="tx-icon-box" style="background:rgba(245,158,11,0.1); font-size:18px;">🏢</div>
+                <div class="tx-icon-box" style="background:rgba(245,158,11,0.1); color:var(--color-warning);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                </div>
                 <div class="tx-info">
                   <h5>Facility Maintenance Fee</h5>
                   <span>Due: Nov 15, 2026</span>

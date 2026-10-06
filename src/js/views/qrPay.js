@@ -12,8 +12,8 @@ export function renderQrPayView() {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </a>
         <h3 class="screen-title">Scan to Pay</h3>
-        <button class="header-icon-btn" id="btn-qr-flash" title="Flashlight">
-          ⚡
+        <button class="header-icon-btn" id="btn-qr-flash" title="Flashlight" style="display:flex; align-items:center; justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </button>
       </header>
 
@@ -33,8 +33,8 @@ export function renderQrPayView() {
             <div style="position: absolute; bottom: 12px; left: 12px; width: 28px; height: 28px; border-bottom: 3px solid var(--zpay-green); border-left: 3px solid var(--zpay-green); border-bottom-left-radius: 8px;"></div>
             <div style="position: absolute; bottom: 12px; right: 12px; width: 28px; height: 28px; border-bottom: 3px solid var(--zpay-green); border-right: 3px solid var(--zpay-green); border-bottom-right-radius: 8px;"></div>
 
-            <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.25; font-size: 80px;">
-              📷
+            <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.25; color: var(--text-muted);">
+              <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
             </div>
           </div>
 
@@ -62,11 +62,13 @@ export function renderQrPayView() {
         </div>
 
         <div style="margin-top: 24px; display: flex; gap: 12px;">
-          <button class="zpay-btn zpay-btn-secondary" id="btn-upload-qr" style="flex: 1;">
-            📁 Upload QR
+          <button class="zpay-btn zpay-btn-secondary" id="btn-upload-qr" style="flex: 1; display:inline-flex; align-items:center; justify-content:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload QR
           </button>
-          <button class="zpay-btn zpay-btn-outline" id="btn-manual-zpayid" style="flex: 1;">
-            ⌨️ Manual ZPay ID
+          <button class="zpay-btn zpay-btn-outline" id="btn-manual-zpayid" style="flex: 1; display:inline-flex; align-items:center; justify-content:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6.01" y2="8"/><line x1="10" y1="8" x2="10.01" y2="8"/><line x1="14" y1="8" x2="14.01" y2="8"/><line x1="18" y1="8" x2="18.01" y2="8"/><line x1="6" y1="12" x2="6.01" y2="12"/><line x1="18" y1="12" x2="18.01" y2="12"/><line x1="8" y1="16" x2="16" y2="16"/></svg>
+            Manual ZPay ID
           </button>
         </div>
       </div>

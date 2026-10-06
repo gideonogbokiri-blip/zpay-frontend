@@ -43,7 +43,9 @@ export function renderAirtimeView() {
             <label class="zpay-label">Phone Number</label>
             <div class="zpay-input-wrapper">
               <input type="tel" class="zpay-input" id="airtime-phone" placeholder="0803 123 4567" value="0803 123 4567" />
-              <span class="zpay-input-icon" id="airtime-contact-pick" title="Use My Number">📱</span>
+              <span class="zpay-input-icon" id="airtime-contact-pick" title="Use My Number" style="display:flex; align-items:center; cursor:pointer;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              </span>
             </div>
           </div>
 

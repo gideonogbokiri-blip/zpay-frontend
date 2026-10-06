@@ -140,7 +140,7 @@ export function initReceiveMoneyListeners() {
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
       navigator.clipboard?.writeText(phone);
-      showToast('Account number copied! 📋');
+      showToast('Account number copied to clipboard!');
     });
   }
 
@@ -153,7 +153,7 @@ export function initReceiveMoneyListeners() {
     } else {
       shareBtn.addEventListener('click', () => {
         navigator.clipboard?.writeText(text);
-        showToast('Account details copied to clipboard! 📋');
+        showToast('Account details copied to clipboard!');
       });
     }
   }

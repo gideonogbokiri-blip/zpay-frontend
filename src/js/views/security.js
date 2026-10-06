@@ -13,7 +13,7 @@ export function renderSecurityView() {
         </nav>
         <div class="nav-actions">
           <a href="#/login" class="zpay-btn zpay-btn-secondary zpay-btn-sm">Sign In</a>
-          <a href="#/app" class="zpay-btn zpay-btn-primary zpay-btn-sm">Launch App 🚀</a>
+          <a href="#/app" class="zpay-btn zpay-btn-primary zpay-btn-sm">Launch App</a>
         </div>
       </div>
     </header>

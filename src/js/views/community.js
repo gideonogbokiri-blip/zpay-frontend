@@ -40,7 +40,9 @@ export function renderCommunityView() {
           padding: 16px;
         ">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-            <span style="font-size:16px;">📢</span>
+            <span style="color:var(--color-warning); display:flex; align-items:center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </span>
             <span style="font-weight:700; font-size:14px; color:var(--text-primary);">General Meeting – Saturday</span>
             <span class="zpay-badge zpay-badge-warning" style="margin-left:auto; font-size:10px;">Pinned</span>
           </div>
@@ -66,8 +68,12 @@ export function renderCommunityView() {
               </div>
               <p style="font-size:13px; color:var(--text-secondary); margin:0 0 0 52px; line-height:1.5;">Has anyone received the Q3 dividends yet? I haven't gotten mine.</p>
               <div style="display:flex; gap:16px; margin-left:52px;">
-                <span style="font-size:12px; color:var(--text-muted); cursor:pointer;">💬 12 Replies</span>
-                <span style="font-size:12px; color:var(--text-muted); cursor:pointer;">❤️ 5 Likes</span>
+                <span style="font-size:12px; color:var(--text-muted); cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 12 Replies
+                </span>
+                <span style="font-size:12px; color:var(--text-muted); cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 5 Likes
+                </span>
               </div>
             </div>
 
@@ -81,8 +87,12 @@ export function renderCommunityView() {
               </div>
               <p style="font-size:13px; color:var(--text-secondary); margin:0 0 0 52px; line-height:1.5;">Updated loan policy documents are now available. Please review before next month.</p>
               <div style="display:flex; gap:16px; margin-left:52px;">
-                <span style="font-size:12px; color:var(--text-muted); cursor:pointer;">💬 0 Replies</span>
-                <span style="font-size:12px; color:var(--text-muted); cursor:pointer;">❤️ 20 Likes</span>
+                <span style="font-size:12px; color:var(--text-muted); cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 0 Replies
+                </span>
+                <span style="font-size:12px; color:var(--text-muted); cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 20 Likes
+                </span>
               </div>
             </div>
           </div>
@@ -149,8 +159,12 @@ export function initCommunityListeners() {
           </div>
           <p style="font-size:13px; color:var(--text-secondary); margin:0 0 0 52px; line-height:1.5;">${text}</p>
           <div style="display:flex; gap:16px; margin-left:52px;">
-            <span style="font-size:12px; color:var(--text-muted);">💬 0 Replies</span>
-            <span style="font-size:12px; color:var(--text-muted);">❤️ 1 Like</span>
+            <span style="font-size:12px; color:var(--text-muted); display:inline-flex; align-items:center; gap:4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 0 Replies
+            </span>
+            <span style="font-size:12px; color:var(--text-muted); display:inline-flex; align-items:center; gap:4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 1 Like
+            </span>
           </div>
         `;
         list.prepend(item);

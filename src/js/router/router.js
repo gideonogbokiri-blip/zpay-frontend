@@ -26,6 +26,10 @@ import { renderZrefView, initZrefListeners } from '../views/zref.js';
 import { renderZsoView, initZsoListeners } from '../views/zso.js';
 import { renderSendMoneyView, initSendMoneyListeners } from '../views/sendMoney.js';
 import { renderReceiveMoneyView, initReceiveMoneyListeners } from '../views/receiveMoney.js';
+import { renderCooperativeView, initCooperativeListeners } from '../views/cooperative.js';
+import { renderCooperativeAdminView, initCooperativeAdminListeners } from '../views/cooperativeAdmin.js';
+import { renderPaySmallSmallView, initPaySmallSmallListeners } from '../views/paySmallSmall.js';
+import { renderElectricityView, initElectricityListeners } from '../views/electricity.js';
 
 class Router {
   constructor(appElement) {
@@ -129,6 +133,11 @@ class Router {
         html = renderBillsView();
         listenerInit = initBillsListeners;
         break;
+      case '/app/electricity':
+      case '/app/power':
+        html = renderElectricityView();
+        listenerInit = initElectricityListeners;
+        break;
       case '/app/services':
       case '/app/service':
         html = renderServicesView();
@@ -143,6 +152,21 @@ class Router {
         listenerInit = initProfileListeners;
         break;
 
+      case '/app/cooperative':
+      case '/app/coop':
+        html = renderCooperativeView();
+        listenerInit = initCooperativeListeners;
+        break;
+      case '/app/cooperative-admin':
+      case '/app/coop-admin':
+        html = renderCooperativeAdminView();
+        listenerInit = initCooperativeAdminListeners;
+        break;
+      case '/app/paysmallsmall':
+      case '/app/marketplace':
+        html = renderPaySmallSmallView();
+        listenerInit = initPaySmallSmallListeners;
+        break;
       case '/app/loans':
         html = renderLoansView();
         listenerInit = initLoansListeners;

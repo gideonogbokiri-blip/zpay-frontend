@@ -447,3 +447,19 @@
 .zpay-toast.toast-error {
   border-left-color: var(--color-danger);
 }
+
+/* Utilities & Marketplace */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(234, 0, 41, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+

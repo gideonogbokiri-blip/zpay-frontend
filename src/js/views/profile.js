@@ -35,7 +35,9 @@ export function renderProfileView() {
           <div class="zpay-card" style="padding: 0; overflow: hidden;">
             <div class="profile-row" id="row-personal-info" style="padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); cursor: pointer;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 18px;">👤</span>
+                <span style="color: var(--zpay-green); display:flex; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
                 <span style="font-size: 14px; font-weight: 600;">Personal Information</span>
               </div>
               <span style="color: var(--text-muted); font-size: 18px;">&rsaquo;</span>
@@ -43,7 +45,9 @@ export function renderProfileView() {
 
             <div class="profile-row" id="row-change-pin" style="padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); cursor: pointer;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 18px;">🔐</span>
+                <span style="color: var(--color-blue); display:flex; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
                 <span style="font-size: 14px; font-weight: 600;">Change Transaction PIN</span>
               </div>
               <span style="color: var(--text-muted); font-size: 18px;">&rsaquo;</span>
@@ -51,7 +55,9 @@ export function renderProfileView() {
 
             <div class="profile-row" style="padding: 16px; display: flex; justify-content: space-between; align-items: center;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 18px;">🧬</span>
+                <span style="color: #a855f7; display:flex; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 0-6.88 17.23M12 22a10 10 0 0 0 6.88-17.23M2 12h4M18 12h4"/></svg>
+                </span>
                 <span style="font-size: 14px; font-weight: 600;">Biometric Login & PIN Bypass</span>
               </div>
               <label style="position: relative; display: inline-block; width: 44px; height: 24px; cursor: pointer;">
@@ -70,7 +76,9 @@ export function renderProfileView() {
           <div class="zpay-card" style="padding: 0; overflow: hidden;">
             <div class="profile-row" id="row-theme-toggle" style="padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); cursor: pointer;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 18px;">🎨</span>
+                <span style="color: #f59e0b; display:flex; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </span>
                 <div>
                   <span style="font-size: 14px; font-weight: 600;">Appearance Mode</span>
                   <p style="font-size: 11px; color: var(--text-muted);">Current: ${store.user.theme === 'dark' ? 'Obsidian Charcoal (Dark)' : 'Clean Minimal (Light)'}</p>
@@ -83,7 +91,9 @@ export function renderProfileView() {
 
             <div class="profile-row" id="row-device-sessions" style="padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 18px;">📱</span>
+                <span style="color: #0284c7; display:flex; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                </span>
                 <div>
                   <span style="font-size: 14px; font-weight: 600;">Device Security & Sessions</span>
                   <p style="font-size: 11px; color: var(--zpay-green);">1 Active Session (Current Device)</p>
@@ -98,16 +108,20 @@ export function renderProfileView() {
         <div>
           <p style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase;">Support & Legal</p>
           <div class="zpay-card" style="padding: 0; overflow: hidden;">
-            <a href="#/support" class="profile-row" style="padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle);">
+            <a href="#/support" class="profile-row" style="padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); text-decoration:none; color:inherit;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 18px;">❓</span>
+                <span style="color: var(--text-secondary); display:flex; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </span>
                 <span style="font-size: 14px; font-weight: 600;">Help Center & FAQs</span>
               </div>
               <span style="color: var(--text-muted); font-size: 18px;">&rsaquo;</span>
             </a>
-            <a href="#/security" class="profile-row" style="padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="#/security" class="profile-row" style="padding: 16px; display: flex; justify-content: space-between; align-items: center; text-decoration:none; color:inherit;">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 18px;">🛡️</span>
+                <span style="color: var(--zpay-green); display:flex; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
                 <span style="font-size: 14px; font-weight: 600;">Security Standards</span>
               </div>
               <span style="color: var(--text-muted); font-size: 18px;">&rsaquo;</span>
@@ -174,7 +188,7 @@ export function initProfileListeners() {
         const next = prompt("Enter new 4-digit PIN:");
         if (next && next.length === 4 && !isNaN(next)) {
           store.updatePin(next);
-          showToast("PIN updated successfully! 🔒");
+          showToast("PIN updated successfully!");
         } else {
           showToast("Invalid PIN. Must be 4 numeric digits.", "error");
         }
@@ -187,7 +201,7 @@ export function initProfileListeners() {
   const rowDevice = document.getElementById('row-device-sessions');
   if (rowDevice) {
     rowDevice.addEventListener('click', () => {
-      alert("📱 Active Sessions:\n\n• Current Device (Chrome / Windows Web Client) - Active Now\n• ZPay Flutter Android Client (Pixel 7) - Logged in 2 days ago\n\nAll connections encrypted with TLS 1.3.");
+      alert("Active Sessions:\n\n• Current Device (Chrome / Windows Web Client) - Active Now\n• ZPay Flutter Android Client (Pixel 7) - Logged in 2 days ago\n\nAll connections encrypted with TLS 1.3.");
     });
   }
 

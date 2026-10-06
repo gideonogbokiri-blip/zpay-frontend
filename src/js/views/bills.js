@@ -20,10 +20,22 @@ export function renderBillsView() {
         <div>
           <!-- Categories Tabs -->
           <div class="zpay-tabs" style="margin-bottom: 20px;" id="bills-category-tabs">
-            <button class="zpay-tab-btn active" data-cat="electricity">⚡ Power</button>
-            <button class="zpay-tab-btn" data-cat="cable">📺 TV</button>
-            <button class="zpay-tab-btn" data-cat="internet">🌐 Internet</button>
-            <button class="zpay-tab-btn" data-cat="education">🎓 Exams</button>
+            <button class="zpay-tab-btn active" data-cat="electricity" style="display:inline-flex; align-items:center; justify-content:center; gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Power
+            </button>
+            <button class="zpay-tab-btn" data-cat="cable" style="display:inline-flex; align-items:center; justify-content:center; gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+              TV
+            </button>
+            <button class="zpay-tab-btn" data-cat="internet" style="display:inline-flex; align-items:center; justify-content:center; gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              Internet
+            </button>
+            <button class="zpay-tab-btn" data-cat="education" style="display:inline-flex; align-items:center; justify-content:center; gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Exams
+            </button>
           </div>
 
           <!-- Dynamic Form Area -->

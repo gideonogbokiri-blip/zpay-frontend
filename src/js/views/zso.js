@@ -15,7 +15,10 @@ export function renderZsoView() {
       <div style="padding: 20px; display: flex; flex-direction: column; gap: 20px;">
         <!-- Escrow Balance Card -->
         <div class="balance-card" style="background: linear-gradient(135deg, #001233 0%, #000d26 100%); border: 1px solid rgba(56,189,248,0.25);">
-          <div class="balance-label" style="color: rgba(56,189,248,0.8);">🔒 Total Escrow Balance</div>
+          <div class="balance-label" style="color: rgba(56,189,248,0.8); display:flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Total Escrow Balance
+          </div>
           <div class="balance-amount" style="margin: 10px 0; color: #fff;">₦120,500.00</div>
           <div style="display:flex; gap:16px;">
             <div>
@@ -39,7 +42,9 @@ export function renderZsoView() {
           align-items: center;
           gap: 12px;
         ">
-          <span style="font-size:22px;">ℹ️</span>
+          <span style="color:var(--color-blue); display:flex; align-items:center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </span>
           <p style="margin:0; font-size:13px; color:var(--text-secondary); line-height:1.5;">Zso holds your funds safely until the other party fulfills their obligation — safe for buying, selling, and freelance work.</p>
         </div>
 
@@ -52,7 +57,9 @@ export function renderZsoView() {
           <div class="transactions-list" id="escrow-list">
             <div class="transaction-tile">
               <div class="tx-left">
-                <div class="tx-icon-box" style="background:rgba(56,189,248,0.1); color:var(--color-blue); font-size:18px;">🔒</div>
+                <div class="tx-icon-box" style="background:rgba(56,189,248,0.1); color:var(--color-blue);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
                 <div class="tx-info">
                   <h5>Marketplace Purchase</h5>
                   <span>Seller: Emeka Tech Hub</span>
@@ -66,7 +73,9 @@ export function renderZsoView() {
 
             <div class="transaction-tile" id="escrow-gig-tile">
               <div class="tx-left">
-                <div class="tx-icon-box" style="background:rgba(0,210,106,0.1); color:var(--zpay-green); font-size:18px;">💼</div>
+                <div class="tx-icon-box" style="background:rgba(0,210,106,0.1); color:var(--zpay-green);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                </div>
                 <div class="tx-info">
                   <h5>Freelance Design Gig</h5>
                   <span>Client: Z-Studios Ltd</span>
@@ -155,7 +164,9 @@ export function initZsoListeners() {
           item.className = 'transaction-tile';
           item.innerHTML = `
             <div class="tx-left">
-              <div class="tx-icon-box" style="background:rgba(56,189,248,0.1); color:var(--color-blue); font-size:18px;">🔒</div>
+              <div class="tx-icon-box" style="background:rgba(56,189,248,0.1); color:var(--color-blue);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
               <div class="tx-info">
                 <h5>${title}</h5>
                 <span>Party: ${party}</span>

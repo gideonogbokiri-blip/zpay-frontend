@@ -16,7 +16,9 @@ export function renderActivityView() {
         <!-- Search Bar -->
         <div class="zpay-input-wrapper" style="margin-bottom: 16px;">
           <input type="text" class="zpay-input" id="tx-search-input" placeholder="Search by recipient, title, or reference..." />
-          <span class="zpay-input-icon">🔍</span>
+          <span class="zpay-input-icon" style="display:flex; align-items:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
         </div>
 
         <!-- Filters: All | Money In | Money Out | Pending -->
@@ -83,7 +85,9 @@ export function initActivityListeners() {
     if (list.length === 0) {
       container.innerHTML = `
         <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
-          <div style="font-size: 40px; margin-bottom: 12px;">📂</div>
+          <div style="width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; margin:0 auto 12px auto; color:var(--text-muted);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          </div>
           <p style="font-size: 15px; font-weight: 600;">No transactions found</p>
           <p style="font-size: 13px;">Transactions matching your filters will appear here.</p>
         </div>

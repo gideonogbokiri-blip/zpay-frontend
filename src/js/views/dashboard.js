@@ -20,7 +20,7 @@ export function renderDashboardView() {
             <div class="online-indicator"></div>
           </a>
           <div class="user-greeting">
-            <span>${greeting} 👋</span>
+            <span>${greeting}</span>
             <h4>${store.user.name}</h4>
           </div>
         </div>
@@ -81,51 +81,55 @@ export function renderDashboardView() {
             <span class="service-name">Receive</span>
           </a>
           <a href="#/app/airtime" class="service-card">
-            <div class="service-icon-box airtime">📱</div>
+            <div class="service-icon-box airtime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
             <span class="service-name">Airtime</span>
           </a>
           <a href="#/app/data" class="service-card">
-            <div class="service-icon-box data">📶</div>
+            <div class="service-icon-box data"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg></div>
             <span class="service-name">Data</span>
           </a>
-          <a href="#/app/bills" class="service-card">
-            <div class="service-icon-box bills">⚡</div>
+          <a href="#/app/electricity" class="service-card">
+            <div class="service-icon-box bills"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="none"/></svg></div>
             <span class="service-name">Electricity</span>
           </a>
           <a href="#/app/qr-pay" class="service-card">
-            <div class="service-icon-box" style="background:rgba(245,158,11,0.12); color:var(--color-warning);">⛶</div>
+            <div class="service-icon-box" style="background:rgba(245,158,11,0.12); color:var(--color-warning);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
             <span class="service-name">QR Pay</span>
           </a>
-          <a href="#/app/bills" class="service-card">
-            <div class="service-icon-box" style="background:rgba(168,85,247,0.12); color:var(--color-purple);">📺</div>
-            <span class="service-name">Cable TV</span>
+          <a href="#/app/paysmallsmall" class="service-card">
+            <div class="service-icon-box" style="background:rgba(56,189,248,0.15); color:var(--color-blue);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+            <span class="service-name">Small Small</span>
           </a>
           <a href="#/app/services" class="service-card">
-            <div class="service-icon-box more">⋯</div>
+            <div class="service-icon-box more"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/></svg></div>
             <span class="service-name">More</span>
           </a>
         </div>
       </div>
 
-      <!-- Cooperative Banner -->
+      <!-- Cooperative Hub Banner -->
       <div class="app-section">
         <div style="
-          background: linear-gradient(135deg, #1a0007 0%, #0d0003 60%, #1a0007 100%);
-          border: 1px solid rgba(234,0,41,0.3);
+          background: linear-gradient(135deg, #1b0007 0%, #0d0004 60%, #1a0007 100%);
+          border: 1px solid rgba(234,0,41,0.35);
           border-radius: var(--radius-lg);
           padding: 18px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 12px;
+          box-shadow: 0 8px 24px rgba(234,0,41,0.15);
         ">
           <div>
-            <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:rgba(234,0,41,0.8); font-weight:700;">Zenith Bank Cooperative</div>
-            <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">Access Loans • Osusu • Community</div>
-            <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:4px;">All cooperative services in one place</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:10px; text-transform:uppercase; letter-spacing:1px; background:rgba(234,0,41,0.2); color:var(--zpay-green); padding:2px 8px; border-radius:4px; font-weight:700;">Cooperative Hub</span>
+              <span style="font-size:11px; color:rgba(255,255,255,0.6);">Equity: ${store.formatMoney(store.cooperativeBalance)}</span>
+            </div>
+            <div style="font-size:15px; font-weight:800; color:#fff; margin-top:5px;">${store.getActiveCooperative().shortName}</div>
+            <div style="font-size:11.5px; color:rgba(255,255,255,0.55); margin-top:2px;">Fund wallet &bull; Up to 3x loans &bull; Dec pack money</div>
           </div>
-          <a href="#/app/services" style="background:var(--zpay-green); color:#fff; border-radius:var(--radius-sm); padding:8px 14px; font-size:12px; font-weight:700; white-space:nowrap; text-decoration:none; flex-shrink:0;">
-            Go →
+          <a href="#/app/cooperative" style="background:var(--zpay-green); color:#fff; border-radius:var(--radius-sm); padding:9px 14px; font-size:12px; font-weight:700; white-space:nowrap; text-decoration:none; flex-shrink:0;">
+            Enter &rarr;
           </a>
         </div>
       </div>
@@ -140,7 +144,7 @@ export function renderDashboardView() {
         <div class="transactions-list" id="dashboard-tx-list">
           ${recentTxs.length === 0
             ? `<div style="text-align:center; padding:40px 20px; color:var(--text-muted);">
-                <div style="font-size:32px; margin-bottom:10px;">💸</div>
+                <div style="margin-bottom:10px; color:var(--text-muted);"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></div>
                 <div style="font-size:14px; font-weight:600;">No transactions yet</div>
                 <div style="font-size:12px; margin-top:4px;">Start by funding your wallet</div>
                </div>`
@@ -213,7 +217,7 @@ export function initDashboardListeners() {
 
   document.getElementById('copy-tag-pill')?.addEventListener('click', () => {
     navigator.clipboard?.writeText(store.user.tag);
-    showToast(`Copied ${store.user.tag}! 📋`);
+    showToast(`Copied ${store.user.tag}!`);
   });
 
   document.querySelectorAll('.transaction-tile').forEach(tile => {
@@ -225,6 +229,6 @@ export function initDashboardListeners() {
 
   document.getElementById('header-notif-btn')?.addEventListener('click', () => {
     const notifs = store.notifications.map(n => `• ${n.title}: ${n.message}`).join('\n\n');
-    alert(`🔔 Notifications:\n\n${notifs}`);
+    alert(`Notifications:\n\n${notifs}`);
   });
 }
